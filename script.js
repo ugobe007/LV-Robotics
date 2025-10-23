@@ -43,15 +43,38 @@ contactForm.addEventListener('submit', (e) => {
     
     // Validate form
     if (name && email && message) {
-        // Display success message
-        alert(`Thank you, ${name}! Your message has been received. We'll get back to you at ${email} soon.`);
+        // Show success message
+        showFormMessage('success', `Thank you, ${name}! Your message has been received. We'll get back to you at ${email} soon.`);
         
         // Reset form
         contactForm.reset();
     } else {
-        alert('Please fill in all fields.');
+        showFormMessage('error', 'Please fill in all fields.');
     }
 });
+
+// Function to display form messages
+function showFormMessage(type, message) {
+    // Remove any existing message
+    const existingMessage = document.querySelector('.form-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Create message element
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `form-message form-message-${type}`;
+    messageDiv.textContent = message;
+    
+    // Insert after the form
+    contactForm.parentNode.insertBefore(messageDiv, contactForm.nextSibling);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        messageDiv.style.opacity = '0';
+        setTimeout(() => messageDiv.remove(), 300);
+    }, 5000);
+}
 
 // Smooth scroll with offset for fixed navbar
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
