@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+/* Footer */<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -66,18 +66,22 @@
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+        }
+
+        .logo-image {
+            height: 60px;
+            width: auto;
         }
 
         .nav-links {
             display: flex;
             gap: 2rem;
             list-style: none;
+            align-items: center;
         }
 
         .nav-links a {
@@ -105,6 +109,15 @@
 
         .nav-links a:hover::after {
             width: 100%;
+        }
+
+        /* Page System */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
         }
 
         /* Hero Section */
@@ -192,7 +205,122 @@
             transform: translateY(-3px);
         }
 
-        /* Main Content */
+        .btn-orange {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-orange:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+        }
+
+        .btn-silver {
+            background: linear-gradient(135deg, #8e9eab 0%, #c0c5ce 100%);
+            color: #1a1a2e;
+            box-shadow: 0 10px 30px rgba(142, 158, 171, 0.4);
+        }
+
+        .btn-silver:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(142, 158, 171, 0.6);
+        }
+
+        /* News Banner */
+        .news-banner {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            padding: 0.8rem 2rem;
+            text-align: center;
+            margin: 2rem auto;
+            max-width: 1000px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .news-banner::before {
+            content: '📢';
+            position: absolute;
+            left: 2%;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); }
+        }
+
+        .news-banner-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .news-label {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+        .news-banner h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0;
+            display: inline;
+        }
+
+        .news-banner p {
+            font-size: 1rem;
+            opacity: 0.95;
+            display: inline;
+            margin-left: 0.5rem;
+        }
+
+        /* Sponsor CTA */
+        .sponsor-cta {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .sponsor-cta h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sponsor-cta p {
+            color: #b8b8d1;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Container */
         .container {
             position: relative;
             z-index: 1;
@@ -373,35 +501,109 @@
             margin-top: 0.5rem;
         }
 
-        /* News Section */
-        .news-section {
+        /* Member Profiles Section */
+        .members-section {
             padding: 80px 0;
         }
 
-        .news-grid {
+        .members-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
         }
 
-        .news-card {
+        .member-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            overflow: hidden;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
             transition: all 0.3s;
+            cursor: pointer;
         }
 
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        .member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
             border-color: rgba(102, 126, 234, 0.5);
         }
 
-        .news-image {
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .member-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: #667eea;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .member-bio {
+            color: #b8b8d1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .member-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        /* Photo Gallery */
+        .gallery-section {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .gallery-image {
             width: 100%;
-            height: 200px;
+            height: 250px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
@@ -409,42 +611,309 @@
             font-size: 4rem;
         }
 
-        .news-content {
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s;
         }
 
-        .news-meta {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-            color: #9ca3af;
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
         }
 
-        .news-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            color: #fff;
+        .gallery-overlay h4 {
+            margin-bottom: 0.3rem;
         }
 
-        .news-card p {
+        .gallery-overlay p {
+            font-size: 0.9rem;
             color: #b8b8d1;
-            line-height: 1.6;
+        }
+
+        /* Services Request Page */
+        .services-section {
+            padding: 150px 0 80px;
+        }
+
+        .services-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .services-intro h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .services-intro p {
+            font-size: 1.2rem;
+            color: #b8b8d1;
+            line-height: 1.7;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
             margin-bottom: 1rem;
         }
 
-        .read-more {
+        .service-card p {
+            color: #b8b8d1;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card ul {
+            list-style: none;
+            text-align: left;
+            color: #b8b8d1;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .service-card li::before {
+            content: '✓';
             color: #667eea;
-            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Request Form */
+        .request-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Sponsorship Page */
+        .sponsor-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .tier-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tier-card.featured {
+            border-color: rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            transform: scale(1.05);
+        }
+
+        .tier-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
+        }
+
+        .tier-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
             font-weight: 600;
-            transition: color 0.3s;
+            margin-bottom: 1rem;
         }
 
-        .read-more:hover {
-            color: #764ba2;
+        .tier-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
 
-        /* Footer */
+        .tier-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 2rem;
+        }
+
+        .tier-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .tier-features li {
+            padding: 0.8rem 0;
+            color: #b8b8d1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tier-features li::before {
+            content: '✓';
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Photo Showcase on Home */
+        .home-photos-section {
+            padding: 60px 0;
+        }
+
+        .photos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .photos-header h2 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .upload-btn {
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .home-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .home-photo-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .home-photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .home-photo-placeholder {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        }
+
+        .home-photo-placeholder svg {
+            height: 100px;
+            width: auto;
+            opacity: 0.7;
+        }
         footer {
             position: relative;
             z-index: 1;
@@ -514,247 +983,146 @@
 
             .events-grid,
             .projects-grid,
-            .news-grid {
+            .members-grid,
+            .gallery-grid,
+            .services-grid,
+            .sponsor-tiers {
                 grid-template-columns: 1fr;
+            }
+
+            .tier-card.featured {
+                transform: scale(1);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
     <div class="particles" id="particles"></div>
 
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo">LV ROBOTICS</div>
+            <div class="logo" onclick="showPage('home')">
+                <svg class="logo-image" viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
+                    <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
+                    <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                    <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                    <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                    <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                    <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
+                </svg>
+            </div>
             <ul class="nav-links">
-                <li><a href="#events">Events</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#news">News</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('members')">Members</a></li>
+                <li><a href="#" onclick="showPage('gallery')">Gallery</a></li>
+                <li><a href="#" onclick="showPage('services')">Services</a></li>
+                <li><a href="#" onclick="showPage('sponsors')">Sponsors</a></li>
+                <li><a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank">Events</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Building the Future of Robotics</h1>
-        <p>Join Las Vegas's premier robotics community where innovation meets opportunity</p>
-        <div class="cta-buttons">
-            <a href="#events" class="btn btn-primary">Upcoming Events</a>
-            <a href="#projects" class="btn btn-secondary">Our Programs</a>
-        </div>
-    </section>
-
-    <!-- Events Section -->
-    <section class="events-section" id="events">
-        <div class="container">
-            <div class="section-header">
-                <h2>Upcoming Events</h2>
-                <p>Join us for exciting robotics meetups and workshops</p>
-            </div>
-            <div class="events-grid">
-                <div class="event-card">
-                    <span class="event-date">🚀 Oct 23, 2025 • 5:00 PM</span>
-                    <h3>Robots in Space</h3>
-                    <p>Explore the future of space robotics with industry experts. Learn about autonomous systems, satellite servicing, and AI-driven automation in space exploration.</p>
-                    <div class="event-location">
-                        <span>📍</span>
-                        <span>Desert Research Institute</span>
-                    </div>
-                    <a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.95rem;">RSVP on Meetup</a>
-                </div>
-
-                <div class="event-card">
-                    <span class="event-date">🤖 Nov 15, 2025 • 6:00 PM</span>
-                    <h3>FIRST Robotics Workshop</h3>
-                    <p>Hands-on workshop for high school students interested in competitive robotics. Learn programming, mechanical design, and team collaboration.</p>
-                    <div class="event-location">
-                        <span>📍</span>
-                        <span>Location TBA</span>
-                    </div>
-                    <a href="#" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.95rem;">Learn More</a>
-                </div>
-
-                <div class="event-card">
-                    <span class="event-date">💡 Dec 5, 2025 • 5:30 PM</span>
-                    <h3>AI & Automation Showcase</h3>
-                    <p>See cutting-edge projects from our community members featuring machine learning, computer vision, and autonomous systems.</p>
-                    <div class="event-location">
-                        <span>📍</span>
-                        <span>Innovation Lab</span>
-                    </div>
-                    <a href="#" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.95rem;">Coming Soon</a>
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Building the Future of Robotics</h1>
+            <p>Join Las Vegas's premier robotics community where innovation meets opportunity</p>
+            
+            <!-- News Banner -->
+            <div class="news-banner">
+                <div class="news-banner-content">
+                    <span class="news-label">🔥 Latest News</span>
+                    <h2>LV Robotics Fellowship Program Expands to 15 Partner Companies!</h2>
+                    <p>Students can build skills and opportunities in paid internships. Applications now open for Winter 2026 cohort.</p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Projects Section -->
-    <section class="projects-section" id="projects">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our Programs</h2>
-                <p>Empowering the next generation of robotics innovators</p>
+            <div class="cta-buttons">
+                <a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank" class="btn btn-primary">Upcoming Events</a>
+                <a href="#" onclick="showPage('services')" class="btn btn-orange">Request Services</a>
+                <a href="#" onclick="showPage('sponsors')" class="btn btn-silver">Become a Sponsor</a>
             </div>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-icon">🎓</div>
-                    <h3>Fellowship Program</h3>
-                    <p>Connecting talented high school FIRST Robotics students with paid internships at leading tech companies. Our fellows gain real-world experience building robotics systems, developing software, and working alongside industry professionals.</p>
-                    <p>Through mentorship and hands-on projects, students develop critical skills in engineering, programming, and professional development while earning competitive compensation.</p>
-                    <div>
-                        <span class="project-tag">Paid Internships</span>
-                        <span class="project-tag">Mentorship</span>
-                        <span class="project-tag">FIRST Robotics</span>
-                    </div>
-                </div>
+        </section>
 
-                <div class="project-card">
-                    <div class="project-icon">🔧</div>
-                    <h3>Community Workshops</h3>
-                    <p>Regular hands-on workshops covering robotics fundamentals, advanced programming, mechanical design, and emerging technologies. Open to all skill levels from beginners to experienced builders.</p>
-                    <p>Learn from industry experts and collaborate with fellow robotics enthusiasts in our state-of-the-art maker space.</p>
-                    <div>
-                        <span class="project-tag">All Levels</span>
-                        <span class="project-tag">Hands-On</span>
-                        <span class="project-tag">Free</span>
-                    </div>
+        <!-- Photo Showcase -->
+        <section class="home-photos-section">
+            <div class="container">
+                <div class="photos-header">
+                    <h2>Community in Action</h2>
+                    <button class="upload-btn" onclick="document.getElementById('photoUpload').click()">
+                        📸 Upload Photo
+                    </button>
+                    <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
                 </div>
-
-                <div class="project-card">
-                    <div class="project-icon">🏆</div>
-                    <h3>Competition Support</h3>
-                    <p>Supporting local FIRST Robotics teams with resources, mentorship, and technical expertise. We help teams prepare for regional and national competitions through practice sessions and strategy development.</p>
-                    <p>Our experienced mentors provide guidance on everything from mechanical design to autonomous programming.</p>
-                    <div>
-                        <span class="project-tag">FIRST FRC</span>
-                        <span class="project-tag">Team Support</span>
-                        <span class="project-tag">Mentorship</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section class="news-section" id="news">
-        <div class="container">
-            <div class="section-header">
-                <h2>Community News</h2>
-                <p>Celebrating achievements and sharing updates from our members</p>
-            </div>
-            <div class="news-grid">
-                <div class="news-card">
-                    <div class="news-image">🏅</div>
-                    <div class="news-content">
-                        <div class="news-meta">
-                            <span>📅 October 15, 2025</span>
-                            <span>👤 LV Robotics Team</span>
+                
+                <div class="home-photos-grid">
+                    <div class="home-photo-item">
+                        <div class="home-photo-placeholder">
+                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
+                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
+                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
+                            </svg>
                         </div>
-                        <h3>Team Wins Regional Championship</h3>
-                        <p>Congratulations to our sponsored FIRST Robotics team for taking home first place at the Nevada Regional Championship!</p>
-                        <a href="#" class="read-more">Read more →</a>
                     </div>
-                </div>
-
-                <div class="news-card">
-                    <div class="news-image">💼</div>
-                    <div class="news-content">
-                        <div class="news-meta">
-                            <span>📅 October 8, 2025</span>
-                            <span>👤 Fellowship Program</span>
+                    <div class="home-photo-item">
+                        <div class="home-photo-placeholder">
+                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
+                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
+                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
+                            </svg>
                         </div>
-                        <h3>New Partnership Announced</h3>
-                        <p>We're excited to announce a new partnership with three local tech companies offering paid internships to our fellows.</p>
-                        <a href="#" class="read-more">Read more →</a>
                     </div>
-                </div>
-
-                <div class="news-card">
-                    <div class="news-image">🎉</div>
-                    <div class="news-content">
-                        <div class="news-meta">
-                            <span>📅 September 28, 2025</span>
-                            <span>👤 Community</span>
+                    <div class="home-photo-item">
+                        <div class="home-photo-placeholder">
+                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
+                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
+                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
+                            </svg>
                         </div>
-                        <h3>Record Turnout at Workshop</h3>
-                        <p>Our latest AI & Machine Learning workshop drew over 50 participants, making it our largest event yet!</p>
-                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                    <div class="home-photo-item">
+                        <div class="home-photo-placeholder">
+                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
+                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
+                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
+                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
+                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank">Meetup</a>
-                <a href="#">Join Us</a>
-                <a href="#">Volunteer</a>
-                <a href="#">Sponsor</a>
-                <a href="#">Contact</a>
-            </div>
-            <div class="social-links">
-                <a href="#" title="Twitter">𝕏</a>
-                <a href="#" title="LinkedIn">in</a>
-                <a href="#" title="GitHub">⚙</a>
-                <a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank" title="Meetup">M</a>
-            </div>
-            <p style="color: #9ca3af; margin-top: 2rem;">© 2025 Las Vegas Robotics. Building the future, one robot at a time.</p>
-        </div>
-    </footer>
-
-    <script>
-        // Create animated particles
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 15 + 's';
-            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            particlesContainer.appendChild(particle);
-        }
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Add scroll animation to cards
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.event-card, .project-card, .news-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
-    </script>
-</body>
-</html>
+        <!-- Sponsor CTA -->
+        <section class="container">
+            <div class="sponsor-cta">
+                <h3>🤝 Partner With Us</h3>
+                <p>Support the next generation of robotics innovators while gaining access to talented engineers and students</p>
+                <a href="#"
