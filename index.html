@@ -1,9 +1,9 @@
-/* Footer */<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LV Robotics | Building the Future</title>
+    <title>Robotics Club - Building the Future</title>
     <style>
         * {
             margin: 0;
@@ -13,1116 +13,1425 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            overflow-x: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            line-height: 1.6;
         }
 
-        /* Animated background particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .orange-highlight {
+            color: #ff8c42;
+            font-weight: 600;
+        }
+
+        /* Photo Showcase */
+        .photo-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .photo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 140, 66, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 140, 66, 0.2);
+        }
+
+        .photo-card-image {
             width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
         }
 
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(100, 200, 255, 0.5);
-            border-radius: 50%;
-            animation: float 15s infinite;
+        .photo-card-content {
+            padding: 1.5rem;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        .photo-card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Navigation */
         nav {
-            position: fixed;
+            background: rgba(26, 26, 46, 0.95);
+            padding: 0.5rem 2rem;
+            position: sticky;
             top: 0;
-            width: 100%;
-            background: rgba(15, 12, 41, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1.2rem 5%;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            cursor: pointer;
-        }
-
-        .logo-image {
-            height: 60px;
-            width: auto;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
+        .nav-main {
             list-style: none;
-            align-items: center;
+            display: flex;
+            gap: 1.5rem;
+            margin: 0;
         }
 
-        .nav-links a {
-            color: #fff;
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 3px 0;
+            transition: all 0.3s;
+            border-radius: 3px;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: rgba(26, 26, 46, 0.98);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            z-index: 1;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 0.8rem 1rem;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        nav a {
+            color: #ffffff;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s;
             position: relative;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
         }
 
-        .nav-links a:hover {
+        nav a:hover {
             color: #667eea;
         }
 
-        .nav-links a::after {
+        nav a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
+            bottom: 0;
             left: 0;
             width: 0;
             height: 2px;
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: width 0.3s;
         }
 
-        .nav-links a:hover::after {
+        nav a:hover::after {
             width: 100%;
         }
 
-        /* Page System */
-        .page {
-            display: none;
+        /* Mobile Navigation */
+        @media (max-width: 968px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-main {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(26, 26, 46, 0.98);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            }
+
+            .nav-main.active {
+                display: flex;
+            }
+
+            .nav-main li {
+                margin: 0.5rem 0;
+            }
+
+            .dropdown-content {
+                position: static;
+                display: none;
+                box-shadow: none;
+                margin-top: 0.5rem;
+                margin-left: 1rem;
+                border-left: 2px solid #667eea;
+            }
+
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
         }
 
-        .page.active {
-            display: block;
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
         /* Hero Section */
         .hero {
-            position: relative;
-            z-index: 1;
-            padding: 150px 5% 100px;
             text-align: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            margin-bottom: 3rem;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .robot-head {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .robot-head img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 40px rgba(102, 126, 234, 0.4));
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: slideDown 1s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            font-weight: 700;
         }
 
         .hero p {
             font-size: 1.3rem;
             color: #b8b8d1;
-            margin-bottom: 2rem;
-            animation: fadeIn 1s ease-out 0.3s both;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeIn 1s ease-out 0.6s both;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .btn-orange {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-        }
-
-        .btn-orange:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
-        }
-
-        .btn-silver {
-            background: linear-gradient(135deg, #8e9eab 0%, #c0c5ce 100%);
-            color: #1a1a2e;
-            box-shadow: 0 10px 30px rgba(142, 158, 171, 0.4);
-        }
-
-        .btn-silver:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(142, 158, 171, 0.6);
-        }
-
-        /* News Banner */
-        .news-banner {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            padding: 0.8rem 2rem;
-            text-align: center;
-            margin: 2rem auto;
-            max-width: 1000px;
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
-            animation: slideIn 0.8s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .news-banner::before {
-            content: '📢';
-            position: absolute;
-            left: 2%;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.5rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: translateY(-50%) scale(1); }
-            50% { transform: translateY(-50%) scale(1.1); }
-        }
-
-        .news-banner-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .news-label {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.2rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
-        }
-
-        .news-banner h2 {
-            font-size: 1.3rem;
-            margin-bottom: 0;
-            display: inline;
-        }
-
-        .news-banner p {
-            font-size: 1rem;
-            opacity: 0.95;
-            display: inline;
-            margin-left: 0.5rem;
-        }
-
-        /* Sponsor CTA */
-        .sponsor-cta {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-            border: 2px solid rgba(102, 126, 234, 0.5);
-            border-radius: 20px;
-            padding: 3rem;
-            text-align: center;
-            margin: 3rem 0;
-        }
-
-        .sponsor-cta h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .sponsor-cta p {
-            color: #b8b8d1;
-            font-size: 1.2rem;
+        h2 {
+            font-size: 2.5rem;
             margin-bottom: 2rem;
-        }
-
-        /* Container */
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 5%;
-        }
-
-        /* Section Headers */
-        .section-header {
             text-align: center;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 2rem;
             margin-bottom: 3rem;
         }
 
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         }
 
-        .section-header p {
-            color: #b8b8d1;
-            font-size: 1.1rem;
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         }
 
-        /* Events Section */
-        .events-section {
-            padding: 80px 0;
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .event-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .event-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-
-        .event-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
-            border-color: rgba(102, 126, 234, 0.5);
-        }
-
-        .event-date {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .event-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #fff;
-        }
-
-        .event-card p {
-            color: #b8b8d1;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .event-location {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Projects Section */
-        .projects-section {
-            padding: 80px 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: 20px;
-            padding: 2.5rem;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
-            transition: all 0.5s;
-            opacity: 0;
-        }
-
-        .project-card:hover::after {
-            opacity: 1;
-            top: -25%;
-            right: -25%;
-        }
-
-        .project-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
-        }
-
-        .project-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .project-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .project-card p {
-            color: #b8b8d1;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .project-tag {
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(102, 126, 234, 0.4);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-right: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Member Profiles Section */
-        .members-section {
-            padding: 80px 0;
-        }
-
-        .members-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .member-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
+        /* Founders Section */
+        .founder-card {
             text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
         }
 
-        .member-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
-            border-color: rgba(102, 126, 234, 0.5);
-        }
-
-        .member-avatar {
-            width: 120px;
-            height: 120px;
+        .founder-avatar {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             margin: 0 auto 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            border: 3px solid rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+            border: 4px solid rgba(102, 126, 234, 0.3);
         }
 
-        .member-card h3 {
-            font-size: 1.4rem;
+        .founder-name {
+            font-size: 1.5rem;
             margin-bottom: 0.5rem;
         }
 
-        .member-role {
+        .founder-title {
             color: #667eea;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             margin-bottom: 1rem;
-            font-weight: 600;
         }
 
-        .member-bio {
-            color: #b8b8d1;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .member-skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            justify-content: center;
-        }
-
-        .skill-tag {
-            background: rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(102, 126, 234, 0.4);
-            padding: 0.4rem 1rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-        }
-
-        /* Photo Gallery */
-        .gallery-section {
-            padding: 80px 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .gallery-grid {
+        /* Sponsor Logos */
+        .sponsor-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        }
-
-        .gallery-image {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-
-        .gallery-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            padding: 1.5rem;
-            transform: translateY(100%);
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            transform: translateY(0);
-        }
-
-        .gallery-overlay h4 {
-            margin-bottom: 0.3rem;
-        }
-
-        .gallery-overlay p {
-            font-size: 0.9rem;
-            color: #b8b8d1;
-        }
-
-        /* Services Request Page */
-        .services-section {
-            padding: 150px 0 80px;
-        }
-
-        .services-intro {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 4rem;
-        }
-
-        .services-intro h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .services-intro p {
-            font-size: 1.2rem;
-            color: #b8b8d1;
-            line-height: 1.7;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
-            margin-bottom: 4rem;
+            margin-top: 2rem;
         }
 
-        .service-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
+        .sponsor-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
             text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s;
         }
 
-        .service-card:hover {
-            border-color: rgba(102, 126, 234, 0.5);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        .sponsor-card:hover {
+            border-color: rgba(102, 126, 234, 0.7);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        .service-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
+        /* Bulletin Board */
+        .bulletin-board {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .service-card h3 {
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-        }
-
-        .service-card p {
-            color: #b8b8d1;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-card ul {
-            list-style: none;
-            text-align: left;
-            color: #b8b8d1;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-card li {
-            padding: 0.5rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .service-card li::before {
-            content: '✓';
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        /* Request Form */
-        .request-form {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 3rem;
+        .post-form {
+            margin-bottom: 2rem;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #e0e0e0;
+            color: #667eea;
             font-weight: 500;
         }
 
         .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .form-group textarea {
             width: 100%;
-            padding: 1rem;
+            padding: 0.8rem;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            color: #fff;
-            font-family: inherit;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
             font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            background: rgba(255, 255, 255, 0.08);
         }
 
         .form-group textarea {
-            min-height: 150px;
+            min-height: 100px;
             resize: vertical;
         }
 
-        /* Sponsorship Page */
-        .sponsor-tiers {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 4rem;
-        }
-
-        .tier-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .tier-card.featured {
-            border-color: rgba(102, 126, 234, 0.6);
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            transform: scale(1.05);
-        }
-
-        .tier-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
-        }
-
-        .tier-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .tier-card h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .tier-price {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 2rem;
-        }
-
-        .tier-features {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 2rem;
-            text-align: left;
-        }
-
-        .tier-features li {
-            padding: 0.8rem 0;
-            color: #b8b8d1;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .tier-features li::before {
-            content: '✓';
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        /* Photo Showcase on Home */
-        .home-photos-section {
-            padding: 60px 0;
-        }
-
-        .photos-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .photos-header h2 {
-            font-size: 2rem;
+        .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .upload-btn {
-            padding: 0.8rem 1.8rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            color: white;
+            padding: 0.8rem 2rem;
             border: none;
-            border-radius: 25px;
+            border-radius: 8px;
+            cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
-        .upload-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .home-photos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .home-photo-item {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s;
+        .comment {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 3px solid #667eea;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
         }
 
-        .home-photo-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
-            border-color: rgba(102, 126, 234, 0.5);
-        }
-
-        .home-photo-placeholder {
-            width: 100%;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-        }
-
-        .home-photo-placeholder svg {
-            height: 100px;
-            width: auto;
-            opacity: 0.7;
-        }
-        footer {
-            position: relative;
-            z-index: 1;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 3rem 5%;
-            text-align: center;
-            margin-top: 80px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #b8b8d1;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
+        .comment-author {
             color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+        .comment-date {
+            color: #b8b8d1;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
 
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            text-decoration: none;
+        /* Events Calendar */
+        .event-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
             transition: all 0.3s;
         }
 
-        .social-links a:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            transform: translateY(-3px);
+        .event-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
         }
 
+        .event-date {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-description {
+            color: #b8b8d1;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-location {
+            color: #764ba2;
+            font-style: italic;
+        }
+
+        /* Features List */
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .feature-list li:before {
+            content: "→";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Partnership Form */
+        .partnership-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
             }
 
-            .nav-links {
-                display: none;
+            nav ul {
+                gap: 1rem;
             }
 
-            .events-grid,
-            .projects-grid,
-            .members-grid,
-            .gallery-grid,
-            .services-grid,
-            .sponsor-tiers {
-                grid-template-columns: 1fr;
+            h2 {
+                font-size: 2rem;
             }
+        }
 
-            .tier-card.featured {
-                transform: scale(1);
-            }
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #b8b8d1;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
         }
     </style>
 </head>
 <body>
-    <div class="particles" id="particles"></div>
-
-    <!-- Navigation -->
     <nav>
-        <div class="nav-container">
-            <div class="logo" onclick="showPage('home')">
-                <svg class="logo-image" viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
-                    <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
-                    <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                    <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                    <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                    <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                    <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
-                    <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
-                </svg>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#" onclick="showPage('home')">Home</a></li>
-                <li><a href="#" onclick="showPage('members')">Members</a></li>
-                <li><a href="#" onclick="showPage('gallery')">Gallery</a></li>
-                <li><a href="#" onclick="showPage('services')">Services</a></li>
-                <li><a href="#" onclick="showPage('sponsors')">Sponsors</a></li>
-                <li><a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank">Events</a></li>
-            </ul>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
+        <ul class="nav-main" id="navMenu">
+            <li><a href="#" onclick="showSection('home')">Home</a></li>
+            <li><a href="#" onclick="showSection('events')">View Events</a></li>
+            <li><a href="#" onclick="showSection('learn-more')">Learn More</a></li>
+            <li class="dropdown">
+                <a href="#" onclick="return false;">Programs ▾</a>
+                <div class="dropdown-content">
+                    <a href="#" onclick="showSection('fellowship')">Fellowship Program</a>
+                    <a href="#" onclick="showSection('workshops')">Workshops</a>
+                    <a href="#" onclick="showSection('competitions')">Competitions</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" onclick="return false;">About ▾</a>
+                <div class="dropdown-content">
+                    <a href="#" onclick="showSection('founders')">Our Founders</a>
+                    <a href="#" onclick="showSection('sponsors')">Sponsors</a>
+                </div>
+            </li>
+            <li><a href="#" onclick="showSection('bulletin')">Bulletin Board</a></li>
+            <li><a href="#" onclick="showSection('partner')">Partner with Us</a></li>
+        </ul>
     </nav>
 
-    <!-- HOME PAGE -->
-    <div id="home" class="page active">
-        <!-- Hero Section -->
-        <section class="hero">
-            <h1>Building the Future of Robotics</h1>
-            <p>Join Las Vegas's premier robotics community where innovation meets opportunity</p>
+    <div class="container">
+        <!-- HOME SECTION -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <div class="robot-head">
+                    <img src="assets/images/logo.png" alt="Robotics Club Logo">
+                </div>
+                <h1 class="gradient-text">Building the Future of Robotics</h1>
+                <p>Join us in exploring the cutting edge of robotics, AI, and automation. Where innovation meets community.</p>
+            </div>
+
+            <div class="photo-showcase">
+                <div class="photo-card">
+                    <div class="photo-card-image">🤖</div>
+                    <div class="photo-card-content">
+                        <div class="photo-card-title">Competition Success</div>
+                        <p>Our teams competing at regional championships and bringing home awards!</p>
+                    </div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-card-image">🔧</div>
+                    <div class="photo-card-content">
+                        <div class="photo-card-title">Workshop Sessions</div>
+                        <p>Hands-on learning with Arduino, 3D printing, and more.</p>
+                    </div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-card-image">👥</div>
+                    <div class="photo-card-content">
+                        <div class="photo-card-title">Community Building</div>
+                        <p>Connect with fellow robotics enthusiasts and build lasting friendships.</p>
+                    </div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-card-image">💡</div>
+                    <div class="photo-card-content">
+                        <div class="photo-card-title">Innovation Lab</div>
+                        <p>Access to cutting-edge tools and technology for your projects.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <h3 class="gradient-text">🤖 Hands-On Projects</h3>
+                    <p>Build real robots and work on exciting projects that push the boundaries of what's possible.</p>
+                </div>
+                <div class="card">
+                    <h3 class="gradient-text">🏆 Compete & Excel</h3>
+                    <p>Participate in regional and national robotics competitions to showcase your skills.</p>
+                </div>
+                <div class="card">
+                    <h3 class="gradient-text">🌟 Learn & Grow</h3>
+                    <p>Access workshops, mentorship, and resources to advance your robotics knowledge.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Welcome to Our Community</h3>
+                <p>Whether you're a beginner or an experienced roboticist, we provide the tools, knowledge, and community to help you succeed. Our club is dedicated to fostering innovation, collaboration, and a passion for robotics that will shape tomorrow's technology.</p>
+            </div>
+        </section>
+
+        <!-- VIEW EVENTS SECTION -->
+        <section id="events" class="section">
+            <h2 class="gradient-text">Upcoming Events</h2>
             
-            <!-- News Banner -->
-            <div class="news-banner">
-                <div class="news-banner-content">
-                    <span class="news-label">🔥 Latest News</span>
-                    <h2>LV Robotics Fellowship Program Expands to 15 Partner Companies!</h2>
-                    <p>Students can build skills and opportunities in paid internships. Applications now open for Winter 2026 cohort.</p>
+            <div id="events-calendar">
+                <div class="event-item">
+                    <div class="event-date">📅 November 15, 2025 | 6:00 PM - 8:00 PM</div>
+                    <div class="event-title">Intro to Arduino Workshop</div>
+                    <div class="event-description">Learn the basics of microcontroller programming and build your first circuit!</div>
+                    <div class="event-location">📍 Engineering Lab, Room 204</div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">📅 November 22, 2025 | 5:30 PM - 7:30 PM</div>
+                    <div class="event-title">Robot Design Competition Kickoff</div>
+                    <div class="event-description">Join us for the launch of this semester's robot challenge! Form teams and start planning.</div>
+                    <div class="event-location">📍 Main Auditorium</div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">📅 December 6, 2025 | 3:00 PM - 5:00 PM</div>
+                    <div class="event-title">Industry Guest Speaker: AI in Robotics</div>
+                    <div class="event-description">Hear from a leading robotics engineer about cutting-edge AI applications in modern robotics.</div>
+                    <div class="event-location">📍 Student Center, Theater Hall</div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">📅 December 13, 2025 | 4:00 PM - 6:00 PM</div>
+                    <div class="event-title">3D Printing for Robotics</div>
+                    <div class="event-description">Learn how to design and print custom parts for your robot builds.</div>
+                    <div class="event-location">📍 Maker Space</div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">📅 January 10, 2026 | All Day</div>
+                    <div class="event-title">Regional Robotics Competition</div>
+                    <div class="event-description">Our team competes in the regional championship! Come support us!</div>
+                    <div class="event-location">📍 Convention Center Downtown</div>
                 </div>
             </div>
 
-            <div class="cta-buttons">
-                <a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank" class="btn btn-primary">Upcoming Events</a>
-                <a href="#" onclick="showPage('services')" class="btn btn-orange">Request Services</a>
-                <a href="#" onclick="showPage('sponsors')" class="btn btn-silver">Become a Sponsor</a>
+            <div class="card" style="margin-top: 2rem;">
+                <h3 class="gradient-text">📬 Stay Updated</h3>
+                <p>Want to receive event notifications? Join our mailing list and follow us on social media to never miss an event!</p>
             </div>
         </section>
 
-        <!-- Photo Showcase -->
-        <section class="home-photos-section">
-            <div class="container">
-                <div class="photos-header">
-                    <h2>Community in Action</h2>
-                    <button class="upload-btn" onclick="document.getElementById('photoUpload').click()">
-                        📸 Upload Photo
-                    </button>
-                    <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
+        <!-- LEARN MORE SECTION -->
+        <section id="learn-more" class="section">
+            <h2 class="gradient-text">Learn More About Us</h2>
+            
+            <div class="card">
+                <h3 class="gradient-text">Our Mission</h3>
+                <p>We are dedicated to creating an inclusive community where students can explore robotics, develop technical skills, and collaborate on innovative projects. Our mission is to inspire the <span class="orange-highlight">next generation of engineers</span>, programmers, and innovators who will shape the future of technology.</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3 class="gradient-text">What We Do</h3>
+                    <ul class="feature-list">
+                        <li>Weekly hands-on workshops and technical sessions</li>
+                        <li>Collaborative robot building projects</li>
+                        <li>Competition team training and support</li>
+                        <li>Guest speakers from industry and academia</li>
+                        <li>Networking events and career development</li>
+                        <li>Access to tools, equipment, and resources</li>
+                    </ul>
                 </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">Who Can Join?</h3>
+                    <p>All students are welcome, regardless of experience level! Whether you've never touched a robot before or you're a seasoned competitor, we have something for everyone.</p>
+                    <p style="margin-top: 1rem;"><strong class="orange-highlight">No experience required!</strong> We provide all the training and support you need to get started.</p>
+                    <p style="margin-top: 1rem;">Our club meets every week during the academic year, and we offer various levels of involvement to fit your schedule.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Skills You'll Learn</h3>
+                <div class="grid grid-3">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 0.5rem;">🔧 Mechanical Design</h4>
+                        <p>CAD modeling, 3D printing, machining, and mechanical systems</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 0.5rem;">💻 Programming</h4>
+                        <p>Python, C++, Arduino, ROS, and embedded systems</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 0.5rem;">⚡ Electronics</h4>
+                        <p>Circuit design, sensors, motors, and control systems</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Get Involved</h3>
+                <p>Ready to join? Contact us to learn about membership, upcoming meetings, and how you can get started with your first project!</p>
+                <p style="margin-top: 1rem;"><strong>Email:</strong> <span style="color: #667eea;">roboticsclub@university.edu</span></p>
+                <p><strong>Meeting Time:</strong> <span style="color: #667eea;">Thursdays, 6:00 PM</span></p>
+                <p><strong>Location:</strong> <span style="color: #667eea;">Engineering Building, Lab 204</span></p>
+            </div>
+        </section>
+
+        <!-- FELLOWSHIP PROGRAM SECTION -->
+        <section id="fellowship" class="section">
+            <h2 class="gradient-text">Fellowship Program</h2>
+            
+            <div class="card">
+                <h3 class="gradient-text">About the Fellowship</h3>
+                <p>Our Fellowship Program is designed for <span class="orange-highlight">dedicated members</span> who want to take their robotics expertise to the next level. Fellows receive specialized training, mentorship, and the opportunity to lead major club initiatives.</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3 class="gradient-text">Program Benefits</h3>
+                    <ul class="feature-list">
+                        <li>One-on-one mentorship from industry professionals</li>
+                        <li>Advanced technical workshops and training</li>
+                        <li>Leadership opportunities within the club</li>
+                        <li>Funding for personal robotics projects</li>
+                        <li>Priority access to competitions and events</li>
+                        <li>Networking with alumni and industry partners</li>
+                        <li>Certificate of completion for your portfolio</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">Program Structure</h3>
+                    <p><strong style="color: #667eea;">Duration:</strong> One academic year (Fall & Spring)</p>
+                    <p style="margin-top: 1rem;"><strong style="color: #667eea;">Time Commitment:</strong> 8-10 hours per week</p>
+                    <p style="margin-top: 1rem;"><strong style="color: #667eea;">Cohort Size:</strong> 15-20 Fellows per year</p>
+                    <p style="margin-top: 1rem;">Fellows work on a capstone project throughout the year, culminating in a showcase event where they present their work to the university community and industry partners.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Eligibility & Application</h3>
+                <p><strong>Who Can Apply:</strong></p>
+                <ul class="feature-list" style="margin-top: 1rem;">
+                    <li>Active club members for at least one semester</li>
+                    <li>Demonstrated passion for robotics and technology</li>
+                    <li>Strong collaboration and communication skills</li>
+                    <li>All majors and class years welcome</li>
+                </ul>
+                <p style="margin-top: 2rem;"><strong style="color: #667eea;">Application Period:</strong> Applications open each Spring for the following academic year</p>
+                <p style="margin-top: 1rem;"><strong style="color: #667eea;">Selection Process:</strong> Rolling applications, interview required</p>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Fellow Testimonials</h3>
+                <div style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 10px; margin-top: 1rem;">
+                    <p style="font-style: italic;">"The Fellowship Program gave me the confidence and skills to pursue a career in robotics. The mentorship and hands-on experience were invaluable."</p>
+                    <p style="color: #667eea; margin-top: 0.5rem;">— Former Fellow, Class of 2024</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WORKSHOPS SECTION -->
+        <section id="workshops" class="section">
+            <h2 class="gradient-text">Workshops</h2>
+            
+            <div class="card">
+                <h3 class="gradient-text">Hands-On Learning</h3>
+                <p>Our workshops are designed to teach practical skills in a fun, collaborative environment. No matter your skill level, you'll find workshops that challenge and inspire you.</p>
+            </div>
+
+            <h3 style="text-align: center; color: #667eea; margin-top: 2rem;">Beginner Workshops</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3 class="gradient-text">Introduction to Robotics</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>Basic robot components and systems</li>
+                        <li>Simple programming concepts</li>
+                        <li>Building your first robot</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 2 hours | <strong>Frequency:</strong> Monthly</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">Arduino Basics</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>Microcontroller fundamentals</li>
+                        <li>Reading sensors and controlling outputs</li>
+                        <li>Writing and uploading code</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 2 hours | <strong>Frequency:</strong> Monthly</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">CAD for Robotics</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>3D modeling basics</li>
+                        <li>Designing robot parts</li>
+                        <li>Preparing models for 3D printing</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 3 hours | <strong>Frequency:</strong> Bi-monthly</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">Electronics 101</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>Circuit fundamentals</li>
+                        <li>Using breadboards and components</li>
+                        <li>Safety and troubleshooting</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 2 hours | <strong>Frequency:</strong> Monthly</p>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; color: #764ba2; margin-top: 3rem;">Advanced Workshops</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3 class="gradient-text">ROS (Robot Operating System)</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>ROS architecture and concepts</li>
+                        <li>Publishing and subscribing to topics</li>
+                        <li>Building autonomous systems</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 4 hours | <strong>Frequency:</strong> Quarterly</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">Computer Vision & AI</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>Image processing with OpenCV</li>
+                        <li>Object detection and tracking</li>
+                        <li>Implementing ML models on robots</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 4 hours | <strong>Frequency:</strong> Quarterly</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">Advanced Motor Control</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>PID control theory</li>
+                        <li>Servo and stepper motor control</li>
+                        <li>Motion planning algorithms</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 3 hours | <strong>Frequency:</strong> Bi-monthly</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">PCB Design</h3>
+                    <p><strong style="color: #667eea;">What You'll Learn:</strong></p>
+                    <ul class="feature-list">
+                        <li>Schematic capture</li>
+                        <li>PCB layout and routing</li>
+                        <li>Manufacturing considerations</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Duration:</strong> 4 hours | <strong>Frequency:</strong> Quarterly</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3 class="gradient-text">Workshop Schedule</h3>
+                <p>Workshops are held weekly throughout the academic year. Check our events calendar or bulletin board for the latest schedule. <span class="orange-highlight">All workshops are free for club members!</span></p>
+                <p style="margin-top: 1rem;"><strong style="color: #667eea;">Note:</strong> Some advanced workshops may have prerequisites. Contact us if you're unsure about your readiness.</p>
+            </div>
+        </section>
+
+        <!-- COMPETITIONS SECTION -->
+        <section id="competitions" class="section">
+            <h2 class="gradient-text">Competitions</h2>
+            
+            <div class="card">
+                <h3 class="gradient-text">Compete at the Highest Level</h3>
+                <p>Our competition teams represent the best of what our club has to offer. Whether you're interested in building combat robots, autonomous vehicles, or solving complex challenges, we have a team for you.</p>
+            </div>
+
+            <h3 style="text-align: center; color: #667eea; margin-top: 2rem;">Major Competitions</h3>
+            
+            <div class="card">
+                <h3 class="gradient-text">🏆 VEX Robotics Competition</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <p><strong style="color: #667eea;">About:</strong></p>
+                        <p>The VEX Robotics Competition is a global robotics competition where teams design, build, and program robots to compete in an engineering challenge.</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Our Record:</strong></p>
+                        <ul class="feature-list">
+                            <li>3x Regional Champions</li>
+                            <li>National Semifinalists 2024</li>
+                            <li>Excellence Award Winners</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong style="color: #667eea;">Season:</strong> September - April</p>
+                        <p><strong style="color: #667eea;">Team Size:</strong> 8-12 members</p>
+                        <p><strong style="color: #667eea;">Skills Needed:</strong> Mechanical design, programming, strategy</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Commitment:</strong> 10-15 hours/week during competition season</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">🤖 FIRST Robotics Competition</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <p><strong style="color: #667eea;">About:</strong></p>
+                        <p>FIRST Robotics combines the excitement of sport with the rigors of science and technology. Teams build large-scale robots to compete in a high-energy game.</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Our Achievements:</strong></p>
+                        <ul class="feature-list">
+                            <li>Regional Finalists 2025</li>
+                            <li>Engineering Inspiration Award</li>
+                            <li>Rookie All-Star Team</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong style="color: #667eea;">Season:</strong> January - April</p>
+                        <p><strong style="color: #667eea;">Team Size:</strong> 15-25 members</p>
+                        <p><strong style="color: #667eea;">Skills Needed:</strong> All disciplines - mechanical, electrical, programming, business</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Commitment:</strong> 15-20 hours/week, intensive build season</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">🚗 Autonomous Vehicle Challenge</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <p><strong style="color: #667eea;">About:</strong></p>
+                        <p>Design and build an autonomous vehicle capable of navigating complex courses, avoiding obstacles, and completing specific tasks without human intervention.</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Our Progress:</strong></p>
+                        <ul class="feature-list">
+                            <li>Qualified for Nationals 2025</li>
+                            <li>Innovation Award Winners</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong style="color: #667eea;">Season:</strong> Year-round</p>
+                        <p><strong style="color: #667eea;">Team Size:</strong> 6-10 members</p>
+                        <p><strong style="color: #667eea;">Skills Needed:</strong> Computer vision, AI/ML, sensors, control systems</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Commitment:</strong> 8-12 hours/week</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">⚔️ BattleBots / Combat Robotics</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <p><strong style="color: #667eea;">About:</strong></p>
+                        <p>Build armored robots designed to battle head-to-head in an arena. Focus on durability, strategy, and creative weaponry.</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Our Highlights:</strong></p>
+                        <ul class="feature-list">
+                            <li>Local Tournament Champions</li>
+                            <li>Fan Favorite Award 2024</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong style="color: #667eea;">Season:</strong> October - March</p>
+                        <p><strong style="color: #667eea;">Team Size:</strong> 4-8 members</p>
+                        <p><strong style="color: #667eea;">Skills Needed:</strong> Mechanical design, materials science, strategy</p>
+                        <p style="margin-top: 1rem;"><strong style="color: #667eea;">Commitment:</strong> 6-10 hours/week</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">How to Join a Competition Team</h3>
+                <ul class="feature-list">
+                    <li>Attend an informational meeting at the start of the season</li>
+                    <li>No tryouts required - all interested members welcome!</li>
+                    <li>Teams welcome both beginners and experienced members</li>
+                    <li>Mentorship provided for new team members</li>
+                    <li>Flexible roles available based on your interests and schedule</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong style="color: #667eea;">Competition Funding:</strong> Travel, registration fees, and materials are covered by the club through sponsorships and university support.</p>
+            </div>
+        </section>
+
+        <!-- FOUNDERS SECTION -->
+        <section id="founders" class="section">
+            <h2 class="gradient-text">Meet Our Founders</h2>
+            
+            <div class="card">
+                <p style="text-align: center; font-size: 1.2rem; color: #b8b8d1;">Our club was founded by two passionate students who shared a vision of creating an inclusive, innovative robotics community.</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card founder-card">
+                    <div class="founder-avatar">AF</div>
+                    <div class="founder-name gradient-text">[Founder Name]</div>
+                    <div class="founder-title">Co-Founder & President</div>
+                    <p style="text-align: left; margin-top: 1rem;">
+                        [Brief bio about founder 1 - their background, what inspired them to start the club, their vision for the club's future, notable achievements, and what they're passionate about in robotics. This section can include their major, graduation year, previous experience, and future career goals.]
+                    </p>
+                    <p style="text-align: left; margin-top: 1rem; color: #667eea;">
+                        <strong>Area of Expertise:</strong> [e.g., Mechanical Design, AI/ML, etc.]<br>
+                        <strong>Favorite Project:</strong> [Project name/description]<br>
+                        <strong>Contact:</strong> founder1@university.edu
+                    </p>
+                </div>
+
+                <div class="card founder-card">
+                    <div class="founder-avatar">CS</div>
+                    <div class="founder-name gradient-text">[Co-Founder Name]</div>
+                    <div class="founder-title">Co-Founder & Vice President</div>
+                    <p style="text-align: left; margin-top: 1rem;">
+                        [Brief bio about founder 2 - their background, what inspired them to start the club, their vision for the club's future, notable achievements, and what they're passionate about in robotics. This section can include their major, graduation year, previous experience, and future career goals.]
+                    </p>
+                    <p style="text-align: left; margin-top: 1rem; color: #667eea;">
+                        <strong>Area of Expertise:</strong> [e.g., Programming, Electronics, etc.]<br>
+                        <strong>Favorite Project:</strong> [Project name/description]<br>
+                        <strong>Contact:</strong> founder2@university.edu
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Our Story</h3>
+                <p>[Tell the story of how the club was founded - when it started, what motivated the founders to create it, early challenges and successes, how it has grown, and the impact it has had on members and the community. This is a great place to share the club's origin story and values.]</p>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Leadership Team</h3>
+                <p>Beyond our founders, our club is supported by a dedicated leadership team of officers, project leads, and mentors who work together to make our vision a reality.</p>
+                <p style="margin-top: 1rem; color: #b8b8d1;">Interested in leadership opportunities? Active members can apply for officer positions each spring!</p>
+            </div>
+        </section>
+
+        <!-- SPONSORS SECTION -->
+        <section id="sponsors" class="section">
+            <h2 class="gradient-text">Our Sponsors</h2>
+            
+            <div class="card">
+                <h3 class="gradient-text">Thank You to Our Supporters</h3>
+                <p>Our sponsors make it possible for us to provide world-class resources, compete at the highest levels, and offer free programming to all our members. We are grateful for their partnership and commitment to education and innovation.</p>
+            </div>
+
+            <h3 style="text-align: center; color: #667eea; margin-top: 2rem;">Platinum Sponsors</h3>
+            <div class="sponsor-grid">
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🏢</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🏢</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; color: #764ba2; margin-top: 2rem;">Gold Sponsors</h3>
+            <div class="sponsor-grid">
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏆</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏆</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏆</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; color: #667eea; margin-top: 2rem;">Silver Sponsors</h3>
+            <div class="sponsor-grid">
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+                <div class="sponsor-card">
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                        <h4 class="gradient-text">[Company Name]</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 3rem;">
+                <h3 class="gradient-text">In-Kind Supporters</h3>
+                <p>We also want to thank the following organizations for their generous donations of equipment, software licenses, and other resources:</p>
+                <div class="grid grid-3" style="margin-top: 1.5rem;">
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛠️</div>
+                        <p class="gradient-text"><strong>[Company/Org Name]</strong></p>
+                        <p style="font-size: 0.9rem; color: #b8b8d1;">Tools & Equipment</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">💻</div>
+                        <p class="gradient-text"><strong>[Company/Org Name]</strong></p>
+                        <p style="font-size: 0.9rem; color: #b8b8d1;">Software Licenses</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
+                        <p class="gradient-text"><strong>[Company/Org Name]</strong></p>
+                        <p style="font-size: 0.9rem; color: #b8b8d1;">Training Resources</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Interested in Sponsoring?</h3>
+                <p>Your support helps us expand our programs, purchase equipment, and provide opportunities for students to learn and grow. Visit our <a href="#" onclick="showSection('partner')" style="color: #667eea; text-decoration: underline;">Partner with Us</a> page to learn about sponsorship opportunities.</p>
+            </div>
+        </section>
+
+        <!-- BULLETIN BOARD SECTION -->
+        <section id="bulletin" class="section">
+            <h2 class="gradient-text">Bulletin Board</h2>
+            
+            <div class="card">
+                <p style="text-align: center; font-size: 1.1rem;">Share updates, ask questions, and connect with fellow members!</p>
+            </div>
+
+            <div class="bulletin-board">
+                <h3 class="gradient-text">Post a Message</h3>
+                <form class="post-form" onsubmit="addComment(event)">
+                    <div class="form-group">
+                        <label for="comment-name">Your Name:</label>
+                        <input type="text" id="comment-name" required placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="comment-message">Message:</label>
+                        <textarea id="comment-message" required placeholder="Share your thoughts, questions, or announcements..."></textarea>
+                    </div>
+                    <button type="submit" class="btn">Post Message</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">Recent Posts</h3>
+                <div id="comments-container">
+                    <div class="comment">
+                        <div class="comment-author">Alex Chen</div>
+                        <div class="comment-date">October 23, 2025 at 3:45 PM</div>
+                        <div class="comment-text">Hey everyone! Looking for team members for the VEX competition. We need 2 more programmers. DM me if interested!</div>
+                    </div>
+
+                    <div class="comment">
+                        <div class="comment-author">Sarah Johnson</div>
+                        <div class="comment-date">October 23, 2025 at 11:20 AM</div>
+                        <div class="comment-text">The Arduino workshop yesterday was amazing! Thanks to the organizers. Can't wait for the next one! 🤖</div>
+                    </div>
+
+                    <div class="comment">
+                        <div class="comment-author">Mike Rodriguez</div>
+                        <div class="comment-date">October 22, 2025 at 7:15 PM</div>
+                        <div class="comment-text">Don't forget - lab cleanup this Saturday at 10 AM. Pizza provided! Please come help us organize the workshop space.</div>
+                    </div>
+
+                    <div class="comment">
+                        <div class="comment-author">Emily Park</div>
+                        <div class="comment-date">October 22, 2025 at 2:30 PM</div>
+                        <div class="comment-text">Anyone have experience with ROS navigation? Working on a project and could use some advice. Happy to grab coffee!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PARTNER WITH US SECTION -->
+        <section id="partner" class="section">
+            <h2 class="gradient-text">Partner with Us</h2>
+            
+            <div class="card">
+                <h3 class="gradient-text">Why Partner with Our Club?</h3>
+                <p>Partnering with our robotics club offers unique opportunities to connect with talented, passionate students, support STEM education, and contribute to the development of future engineers and innovators.</p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <h3 class="gradient-text">💼 For Companies</h3>
+                    <ul class="feature-list">
+                        <li>Access to top student talent for recruiting</li>
+                        <li>Brand visibility to tech-savvy audience</li>
+                        <li>Host workshops and tech talks</li>
+                        <li>Sponsor competition teams</li>
+                        <li>Collaborate on research projects</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">🎓 For Academic Partners</h3>
+                    <ul class="feature-list">
+                        <li>Joint research opportunities</li>
+                        <li>Guest lecture series</li>
+                        <li>Lab equipment sharing</li>
+                        <li>Student exchange programs</li>
+                        <li>Conference collaborations</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3 class="gradient-text">🤝 For Organizations</h3>
+                    <ul class="feature-list">
+                        <li>Community outreach programs</li>
+                        <li>STEM education initiatives</li>
+                        <li>Volunteer opportunities</li>
+                        <li>Grant partnerships</li>
+                        <li>Equipment donations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; color: #667eea; margin-top: 3rem;">Sponsorship Tiers</h3>
+            
+            <div class="card">
+                <h3 class="gradient-text">💎 Platinum Tier ($10,000+)</h3>
+                <ul class="feature-list">
+                    <li>Prominent logo placement on website, competition robots, and team apparel</li>
+                    <li>Exclusive naming rights for major events or workshops</li>
+                    <li>Dedicated booth/table at all club events</li>
+                    <li>Direct access to resume book and recruitment events</li>
+                    <li>Quarterly meetings with club leadership</li>
+                    <li>4 guest speaker/workshop opportunities per year</li>
+                    <li>Recognition in all press releases and media coverage</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">🥇 Gold Tier ($5,000 - $9,999)</h3>
+                <ul class="feature-list">
+                    <li>Logo on website, select competition robots, and event materials</li>
+                    <li>Co-branding opportunities for specific programs</li>
+                    <li>Access to resume book</li>
+                    <li>2 guest speaker/workshop opportunities per year</li>
+                    <li>Social media recognition</li>
+                    <li>VIP access to competitions and showcases</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">🥈 Silver Tier ($2,500 - $4,999)</h3>
+                <ul class="feature-list">
+                    <li>Logo on website and event materials</li>
+                    <li>1 guest speaker/workshop opportunity per year</li>
+                    <li>Social media recognition</li>
+                    <li>Access to select recruiting events</li>
+                    <li>Competition spectator passes</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="gradient-text">🥉 Bronze Tier ($1,000 - $2,499)</h3>
+                <ul class="feature-list">
+                    <li>Name listed on website</li>
+                    <li>Social media recognition</li>
+                    <li>Thank you recognition at events</li>
+                    <li>Newsletter feature</li>
+                </ul>
+            </div>
+
+            <div class="partnership-form">
+                <h3 class="gradient-text">Get in Touch</h3>
+                <p style="margin-bottom: 2rem;">Interested in partnering with us? Fill out the form below or contact us directly.</p>
                 
-                <div class="home-photos-grid">
-                    <div class="home-photo-item">
-                        <div class="home-photo-placeholder">
-                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
-                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
-                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
-                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
-                            </svg>
-                        </div>
+                <form onsubmit="submitPartnershipForm(event)">
+                    <div class="form-group">
+                        <label for="partner-name">Name / Organization:</label>
+                        <input type="text" id="partner-name" required placeholder="Your name or organization">
                     </div>
-                    <div class="home-photo-item">
-                        <div class="home-photo-placeholder">
-                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
-                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
-                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
-                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
-                            </svg>
-                        </div>
+                    <div class="form-group">
+                        <label for="partner-email">Email:</label>
+                        <input type="email" id="partner-email" required placeholder="your.email@example.com">
                     </div>
-                    <div class="home-photo-item">
-                        <div class="home-photo-placeholder">
-                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
-                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
-                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
-                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
-                            </svg>
-                        </div>
+                    <div class="form-group">
+                        <label for="partner-type">Partnership Interest:</label>
+                        <select id="partner-type" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(102,126,234,0.3); border-radius: 8px; color: #ffffff;">
+                            <option value="">Select an option...</option>
+                            <option value="sponsorship">Financial Sponsorship</option>
+                            <option value="inkind">In-Kind Donation</option>
+                            <option value="workshop">Host a Workshop/Talk</option>
+                            <option value="recruiting">Recruiting Partnership</option>
+                            <option value="research">Research Collaboration</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
-                    <div class="home-photo-item">
-                        <div class="home-photo-placeholder">
-                            <svg viewBox="0 0 1024 624" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="328" y="95" width="368" height="237" rx="40" fill="#7B5CFA"/>
-                                <circle cx="501" cy="47" r="20" fill="#7B5CFA"/>
-                                <rect x="318" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <rect x="646" y="143" width="60" height="80" rx="30" fill="#7B5CFA"/>
-                                <circle cx="445" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <circle cx="557" cy="183" r="30" stroke="#1a1a2e" stroke-width="8" fill="none"/>
-                                <path d="M455 260 Q501 280 547 260" stroke="#1a1a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
-                                <text x="162" y="560" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#374a67" letter-spacing="20">ROBOTICS</text>
-                            </svg>
-                        </div>
+                    <div class="form-group">
+                        <label for="partner-message">Message:</label>
+                        <textarea id="partner-message" required placeholder="Tell us about your interest in partnering with us..."></textarea>
                     </div>
+                    <button type="submit" class="btn">Submit Inquiry</button>
+                </form>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(102,126,234,0.2);">
+                    <p><strong style="color: #667eea;">Direct Contact:</strong></p>
+                    <p>Email: partnerships@roboticsclub.edu</p>
+                    <p>Phone: (555) 123-4567</p>
                 </div>
             </div>
         </section>
+    </div>
 
-        <!-- Sponsor CTA -->
-        <section class="container">
-            <div class="sponsor-cta">
-                <h3>🤝 Partner With Us</h3>
-                <p>Support the next generation of robotics innovators while gaining access to talented engineers and students</p>
-                <a href="#"
+    <script>
+        // Toggle Mobile Menu
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Close mobile menu if open
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.remove('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Bulletin Board - Add Comment
+        function addComment(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('comment-name').value;
+            const message = document.getElementById('comment-message').value;
+            const now = new Date();
+            const dateString = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            }) + ' at ' + now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit' 
+            });
+            
+            const commentHTML = `
+                <div class="comment">
+                    <div class="comment-author">${name}</div>
+                    <div class="comment-date">${dateString}</div>
+                    <div class="comment-text">${message}</div>
+                </div>
+            `;
+            
+            const container = document.getElementById('comments-container');
+            container.insertAdjacentHTML('afterbegin', commentHTML);
+            
+            // Clear form
+            document.getElementById('comment-name').value = '';
+            document.getElementById('comment-message').value = '';
+            
+            // Show success message
+            alert('Your message has been posted!');
+        }
+
+        // Partnership Form
+        function submitPartnershipForm(event) {
+            event.preventDefault();
+            
+            // In a real application, this would send the form data to a server
+            alert('Thank you for your interest! We will contact you within 2 business days.');
+            
+            // Clear form
+            event.target.reset();
+        }
+
+        // Initialize - show home section by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('home');
+        });
+    </script>
+</body>
+</html>
