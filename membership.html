@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join LV Robotics - Membership Signup</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#events" class="nav-link">Events</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="community.html" class="nav-link">Community</a></li>
+                <li><a href="sponsorship.html" class="nav-link">Sponsorship</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Membership Form Section -->
+    <section class="membership-section">
+        <div class="container">
+            <div class="membership-header">
+                <img src="images/LVRobot_Green_new_Logo.png" alt="LV Robotics" class="membership-logo">
+                <h1>Join <span class="highlight">LV Robotics</span></h1>
+                <p class="membership-intro">Become part of our growing community of 500+ robotics enthusiasts! Fill out the form below to create your member profile.</p>
+            </div>
+
+            <div class="membership-form-container">
+                <div id="formMessage" class="form-message"></div>
+                
+                <form id="membershipForm" class="membership-form" enctype="multipart/form-data">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-user"></i> Personal Information</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">City/Location</label>
+                            <input type="text" id="location" name="location" placeholder="e.g., Las Vegas, Henderson, etc.">
+                        </div>
+                    </div>
+
+                    <!-- Profile Photo -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-camera"></i> Profile Photo</h2>
+                        <div class="form-group">
+                            <label for="profilePhoto">Upload Your Photo (Optional)</label>
+                            <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*">
+                            <div class="file-upload-hint">JPG, PNG, or GIF - Max 5MB</div>
+                        </div>
+                    </div>
+
+                    <!-- About You -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-info-circle"></i> About You</h2>
+                        
+                        <div class="form-group">
+                            <label for="experience">Experience Level</label>
+                            <select id="experience" name="experience">
+                                <option value="">Select your experience level</option>
+                                <option value="beginner">Beginner - New to robotics</option>
+                                <option value="intermediate">Intermediate - Some experience</option>
+                                <option value="advanced">Advanced - Experienced</option>
+                                <option value="professional">Professional - Industry expert</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="interests">Areas of Interest</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="interests" value="firstRobotics"> FIRST Robotics</label>
+                                <label><input type="checkbox" name="interests" value="ai"> AI/Machine Learning</label>
+                                <label><input type="checkbox" name="interests" value="hardware"> Hardware/Electronics</label>
+                                <label><input type="checkbox" name="interests" value="software"> Software/Programming</label>
+                                <label><input type="checkbox" name="interests" value="3dPrinting"> 3D Printing</label>
+                                <label><input type="checkbox" name="interests" value="drones"> Drones</label>
+                                <label><input type="checkbox" name="interests" value="competitions"> Competitions</label>
+                                <label><input type="checkbox" name="interests" value="mentoring"> Mentoring</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bio">Tell Us About Yourself</label>
+                            <textarea id="bio" name="bio" rows="5" placeholder="Share your interests, background, what you hope to get from the community, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Skills & Expertise -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-tools"></i> Skills & Expertise</h2>
+                        <div class="form-group">
+                            <label for="skills">What skills can you bring to the community?</label>
+                            <textarea id="skills" name="skills" rows="3" placeholder="e.g., Python programming, mechanical design, mentoring students, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Social Media (Optional) -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-share-alt"></i> Connect With You (Optional)</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn Profile</label>
+                                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label for="github">GitHub Profile</label>
+                                <input type="url" id="github" name="github" placeholder="https://github.com/yourusername">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- How Did You Hear About Us -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-bullhorn"></i> How Did You Find Us?</h2>
+                        <div class="form-group">
+                            <label for="referral">How did you hear about LV Robotics?</label>
+                            <select id="referral" name="referral">
+                                <option value="">Select an option</option>
+                                <option value="meetup">Meetup.com</option>
+                                <option value="friend">Friend/Colleague</option>
+                                <option value="social">Social Media</option>
+                                <option value="search">Google Search</option>
+                                <option value="event">Attended an event</option>
+                                <option value="school">School/University</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Consent & Privacy -->
+                    <div class="form-section">
+                        <div class="form-group checkbox-single">
+                            <label>
+                                <input type="checkbox" id="emailConsent" name="emailConsent" required>
+                                I agree to receive email updates about LV Robotics events and news *
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-single">
+                            <label>
+                                <input type="checkbox" id="privacyConsent" name="privacyConsent" required>
+                                I agree to the <a href="#" class="link">Privacy Policy</a> and <a href="#" class="link">Terms of Service</a> *
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-rocket"></i> Join LV Robotics Community
+                        </button>
+                    </div>
+
+                    <div id="formMessage" class="form-message"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Information Section -->
+    <section class="membership-benefits">
+        <div class="container">
+            <h2 class="section-title">Member <span class="highlight">Benefits</span></h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Exclusive Events</h3>
+                    <p>Access to workshops, competitions, and networking events</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Community Network</h3>
+                    <p>Connect with 500+ robotics enthusiasts and professionals</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Learning Resources</h3>
+                    <p>Access to tutorials, mentorship, and skill-building programs</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Industry Connections</h3>
+                    <p>Networking with local tech companies and opportunities</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 LV Robotics. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/membership.js"></script>
+</body>
+</html>

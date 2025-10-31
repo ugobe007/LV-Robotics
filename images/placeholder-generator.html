@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id="c1" width="800" height="600"></canvas>
+<canvas id="c2" width="800" height="600"></canvas>
+<canvas id="c3" width="800" height="600"></canvas>
+<script>
+// Generate placeholder images
+const canvases = ['c1', 'c2', 'c3'];
+const colors = ['#7c3aed', '#db2777', '#ea580c'];
+const labels = ['Workshop Photo', 'Team Photo', 'Competition Photo'];
+
+canvases.forEach((id, i) => {
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = colors[i];
+  ctx.fillRect(0, 0, 800, 600);
+  ctx.fillStyle = 'white';
+  ctx.font = '48px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText(labels[i], 400, 300);
+  ctx.fillText('Add your image here', 400, 360);
+  
+  // Download
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'community-' + (i+1) + '.jpg';
+    a.click();
+  }, 'image/jpeg');
+});
+</script>
+</body>
+</html>

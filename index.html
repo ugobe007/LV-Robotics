@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LV Robotics - Las Vegas Robotics Community</title>
+    <link rel="stylesheet" href="css/styles.css?v=26">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li class="dropdown">
+                    <a href="#programs" class="nav-link">Programs <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#fellowship">Fellowship Program</a></li>
+                        <li><a href="#workshops">Workshops</a></li>
+                        <li><a href="#competitions">Competitions</a></li>
+                    </ul>
+                </li>
+                <li><a href="#events" class="nav-link">View Events</a></li>
+                <li class="dropdown">
+                    <a href="#about" class="nav-link">About <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#founders">Founders</a></li>
+                        <li><a href="#sponsors">Sponsors</a></li>
+                    </ul>
+                </li>
+                <li><a href="community.html" class="nav-link">Community</a></li>
+                <li><a href="sponsorship.html" class="nav-link">Sponsorship</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="bulletin-cta">
+            <a href="community.html" class="btn-bulletin">📋 Community Bulletin Board</a>
+        </div>
+        <div class="hero-content">
+            <div class="hero-title-container">
+                <div class="hero-logo-section">
+                    <img src="images/LVRobot_Green_new_Logo.png" alt="LV Robotics Logo" class="hero-logo">
+                </div>
+                <div class="hero-divider"></div>
+                <div class="hero-text-section">
+                    <h1 class="hero-title">welcome to<br><span class="highlight">LV Robotics</span></h1>
+                </div>
+            </div>
+            <p class="hero-subtitle">Building the future of robotics in Las Vegas</p>
+            <p class="hero-description">Join our vibrant community of 500+ innovators, engineers, and enthusiasts passionate about robotics and technology. Whether you're a beginner exploring your first robot or an experienced professional pushing the boundaries of automation, LV Robotics provides the platform, resources, and connections to fuel your journey. Connect with like-minded makers, participate in hands-on workshops, compete in exciting challenges, and be part of shaping the future of robotics in Southern Nevada.</p>
+            <div class="hero-buttons">
+                <a href="membership.html" class="btn btn-primary">Join Us - Become a Member</a>
+            </div>
+        </div>
+        <div class="particles" id="particles"></div>
+    </section>
+
+    <!-- Events Calendar -->
+    <section id="events" class="events-section">
+        <div class="container">
+            <h2 class="section-title">Upcoming <span class="highlight">Events</span></h2>
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-date">
+                        <span class="month">Nov</span>
+                        <span class="day">15</span>
+                    </div>
+                    <div class="event-details">
+                        <h3>Intro to Robotics Workshop</h3>
+                        <p class="event-time"><i class="far fa-clock"></i> 2:00 PM - 5:00 PM</p>
+                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> UNLV Engineering Building</p>
+                        <a href="#" class="btn btn-small">Register</a>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-date">
+                        <span class="month">Nov</span>
+                        <span class="day">22</span>
+                    </div>
+                    <div class="event-details">
+                        <h3>FIRST Robotics Meetup</h3>
+                        <p class="event-time"><i class="far fa-clock"></i> 6:00 PM - 8:00 PM</p>
+                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Tech Center Downtown</p>
+                        <a href="#" class="btn btn-small">Register</a>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-date">
+                        <span class="month">Dec</span>
+                        <span class="day">05</span>
+                    </div>
+                    <div class="event-details">
+                        <h3>Holiday Robot Showcase</h3>
+                        <p class="event-time"><i class="far fa-clock"></i> 1:00 PM - 6:00 PM</p>
+                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Community Center</p>
+                        <a href="#" class="btn btn-small">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Showcase / Community -->
+    <section class="photo-showcase">
+        <div class="container">
+            <h2 class="section-title">Our <span class="highlight">Community</span></h2>
+            <div class="photo-grid">
+                <div class="photo-card">
+                    <div class="photo-placeholder">
+                        <img src="images/community-1.jpg" alt="Robotics Workshop" class="community-photo">
+                    </div>
+                    <h3>Hands-On Workshops</h3>
+                    <p>Learn by doing in our interactive sessions</p>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-placeholder">
+                        <img src="images/community-2.jpg" alt="Team Collaboration" class="community-photo">
+                    </div>
+                    <h3>Team Collaboration</h3>
+                    <p>Work together on exciting projects</p>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-placeholder">
+                        <img src="images/community-3.jpg" alt="Competitions" class="community-photo">
+                    </div>
+                    <h3>Competitions</h3>
+                    <p>Test your skills in friendly competition</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fellowship Program -->
+    <section id="fellowship" class="fellowship-section">
+        <div class="container">
+            <h2 class="section-title"><span class="highlight">Fellowship</span> Program</h2>
+            <div class="fellowship-content">
+                <div class="fellowship-text">
+                    <h3>Connect High School Students with Industry</h3>
+                    <p>Our Fellowship Program bridges the gap between FIRST Robotics teams and paid internship opportunities with local tech companies.</p>
+                    <ul class="benefits-list">
+                        <li><i class="fas fa-check-circle"></i> Paid internships for qualified students</li>
+                        <li><i class="fas fa-check-circle"></i> Mentorship from industry professionals</li>
+                        <li><i class="fas fa-check-circle"></i> Real-world project experience</li>
+                        <li><i class="fas fa-check-circle"></i> College application portfolio building</li>
+                        <li><i class="fas fa-check-circle"></i> Networking opportunities</li>
+                    </ul>
+                    <a href="#partner" class="btn btn-primary">Learn More</a>
+                </div>
+                <div class="fellowship-image">
+                    <div class="stats-box">
+                        <div class="stat">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Students Placed</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">25+</span>
+                            <span class="stat-label">Partner Companies</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Satisfaction Rate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workshops Section -->
+    <section id="workshops" class="workshops-section">
+        <div class="container">
+            <h2 class="section-title">Our <span class="highlight">Workshops</span></h2>
+            <div class="workshops-grid">
+                <div class="workshop-card">
+                    <div class="workshop-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Beginner Robotics</h3>
+                    <p>Learn the fundamentals of robotics design, programming, and electronics.</p>
+                </div>
+                <div class="workshop-card">
+                    <div class="workshop-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Advanced Programming</h3>
+                    <p>Master Python, C++, and ROS for robotics applications.</p>
+                </div>
+                <div class="workshop-card">
+                    <div class="workshop-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>Electronics & Circuits</h3>
+                    <p>Understand sensors, motors, and microcontrollers.</p>
+                </div>
+                <div class="workshop-card">
+                    <div class="workshop-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI & Machine Learning</h3>
+                    <p>Implement computer vision and autonomous navigation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitions Section -->
+    <section id="competitions" class="competitions-section">
+        <div class="container">
+            <h2 class="section-title"><span class="highlight">Competitions</span></h2>
+            <div class="competitions-content">
+                <p class="intro-text">We support and participate in various robotics competitions throughout the year.</p>
+                <div class="competition-list">
+                    <div class="competition-item">
+                        <h3>FIRST Robotics Competition (FRC)</h3>
+                        <p>High school students design and build robots to compete in alliance format field game.</p>
+                    </div>
+                    <div class="competition-item">
+                        <h3>VEX Robotics Competition</h3>
+                        <p>Middle and high school students compete with custom-built robots in challenging game scenarios.</p>
+                    </div>
+                    <div class="competition-item">
+                        <h3>BattleBots IQ</h3>
+                        <p>Combat robotics competition for students to design and battle their own robots.</p>
+                    </div>
+                    <div class="competition-item">
+                        <h3>Local Innovation Challenges</h3>
+                        <p>Community-driven competitions focusing on solving real-world problems with robotics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founders Section -->
+    <section id="founders" class="founders-section">
+        <div class="container">
+            <h2 class="section-title">Meet Our <span class="highlight">Founders</span></h2>
+            <div class="founders-grid">
+                <div class="founder-card">
+                    <div class="founder-image">
+                        <img src="images/Bob_San.jpg" alt="Bob - Co-Founder" class="founder-photo">
+                    </div>
+                    <h3>Bob</h3>
+                    <p class="founder-title">Co-Founder</p>
+                    <p class="founder-bio">Passionate about connecting youth with robotics opportunities and building a thriving tech community in Las Vegas.</p>
+                </div>
+                <div class="founder-card">
+                    <div class="founder-image">
+                        <img src="images/Darius_san.jpg" alt="Darius - Co-Founder" class="founder-photo">
+                    </div>
+                    <h3>Darius</h3>
+                    <p class="founder-title">Co-Founder</p>
+                    <p class="founder-bio">Dedicated to inspiring the next generation of engineers and innovators through hands-on robotics education.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section id="sponsors" class="sponsors-section">
+        <div class="container">
+            <h2 class="section-title">Our <span class="highlight">Sponsors</span></h2>
+            <p class="sponsors-intro">We're grateful for the support of our community partners who make our programs possible.</p>
+            <div class="sponsors-grid">
+                <div class="sponsor-logo">
+                    <div class="logo-placeholder">Sponsor Logo</div>
+                </div>
+                <div class="sponsor-logo">
+                    <div class="logo-placeholder">Sponsor Logo</div>
+                </div>
+                <div class="sponsor-logo">
+                    <div class="logo-placeholder">Sponsor Logo</div>
+                </div>
+                <div class="sponsor-logo">
+                    <div class="logo-placeholder">Sponsor Logo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bulletin Board -->
+    <section id="bulletin" class="bulletin-section">
+        <div class="container">
+            <h2 class="section-title"><span class="highlight">Bulletin</span> Board</h2>
+            <div class="bulletin-container">
+                <div class="auth-controls">
+                    <div id="authSignedOut">
+                        <input type="email" id="authEmail" placeholder="Enter email to sign in" style="padding:0.6rem 1rem;border-radius:8px;border:2px solid #e2e8f0;background:white;margin-right:0.5rem;">
+                        <button class="btn btn-primary" onclick="requestMagicLink()">Sign in to post</button>
+                        <button class="btn btn-secondary" onclick="oauthSignIn('google')" style="margin-left:0.5rem;">Google</button>
+                        <button class="btn btn-secondary" onclick="oauthSignIn('github')" style="margin-left:0.5rem;">GitHub</button>
+                    </div>
+                    <div id="authSignedIn" style="display:none; align-items:center; gap:0.75rem;">
+                        <span id="authUserEmail" style="color:#e2e8f0;"></span>
+                        <button class="btn btn-secondary" onclick="signOut()">Sign out</button>
+                    </div>
+                </div>
+                <div class="post-form">
+                    <h3>Share with the Community</h3>
+                    <textarea id="bulletinText" placeholder="What's happening in robotics?"></textarea>
+                    <div class="media-controls">
+                        <button onclick="document.getElementById('imageUpload').click()" class="media-btn">
+                            📷 Add Image
+                        </button>
+                        <button onclick="document.getElementById('videoUpload').click()" class="media-btn">
+                            🎥 Add Video
+                        </button>
+                        <button onclick="addLink()" class="media-btn">
+                            🔗 Add Link
+                        </button>
+                    </div>
+                    <input type="file" id="imageUpload" class="media-input" accept="image/*" onchange="handleImageUpload(event)">
+                    <input type="file" id="videoUpload" class="media-input" accept="video/*" onchange="handleVideoUpload(event)">
+                    <div id="mediaPreview"></div>
+                    <button onclick="addPost()" class="btn btn-primary">Post</button>
+                </div>
+                <div class="bulletin-posts" id="bulletinPosts">
+                    <div class="bulletin-post">
+                        <div class="post-header">
+                            <span class="post-author">Admin</span>
+                            <span class="post-time">2 hours ago</span>
+                        </div>
+                        <p class="post-content">Welcome to LV Robotics! Share your ideas, questions, and achievements here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partner with Us -->
+    <section id="partner" class="partner-section">
+        <div class="container">
+            <h2 class="section-title"><span class="highlight">Partner</span> with Us</h2>
+            <p class="partner-intro">Join leading organizations investing in the next generation of innovators and engineers</p>
+
+            <div class="partner-grid">
+                <div class="partner-card">
+                    <div class="partner-emoji">🏢</div>
+                    <h3>For Companies</h3>
+                    <p>Sponsor events, offer internships, and connect with top emerging talent in robotics and engineering.</p>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-emoji">🎓</div>
+                    <h3>For Educators</h3>
+                    <p>Collaborate on curriculum, host workshops, and join our mentorship network to inspire students.</p>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-emoji">🤝</div>
+                    <h3>For Community</h3>
+                    <p>Volunteer your time, donate equipment, or help spread the word about STEM education.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="sponsorship.html" class="btn btn-primary" style="font-size: 1.2rem; padding: 1.25rem 3rem;">View Sponsorship Opportunities</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>LV Robotics</h3>
+                    <p>Building the future of robotics in Las Vegas</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#events">Events</a></li>
+                        <li><a href="#fellowship">Fellowship</a></li>
+                        <li><a href="#partner">Partner with Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@lvrobotics.org</li>
+                        <li><i class="fas fa-phone"></i> (702) 555-0123</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Las Vegas, NV</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LV Robotics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/main.js?v=3"></script>
+</body>
+</html>

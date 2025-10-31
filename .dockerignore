@@ -1,0 +1,9 @@
+# Fly.io deployment files
+.git
+.gitignore
+node_modules
+*.log
+.DS_Store
+.env
+*.md
+supabase-setup.sql

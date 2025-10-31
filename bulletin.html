@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Bulletin Board - LV Robotics</title>
+    <link rel="stylesheet" href="css/styles.css?v=18">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#events" class="nav-link">Events</a></li>
+                <li><a href="community.html" class="nav-link active">Community</a></li>
+                <li><a href="membership.html" class="nav-link">Join Us</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Community Bulletin Board Section -->
+    <section class="bulletin-page">
+        <h1 class="page-title" style="display: block; color: white; font-size: 3.5rem; margin-bottom: 1.5rem; text-align: center; padding-top: 0;">Community <span class="highlight" style="color: #a8e6a1;">Bulletin Board</span></h1>
+        <p class="page-subtitle" style="display: block; color: #e2e8f0; font-size: 1.3rem; margin-bottom: 1.5rem; text-align: center;">Share your robotics projects, ask questions, and connect with the community</p>
+        
+        <!-- Auth Controls - Centered -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div id="authSignedOut">
+                <button class="btn btn-primary" onclick="showSignInModal()">Sign in to post</button>
+            </div>
+            <div id="authSignedIn" style="display:none; justify-content: center; align-items:center; gap:0.75rem;">
+                <button class="btn btn-secondary" onclick="signOut()">Sign out</button>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="bulletin-container">
+                <div class="post-form">
+                    <h3>Share with the Community</h3>
+                    <textarea id="bulletinText" placeholder="What's happening in robotics?"></textarea>
+                    <div class="media-controls">
+                        <button onclick="document.getElementById('imageUpload').click()" class="media-btn">
+                            📷 Add Image
+                        </button>
+                        <button onclick="document.getElementById('videoUpload').click()" class="media-btn">
+                            🎥 Add Video
+                        </button>
+                        <button onclick="addLink()" class="media-btn">
+                            🔗 Add Link
+                        </button>
+                    </div>
+                    <input type="file" id="imageUpload" class="media-input" accept="image/*" onchange="handleImageUpload(event)">
+                    <input type="file" id="videoUpload" class="media-input" accept="video/*" onchange="handleVideoUpload(event)">
+                    <div id="mediaPreview"></div>
+                    <button onclick="addPost()" class="btn btn-primary">Post</button>
+                </div>
+                
+                <div class="gallery-section">
+                    <h2 class="gallery-title">📸 Latest Community Posts (0/50)</h2>
+                    <div class="bulletin-posts" id="bulletinPosts">
+                        <!-- Empty placeholders -->
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">📷<br>Share your<br>project!</div>
+                        </div>
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">🤖<br>Upload<br>your robot</div>
+                        </div>
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">💡<br>Share<br>ideas</div>
+                        </div>
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">🎥<br>Post<br>videos</div>
+                        </div>
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">📸<br>Add<br>photos</div>
+                        </div>
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">✨<br>Join the<br>community</div>
+                        </div>
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">🚀<br>Show your<br>work</div>
+                        </div>
+                        <div class="bulletin-post empty-post">
+                            <div class="post-text-preview">🔧<br>Share<br>tips</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>LV Robotics</h3>
+                    <p>Building the future of robotics in Las Vegas</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#events">Events</a></li>
+                        <li><a href="community.html">Community</a></li>
+                        <li><a href="membership.html">Join Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LV Robotics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/main.js?v=5"></script>
+</body>
+</html>
