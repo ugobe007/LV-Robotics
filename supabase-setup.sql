@@ -4,6 +4,7 @@
 -- Create members table (idempotent)
 CREATE TABLE IF NOT EXISTS members (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -23,33 +24,44 @@ CREATE TABLE IF NOT EXISTS members (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Create index on user_id for faster lookups
+CREATE INDEX IF NOT EXISTS idx_members_user_id ON members(user_id);
+
 -- Create index on email for faster lookups
-CREATE INDEX idx_members_email ON members(email);
+CREATE INDEX IF NOT EXISTS idx_members_email ON members(email);
 
 -- Create index on created_at for sorting
-CREATE INDEX idx_members_created_at ON members(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_members_created_at ON members(created_at DESC);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE members ENABLE ROW LEVEL SECURITY;
 
 -- Re-create policies idempotently
 DROP POLICY IF EXISTS "Enable insert for anon users" ON members;
-CREATE POLICY "Enable insert for anon users" 
-ON members FOR INSERT 
-TO anon
-WITH CHECK (true);
-
 DROP POLICY IF EXISTS "Enable insert for authenticated users" ON members;
-CREATE POLICY "Enable insert for authenticated users" 
+CREATE POLICY "Users can insert their own member profile" 
 ON members FOR INSERT 
 TO authenticated
-WITH CHECK (true);
+WITH CHECK (auth.uid() = user_id);
 
 DROP POLICY IF EXISTS "Enable read access for all users" ON members;
-CREATE POLICY "Enable read access for all users" 
+CREATE POLICY "Everyone can view member profiles" 
 ON members FOR SELECT 
 TO anon, authenticated
 USING (true);
+
+DROP POLICY IF EXISTS "Users can update their own profile" ON members;
+CREATE POLICY "Users can update their own profile" 
+ON members FOR UPDATE 
+TO authenticated
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can delete their own profile" ON members;
+CREATE POLICY "Users can delete their own profile" 
+ON members FOR DELETE 
+TO authenticated
+USING (auth.uid() = user_id);
 
 -- Create storage bucket for profile photos (idempotent)
 INSERT INTO storage.buckets (id, name, public)
@@ -73,40 +85,49 @@ USING (bucket_id = 'member-photos');
 -- Create posts table
 CREATE TABLE IF NOT EXISTS posts (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID NOT NULL,
-    author VARCHAR(255) DEFAULT 'Anonymous',
-    text TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    text TEXT NOT NULL,
     media_url TEXT,
     media_type VARCHAR(20), -- 'image' | 'video' | 'link' | null
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE
 );
 
--- Index for latest-first queries
+-- Create indexes for performance
+CREATE INDEX IF NOT EXISTS idx_posts_user_id ON posts(user_id);
 CREATE INDEX IF NOT EXISTS idx_posts_created_at ON posts(created_at DESC);
 
--- Enable RLS and allow public read/insert
+-- Enable RLS
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 
--- Replace anon insert with authenticated-only
-DROP POLICY IF EXISTS "Enable insert for anon users (posts)" ON posts;
-DROP POLICY IF EXISTS "Enable insert for authenticated (posts)" ON posts;
-CREATE POLICY "Insert by owner with rate limit (posts)"
-ON posts FOR INSERT TO authenticated
-WITH CHECK (
-  user_id = auth.uid() AND (
-    SELECT COUNT(*) FROM posts p
-    WHERE p.user_id = auth.uid() AND p.created_at > NOW() - INTERVAL '30 seconds'
-  ) < 3
-);
-
-CREATE POLICY "Enable read access for all (posts)"
-ON posts FOR SELECT TO anon, authenticated
+-- Policy: Anyone can view posts
+DROP POLICY IF EXISTS "Enable read access for all (posts)" ON posts;
+CREATE POLICY "Public can view posts"
+ON posts FOR SELECT
+TO public, anon, authenticated
 USING (true);
 
--- Allow deletes by owner
-CREATE POLICY "Delete own posts"
-ON posts FOR DELETE TO authenticated
-USING (user_id = auth.uid());
+-- Policy: Authenticated users can insert their own posts
+DROP POLICY IF EXISTS "Insert by owner with rate limit (posts)" ON posts;
+CREATE POLICY "Users can insert own posts"
+ON posts FOR INSERT
+TO authenticated
+WITH CHECK (auth.uid() = user_id);
+
+-- Policy: Users can update their own posts
+DROP POLICY IF EXISTS "Update own posts" ON posts;
+CREATE POLICY "Users can update own posts"
+ON posts FOR UPDATE
+TO authenticated
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+
+-- Policy: Users can delete their own posts
+DROP POLICY IF EXISTS "Delete own posts" ON posts;
+CREATE POLICY "Users can delete own posts"
+ON posts FOR DELETE
+TO authenticated
+USING (auth.uid() = user_id);
 
 -- Create storage bucket for community uploads
 INSERT INTO storage.buckets (id, name, public)

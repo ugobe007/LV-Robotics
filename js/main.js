@@ -656,13 +656,13 @@ async function addPost() {
     post.setAttribute('data-text', postText);
     post.setAttribute('data-media', mediaHTML);
     const { data: sessionData } = sbClient ? await sbClient.auth.getSession() : { data: null };
-    const authorEmail = sessionData?.session?.user?.email || 'You';
-    post.setAttribute('data-author', authorEmail);
+    const userId = sessionData?.session?.user?.id || 'User';
+    post.setAttribute('data-user-id', userId);
     post.setAttribute('data-time', timeString);
     
     post.innerHTML = `
         ${thumbnailHTML}
-        <div class="post-author-badge">You</div>
+        <div class="post-author-badge">Member</div>
     `;
     
     // Add click handler to open modal
@@ -683,8 +683,7 @@ async function addPost() {
     const persisted = await savePostSupabase({
         text: postText,
         mediaType: currentMediaType,
-        media: uploadedUrl || currentMedia,
-        author: authorEmail
+        media: uploadedUrl || currentMedia
     });
     
     // Clear media AFTER saving
@@ -747,7 +746,7 @@ function savePostLocal(newPost) {
         text: newPost.text || '',
         mediaType: newPost.mediaType || null,
         media: newPost.media || null,
-        author: 'You',
+        user_id: 'You',
         time: 'Just now',
         createdAt: now.toISOString()
     };
@@ -791,12 +790,12 @@ function renderSavedPosts() {
 
         post.setAttribute('data-text', p.text || '');
         post.setAttribute('data-media', mediaHTML);
-        post.setAttribute('data-author', p.author || 'User');
+        post.setAttribute('data-user-id', p.user_id || 'User');
         post.setAttribute('data-time', p.time || '');
 
         post.innerHTML = `
             ${thumbnailHTML}
-            <div class="post-author-badge">${p.author || 'User'}</div>
+            <div class="post-author-badge">Member</div>
         `;
 
         post.addEventListener('click', () => openPostModal(post));
@@ -875,7 +874,6 @@ async function savePostSupabase(post) {
             return false;
         }
         const insertData = {
-            author: post.author || 'You',
             text: post.text || null,
             media_url: post.media || null,
             media_type: post.mediaType || null,
@@ -974,12 +972,12 @@ async function renderPostsFromSupabase() {
             console.log('MediaHTML:', mediaHTML); // Debug: see what media HTML is created
             post.setAttribute('data-text', p.text || '');
             post.setAttribute('data-media', mediaHTML);
-            post.setAttribute('data-author', p.author || 'User');
+            post.setAttribute('data-user-id', p.user_id || 'User');
             post.setAttribute('data-time', new Date(p.created_at).toLocaleString());
             const canDelete = currentUserId && p.user_id === currentUserId;
             post.innerHTML = `
                 ${thumbnailHTML}
-                <div class="post-author-badge">${p.author || 'User'}${canDelete ? ' · <button class="media-btn" data-delete="1">Delete</button>' : ''}</div>
+                <div class="post-author-badge">Member${canDelete ? ' · <button class="media-btn" data-delete="1">Delete</button>' : ''}</div>
             `;
             
             // Add click handler to open modal (but not for delete button)
@@ -1021,7 +1019,7 @@ function openPostModal(postElement) {
     console.log('Opening modal for post:', postElement);
     const text = postElement.getAttribute('data-text');
     const media = postElement.getAttribute('data-media');
-    const author = postElement.getAttribute('data-author');
+    const author = postElement.getAttribute('data-user-id');
     const time = postElement.getAttribute('data-time');
     
     console.log('Post data:', { text, media, author, time });

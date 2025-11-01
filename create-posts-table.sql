@@ -4,12 +4,16 @@
 CREATE TABLE posts (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     created_at timestamptz DEFAULT now(),
-    author text NOT NULL,
-    text text,
+    updated_at timestamptz DEFAULT now(),
+    text text NOT NULL,
     media_url text,
     media_type text,
-    user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE
+    user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE
 );
+
+-- Create indexes for performance
+CREATE INDEX idx_posts_user_id ON posts(user_id);
+CREATE INDEX idx_posts_created_at ON posts(created_at DESC);
 
 -- Enable Row Level Security
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
