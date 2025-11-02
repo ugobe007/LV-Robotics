@@ -30,7 +30,60 @@ build/
 # Environment variables
 .env
 .env.local
+.env.*.local
+.env*.example
+
+# Sensitive configuration files
+*.key
+*.pem
+*.cert
+.credentials
+.config
+secrets.json
+
+# IDE specific files
+.vscode/settings.json
+.idea/workspace.xml
+.idea/modules.xml
+*.sublime-workspace
 
 # Backup files
 *.bak
 *.backup
+*.swp
+~*
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Dependency lockfiles (optional - keep if team coordination needed)
+# yarn.lock
+# pnpm-lock.yaml
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build and distribution
+dist/
+build/
+.cache/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+node_modules/
+.node_modules/
+*.pid
