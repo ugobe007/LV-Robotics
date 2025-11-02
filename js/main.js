@@ -1,20 +1,53 @@
 // Delete post and media (if in user's folder)
 async function deletePostSupabase(postId, mediaUrl) {
     try {
-        if (!sbClient) return;
+        if (!sbClient) {
+            alert('Could not delete post: System not initialized.');
+            return false;
+        }
+        
+        debugLog('Attempting to delete post:', postId);
+        
         // Delete DB row (RLS ensures ownership)
         const { error } = await sbClient.from('posts').delete().eq('id', postId);
-        if (error) throw error;
+        if (error) {
+            debugError('Database delete error:', error);
+            if (error.message.includes('not found') || error.message.includes('no rows')) {
+                alert('Post not found or already deleted.');
+            } else if (error.message.includes('permission') || error.message.includes('not authorized')) {
+                alert('You do not have permission to delete this post.');
+            } else {
+                alert(`Could not delete post: ${error.message}`);
+            }
+            return false;
+        }
+        
         // Optionally delete media if hosted in our bucket and path contains user id folder
         if (mediaUrl && mediaUrl.includes('/storage/v1/object/public/community-media/')) {
-            const key = mediaUrl.split('/community-media/')[1];
-            if (key) {
-                await sbClient.storage.from('community-media').remove([key]);
+            try {
+                const key = mediaUrl.split('/community-media/')[1];
+                if (key) {
+                    debugLog('Deleting media file:', key);
+                    const { error: delError } = await sbClient.storage.from('community-media').remove([key]);
+                    if (delError) {
+                        debugError('Media delete error (non-critical):', delError);
+                        // Don't alert - DB row was deleted successfully, media is just a bonus cleanup
+                    } else {
+                        debugLog('Media file deleted successfully');
+                    }
+                }
+            } catch (mediaErr) {
+                debugError('Error deleting media file:', mediaErr);
+                // Non-critical - post was already deleted from DB
             }
         }
+        
+        debugLog('Post deleted successfully');
+        return true;
     } catch (e) {
-        console.error('Delete failed:', e);
-        alert('Could not delete post.');
+        debugError('Delete failed with exception:', e);
+        alert(`Could not delete post: ${e.message || 'Unknown error'}`);
+        return false;
     }
 }
 
@@ -142,11 +175,16 @@ document.head.appendChild(style);
 // Initialize particles
 createParticles();
 
+// Debug mode - disable in production
+const DEBUG = false; // Set to true only during development
+const debugLog = (...args) => { if (DEBUG) console.log(...args); };
+const debugError = (...args) => { if (DEBUG) console.error(...args); };
+
 // Bulletin Board Functionality
 // Bulletin Board functionality
 // Supabase client setup
-const SUPABASE_URL = 'https://tzitghqmrmsxddysxhvc.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6aXRnaHFtcm1zeGRkeXN4aHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDAzMjMsImV4cCI6MjA3NzUxNjMyM30.f5rZPAdCOHe6ZXr_TYgmhUkZkcWsSYX_qMLXUgg9dZ8';
+const SUPABASE_URL = 'https://cbgevvuvleuwjjmefjza.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ2V2dnV2bGV1d2pqbWVmanphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjQwMjksImV4cCI6MjA3NzM0MDAyOX0.sEED3-kLSZE74bHsrJvVhyaH_GEXEVECeZNWpCnFK84';
 let sbClient = null;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -158,19 +196,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function initAuth() {
     const { data } = await sbClient.auth.getSession();
-    console.log('=== INITIAL SESSION CHECK ===');
-    console.log('Session exists:', !!data.session);
-    console.log('User:', data.session?.user?.email || 'Not signed in');
-    console.log('============================');
+    debugLog('=== INITIAL SESSION CHECK ===');
+    debugLog('Session exists:', !!data.session);
+    debugLog('User:', data.session?.user?.email || 'Not signed in');
+    debugLog('============================');
     
     updateAuthUI(data.session?.user || null);
     
     sbClient.auth.onAuthStateChange((event, session) => {
-        console.log('=== AUTH STATE CHANGED ===');
-        console.log('Event:', event);
-        console.log('Session exists:', !!session);
-        console.log('User:', session?.user?.email || 'Not signed in');
-        console.log('========================');
+        debugLog('=== AUTH STATE CHANGED ===');
+        debugLog('Event:', event);
+        debugLog('Session exists:', !!session);
+        debugLog('User:', session?.user?.email || 'Not signed in');
+        debugLog('========================');
         
         updateAuthUI(session?.user || null);
         if (document.getElementById('bulletinPosts')) {
@@ -185,17 +223,17 @@ function updateAuthUI(user) {
     const emailEl = document.getElementById('authUserEmail');
     if (!signedOut || !signedIn) return;
     
-    console.log('>>> Updating UI for user:', user?.email || 'No user');
+    debugLog('>>> Updating UI for user:', user?.email || 'No user');
     
     if (user) {
         signedOut.style.display = 'none';
         signedIn.style.display = 'flex';
         if (emailEl) emailEl.textContent = user.email || 'Signed in';
-        console.log('>>> UI updated: Sign-in controls HIDDEN, user controls VISIBLE');
+        debugLog('>>> UI updated: Sign-in controls HIDDEN, user controls VISIBLE');
     } else {
         signedOut.style.display = '';
         signedIn.style.display = 'none';
-        console.log('>>> UI updated: Sign-in controls VISIBLE, user controls HIDDEN');
+        debugLog('>>> UI updated: Sign-in controls VISIBLE, user controls HIDDEN');
     }
 }
 
@@ -313,7 +351,7 @@ async function signInWithPassword() {
         });
         
         if (signInError) {
-            console.error('Sign in error:', signInError);
+            debugError('Sign in error:', signInError);
             
             // Handle email not confirmed - simplest solution is to use different email
             if (signInError.message.toLowerCase().includes('email not confirmed')) {
@@ -332,7 +370,7 @@ async function signInWithPassword() {
                 signInError.message.toLowerCase().includes('credentials')) {
                 
                 // Try to sign up as a new user
-                console.log('Attempting to create new account...');
+                debugLog('Attempting to create new account...');
                 const { data: signUpData, error: signUpError } = await sbClient.auth.signUp({
                     email,
                     password,
@@ -345,18 +383,18 @@ async function signInWithPassword() {
                 });
                 
                 if (signUpError) {
-                    console.error('Sign up error:', signUpError);
+                    debugError('Sign up error:', signUpError);
                     throw signUpError;
                 }
                 
-                console.log('Sign up response:', signUpData);
+                debugLog('Sign up response:', signUpData);
                 
                 // Check if we got a session (auto-confirmed)
                 if (signUpData?.session) {
                     alert('✓ Welcome! Your account has been created and you\'re now signed in.');
                     closeSignInModal();
                     // Session is automatically set by Supabase
-                    console.log('New account created with session');
+                    debugLog('New account created with session');
                 } else if (signUpData?.user) {
                     alert('✓ Account created! Please check your email to confirm your account, then sign in again.');
                     closeSignInModal();
@@ -369,7 +407,7 @@ async function signInWithPassword() {
             }
         } else if (signInData?.session) {
             // Successful sign in with existing account
-            console.log('Sign in successful:', signInData);
+            debugLog('Sign in successful:', signInData);
             alert('✓ Welcome back! You\'re now signed in.');
             closeSignInModal();
             // Session is automatically set by Supabase
@@ -379,15 +417,15 @@ async function signInWithPassword() {
         
         // Wait a moment for the auth state to propagate, then refresh UI
         setTimeout(() => {
-            console.log('Refreshing UI after auth...');
+            debugLog('Refreshing UI after auth...');
             sbClient.auth.getSession().then(({ data }) => {
-                console.log('Current session after sign in:', data.session);
+                debugLog('Current session after sign in:', data.session);
                 updateAuthUI(data.session?.user || null);
             });
         }, 500);
         
     } catch (e) {
-        console.error('Authentication error:', e);
+        debugError('Authentication error:', e);
         alert(`Error: ${e.message || 'Authentication failed. Please try again.'}`);
     } finally {
         // Re-enable button
@@ -411,7 +449,7 @@ async function oauthSignIn(provider) {
         // Modal will close when auth state changes
         closeSignInModal();
     } catch (e) {
-        console.error('OAuth sign-in error:', e);
+        debugError('OAuth sign-in error:', e);
         alert('OAuth sign-in failed.');
     }
 }
@@ -419,9 +457,9 @@ async function oauthSignIn(provider) {
 async function signOut() {
     try {
         await sbClient?.auth.signOut();
-        console.log('User signed out');
+        debugLog('User signed out');
     } catch (e) {
-        console.error('Sign out error:', e);
+        debugError('Sign out error:', e);
     }
 }
 let currentMedia = null;
@@ -431,41 +469,34 @@ async function handleImageUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
     
-    // Check if user is signed in - force a fresh session check
-    if (sbClient) {
-        const { data: sessionData, error } = await sbClient.auth.getSession();
-        console.log('Session check for image upload:', sessionData, error);
-        
-        const isAuthenticated = sessionData?.session?.user != null;
-        console.log('Is authenticated:', isAuthenticated);
-        
-        if (!isAuthenticated) {
-            event.target.value = ''; // Clear the file input
-            const shouldSignIn = confirm('Sign in to upload images and save them permanently.\n\nClick OK to sign in, or Cancel to continue without uploading.');
-            if (shouldSignIn) {
-                showSignInModal();
-            }
-            return;
-        }
-        console.log('User authenticated, proceeding with image upload');
-    } else {
-        console.error('Supabase client not initialized');
-        alert('Authentication system not ready. Please refresh the page.');
+    // Validate MIME type
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+    if (!validImageTypes.includes(file.type)) {
+        alert(`Invalid image format: ${file.type}\n\nSupported formats: JPEG, PNG, GIF, WebP, SVG`);
         event.target.value = '';
         return;
     }
     
     // Check file size (limit to 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-        alert('Image is too large. Please use an image smaller than 10MB.');
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        const maxMB = (maxSize / (1024 * 1024)).toFixed(0);
+        alert(`Image is too large: ${sizeMB}MB\n\nPlease use an image smaller than ${maxMB}MB.\n\nTip: Use https://tinypng.com to compress.`);
         event.target.value = '';
         return;
     }
     
     const reader = new FileReader();
+    reader.onerror = () => {
+        debugError('Failed to read image file');
+        alert('Failed to read image file. Please try again.');
+        event.target.value = '';
+    };
     reader.onload = function(e) {
         currentMedia = e.target.result;
         currentMediaType = 'image';
+        debugLog(`Image loaded: ${file.name} (${(file.size / 1024).toFixed(2)}KB)`);
         showMediaPreview();
     };
     reader.readAsDataURL(file);
@@ -475,41 +506,34 @@ async function handleVideoUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
     
-    // Check if user is signed in - force a fresh session check
-    if (sbClient) {
-        const { data: sessionData, error } = await sbClient.auth.getSession();
-        console.log('Session check for video upload:', sessionData, error);
-        
-        const isAuthenticated = sessionData?.session?.user != null;
-        console.log('Is authenticated:', isAuthenticated);
-        
-        if (!isAuthenticated) {
-            event.target.value = ''; // Clear the file input
-            const shouldSignIn = confirm('Sign in to upload videos and save them permanently.\n\nClick OK to sign in, or Cancel to continue without uploading.');
-            if (shouldSignIn) {
-                showSignInModal();
-            }
-            return;
-        }
-        console.log('User authenticated, proceeding with video upload');
-    } else {
-        console.error('Supabase client not initialized');
-        alert('Authentication system not ready. Please refresh the page.');
+    // Validate MIME type
+    const validVideoTypes = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
+    if (!validVideoTypes.includes(file.type)) {
+        alert(`Invalid video format: ${file.type}\n\nSupported formats: MP4, WebM, QuickTime, AVI`);
         event.target.value = '';
         return;
     }
     
     // Check file size (limit to 50MB for videos)
-    if (file.size > 50 * 1024 * 1024) {
-        alert('Video is too large. Please use a video smaller than 50MB.');
+    const maxSize = 50 * 1024 * 1024;
+    if (file.size > maxSize) {
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        const maxMB = (maxSize / (1024 * 1024)).toFixed(0);
+        alert(`Video is too large: ${sizeMB}MB\n\nPlease use a video smaller than ${maxMB}MB.\n\nTip: Consider uploading a shorter clip or using a compression tool.`);
         event.target.value = '';
         return;
     }
     
     const reader = new FileReader();
+    reader.onerror = () => {
+        debugError('Failed to read video file');
+        alert('Failed to read video file. Please try again.');
+        event.target.value = '';
+    };
     reader.onload = function(e) {
         currentMedia = e.target.result;
         currentMediaType = 'video';
+        debugLog(`Video loaded: ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)}MB)`);
         showMediaPreview();
     };
     reader.readAsDataURL(file);
@@ -582,10 +606,11 @@ async function addPost() {
     // Check if user is authenticated when posting media
     if (currentMedia && sbClient) {
         const { data: sessionData } = await sbClient.auth.getSession();
-        console.log('Session check before posting:', sessionData);
+        debugLog('Session check before posting:', sessionData);
         if (!sessionData?.session?.user) {
-            const shouldSignIn = confirm('Sign in to post images or videos and save them permanently.\n\nClick OK to sign in, or Cancel to post text only.');
-            if (shouldSignIn) {
+            // User not signed in - offer choice
+            const choice = confirm('💡 Sign up to save your uploads forever!\n\nWithout signing up, your post will only be visible in your browser.\n\nClick OK to sign up now, or Cancel to post without saving.');
+            if (choice) {
                 showSignInModal();
                 if (postBtn) {
                     postBtn.disabled = false;
@@ -594,11 +619,11 @@ async function addPost() {
                 isSubmittingPost = false;
                 return;
             } else {
-                // User chose to continue without media
-                clearMedia();
+                // User chose to post without signing up - will use localStorage
+                debugLog('User chose to post without signing up');
             }
         } else {
-            console.log('User is authenticated, media will be uploaded');
+            debugLog('User is authenticated, media will be uploaded to cloud');
         }
     }
 
@@ -628,21 +653,33 @@ async function addPost() {
     let uploadedUrl = null;
     
     if (currentMedia && currentMediaType === 'image') {
-        console.log('Adding image to post:', currentMedia.substring(0, 50));
+        debugLog('Adding image to post:', currentMedia.substring(0, 50));
         // Upload to Supabase Storage if possible
         uploadedUrl = await tryUploadToSupabase(currentMedia, 'image');
         const url = uploadedUrl || currentMedia;
-        mediaHTML = `<img src="${url}" alt="Post image">`;
-        thumbnailHTML = `<img src="${url}" alt="Post thumbnail" class="post-thumbnail">`;
+        // Add error handler for images that fail to load
+        mediaHTML = `<img src="${url}" alt="Post image" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';">
+                      <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Image failed to load</div>`;
+        thumbnailHTML = `<img src="${url}" alt="Post thumbnail" class="post-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EImage not available%3C/text%3E%3C/svg%3E'">`;
     } else if (currentMedia && currentMediaType === 'video') {
-        console.log('Adding video to post');
+        debugLog('Adding video to post');
         uploadedUrl = await tryUploadToSupabase(currentMedia, 'video');
         const url = uploadedUrl || currentMedia;
-        mediaHTML = `<video controls src="${url}"></video>`;
-        thumbnailHTML = `<video src="${url}" class="post-thumbnail" muted></video>`;
+        // Add error handler for videos that fail to load
+        mediaHTML = `<video controls src="${url}" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';"></video>
+                      <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Video failed to load</div>`;
+        thumbnailHTML = `<video src="${url}" class="post-thumbnail" muted onerror="this.style.display='none';"></video>`;
     } else if (currentMedia && currentMediaType === 'link') {
-        console.log('Adding link to post:', currentMedia);
-        mediaHTML = `<a href="${currentMedia}" target="_blank" rel="noopener">🔗 ${currentMedia}</a>`;
+        debugLog('Adding link to post:', currentMedia);
+        // Validate URL format
+        let displayUrl = currentMedia;
+        try {
+            const urlObj = new URL(currentMedia);
+            displayUrl = urlObj.hostname || currentMedia;
+        } catch (e) {
+            debugLog('Invalid URL format:', currentMedia);
+        }
+        mediaHTML = `<a href="${currentMedia}" target="_blank" rel="noopener noreferrer">🔗 ${displayUrl}</a>`;
         thumbnailHTML = `<div class="post-text-preview">🔗 Link</div>`;
     }
     
@@ -679,32 +716,31 @@ async function addPost() {
     updatePostCounter();
     textArea.value = '';
 
-    // Persist: Supabase then localStorage as fallback (SAVE BEFORE CLEARING!)
-    const persisted = await savePostSupabase({
-        text: postText,
-        mediaType: currentMediaType,
-        media: uploadedUrl || currentMedia
-    });
+    // Check if user is authenticated for saving to Supabase
+    const { data: saveSessionData } = sbClient ? await sbClient.auth.getSession() : { data: null };
+    const isAuthenticated = saveSessionData?.session?.user != null;
+    
+    // Persist: Supabase if authenticated, localStorage as fallback
+    let persisted = false;
+    if (isAuthenticated) {
+        persisted = await savePostSupabase({
+            text: postText,
+            mediaType: currentMediaType,
+            media: uploadedUrl || currentMedia
+        });
+    }
     
     // Clear media AFTER saving
     clearMedia();
-    if (!persisted) {
-        // Only save text posts to localStorage as fallback
-        // Media posts require Supabase to work properly
-        if (!currentMedia) {
-            savePostLocal({ text: postText, mediaType: currentMediaType, media: uploadedUrl || currentMedia });
-        } else {
-            alert('Failed to upload media. Please make sure you are signed in and try again.');
-            // Remove the optimistic post since upload failed
-            post.remove();
-            updatePostCounter();
-            if (postBtn) {
-                postBtn.disabled = false;
-                postBtn.textContent = 'Post';
-            }
-            isSubmittingPost = false;
-            return;
-        }
+    
+    // If not authenticated or Supabase save failed, save to localStorage
+    if (!isAuthenticated || !persisted) {
+        debugLog('Saving post locally (unauthenticated or cloud save failed)');
+        savePostLocal({ 
+            text: postText, 
+            mediaType: currentMediaType, 
+            media: uploadedUrl || currentMedia 
+        });
     }
     lastPostAt = nowTs;
 
@@ -813,29 +849,71 @@ function renderSavedPosts() {
 async function tryUploadToSupabase(dataUrl, kind) {
     try {
         if (!sbClient || !dataUrl.startsWith('data:')) {
-            console.warn('Supabase client not available or invalid data URL');
+            debugError('Supabase client not available or invalid data URL');
             return null;
         }
         const { data: sessionData } = await sbClient.auth.getSession();
         const userId = sessionData?.session?.user?.id;
         if (!userId) {
-            console.warn('User not authenticated - cannot upload to Supabase storage');
+            debugError('User not authenticated - cannot upload to Supabase storage');
             return null;
         }
-        const mime = dataUrl.substring(5, dataUrl.indexOf(';'));
+        
+        // Safely parse base64 data URL
+        const mimeMatch = dataUrl.match(/^data:([^;]+);base64,/);
+        if (!mimeMatch) {
+            debugError('Invalid base64 data URL format');
+            return null;
+        }
+        const mime = mimeMatch[1];
+        const base64String = dataUrl.split(',')[1];
+        
+        // Validate base64 string exists and is not empty
+        if (!base64String || base64String.length === 0) {
+            debugError('Empty base64 data in file');
+            alert('Error processing media file. Please try again.');
+            return null;
+        }
+        
+        // Estimate binary size from base64 (base64 is ~33% larger than binary)
+        // If base64 is suspiciously large, check file size
+        const estimatedSize = (base64String.length * 3) / 4;
+        const maxBytes = kind === 'image' ? (10 * 1024 * 1024) : (50 * 1024 * 1024);
+        if (estimatedSize > maxBytes) {
+            const sizeMB = (estimatedSize / (1024 * 1024)).toFixed(2);
+            const maxMB = (maxBytes / (1024 * 1024)).toFixed(0);
+            alert(`Processed file is too large: ${sizeMB}MB\n\nPlease use a file smaller than ${maxMB}MB.`);
+            return null;
+        }
+        
         const ext = mime.split('/')[1] || (kind === 'image' ? 'png' : 'mp4');
         const fileName = `${userId}/post_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-        const base64 = dataUrl.split(',')[1];
-        const bin = atob(base64);
-        const buf = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+        
+        // Convert base64 to binary with error handling
+        let bin, buf;
+        try {
+            bin = atob(base64String);
+            buf = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+        } catch (decodeError) {
+            debugError('Failed to decode base64 data:', decodeError);
+            alert('Error processing media file (corrupted or invalid format). Please try uploading again.');
+            return null;
+        }
+        
         const file = new File([buf], fileName, { type: mime });
         
-        console.log('Attempting to upload to community-media bucket...');
+        debugLog(`Attempting to upload to community-media bucket... (${(file.size / (1024 * 1024)).toFixed(2)}MB)`, fileName);
         const { error } = await sbClient.storage.from('community-media').upload(fileName, file, { upsert: false });
         
         if (error) {
-            console.error('Supabase upload error:', error);
+            debugError('Supabase upload error:', error);
+            
+            // Network connectivity issues
+            if (error.message.includes('net') || error.message.includes('connection') || error.message.includes('timeout')) {
+                alert('Network error: Could not connect to server.\n\nThe photo/video will be saved temporarily in your browser.\n\nPlease check your internet connection and try again.');
+                return dataUrl; // Return the data URL to save locally as fallback
+            }
             
             // If bucket doesn't exist, explain the issue
             if (error.message.includes('Bucket not found') || error.message.includes('not found')) {
@@ -844,16 +922,49 @@ async function tryUploadToSupabase(dataUrl, kind) {
                 return dataUrl; // Return the data URL to save locally
             }
             
-            alert(`Upload failed: ${error.message}`);
+            // Permission denied or other upload errors
+            if (error.message.includes('permissions') || error.message.includes('not authorized')) {
+                alert('Permission denied: You do not have permission to upload.\n\nPlease make sure you are signed in and try again.');
+                return null;
+            }
+            
+            // File too large on server side
+            if (error.message.includes('413') || error.message.includes('too large') || error.message.includes('payload')) {
+                alert(`Upload failed: File is too large.\n\nError: ${error.message}`);
+                return null;
+            }
+            
+            // Rate limiting or server errors
+            if (error.message.includes('429') || error.message.includes('rate') || error.message.includes('5')) {
+                alert('Server busy: Please wait a moment and try again.');
+                return null;
+            }
+            
+            debugError('Detailed error:', { message: error.message, status: error.status, statusText: error.statusText });
+            alert(`Upload failed: ${error.message || 'Unknown error occurred'}`);
             return null;
         }
         
-        const { data } = sbClient.storage.from('community-media').getPublicUrl(fileName);
-        console.log('Successfully uploaded to Supabase:', data.publicUrl);
-        return data.publicUrl;
+        try {
+            const { data } = sbClient.storage.from('community-media').getPublicUrl(fileName);
+            debugLog('Successfully uploaded to Supabase:', data.publicUrl);
+            return data.publicUrl;
+        } catch (urlError) {
+            debugError('Failed to get public URL:', urlError);
+            alert('Upload completed but could not generate public URL. Please try again.');
+            return null;
+        }
     } catch (e) {
-        console.error('Upload failed:', e);
-        alert('Failed to upload media. The file will be saved temporarily in your browser.');
+        debugError('Upload failed with exception:', e);
+        const errorMsg = e.message || 'Unknown error';
+        
+        // Check for specific error types
+        if (e.name === 'TypeError' && errorMsg.includes('network')) {
+            alert('Network error: Could not connect to upload server.\n\nPlease check your internet connection.');
+            return dataUrl;
+        }
+        
+        alert(`Failed to upload media: ${errorMsg}\n\nThe file will be saved temporarily in your browser.`);
         return dataUrl; // Return data URL as fallback
     }
 }
@@ -861,16 +972,16 @@ async function tryUploadToSupabase(dataUrl, kind) {
 // Save post to Supabase table
 async function savePostSupabase(post) {
     try {
-        console.log('💾 Attempting to save post to database:', post);
+        debugLog('💾 Attempting to save post to database:', post);
         if (!sbClient) {
-            console.error('❌ Supabase client not initialized');
+            debugError('❌ Supabase client not initialized');
             return false;
         }
         const { data: sessionData } = await sbClient.auth.getSession();
         const userId = sessionData?.session?.user?.id;
-        console.log('👤 User ID:', userId);
+        debugLog('👤 User ID:', userId);
         if (!userId) {
-            console.error('❌ No user ID - user not signed in');
+            debugError('❌ No user ID - user not signed in');
             return false;
         }
         const insertData = {
@@ -879,16 +990,16 @@ async function savePostSupabase(post) {
             media_type: post.mediaType || null,
             user_id: userId
         };
-        console.log('📤 Inserting data:', insertData);
+        debugLog('📤 Inserting data:', insertData);
         const { data, error } = await sbClient.from('posts').insert(insertData);
         if (error) {
-            console.error('❌ Supabase insert error:', error);
+            debugError('❌ Supabase insert error:', error);
             return false;
         }
-        console.log('✅ Post saved successfully!', data);
+        debugLog('✅ Post saved successfully!', data);
         return true;
     } catch (e) {
-        console.error('❌ savePostSupabase failed:', e);
+        debugError('❌ savePostSupabase failed:', e);
         return false;
     }
 }
@@ -897,33 +1008,33 @@ async function savePostSupabase(post) {
 async function renderPostsFromSupabase() {
     const postsContainer = document.getElementById('bulletinPosts');
     if (!postsContainer) {
-        console.log('❌ No bulletinPosts container found');
+        debugLog('❌ No bulletinPosts container found');
         return;
     }
     
-    console.log('📋 Loading posts from database...');
+    debugLog('📋 Loading posts from database...');
     
     try {
         if (!sbClient) {
-            console.log('⚠️ Supabase client not available, using local storage');
+            debugLog('⚠️ Supabase client not available, using local storage');
             renderSavedPosts();
             return;
         }
         
-        console.log('🔍 Fetching posts from Supabase...');
+        debugLog('🔍 Fetching posts from Supabase...');
         const { data, error } = await sbClient
             .from('posts')
             .select('*')
             .order('created_at', { ascending: false })
             .limit(50);
         
-        console.log('📦 Query result:', { data, error });
+        debugLog('📦 Query result:', { data, error });
         
         if (error) {
-            console.error('Database error:', error);
+            debugError('Database error:', error);
             // If table doesn't exist (404) or other DB error, use local storage
             if (error.code === 'PGRST116' || error.message.includes('not found') || error.message.includes('404')) {
-                console.log('Posts table not found or not accessible, using local storage');
+                debugLog('Posts table not found or not accessible, using local storage');
             }
             renderSavedPosts();
             return;
@@ -946,7 +1057,7 @@ async function renderPostsFromSupabase() {
         });
 
         unique.forEach(p => {
-            console.log('Rendering post:', p); // Debug: see the post data
+            debugLog('Rendering post:', p); // Debug: see the post data
             const post = document.createElement('div');
             post.className = 'bulletin-post';
             post.style.animation = 'fadeInUp 0.5s ease';
@@ -955,21 +1066,33 @@ async function renderPostsFromSupabase() {
             let mediaHTML = '';
             let thumbnailHTML = '';
             if (p.media_url && p.media_type === 'image') {
-                mediaHTML = `<img src="${p.media_url}" alt="Post image">`;
-                thumbnailHTML = `<img src="${p.media_url}" alt="Post thumbnail" class="post-thumbnail">`;
-                console.log('Image post - URL:', p.media_url); // Debug
+                // Add error handler for images that fail to load
+                mediaHTML = `<img src="${p.media_url}" alt="Post image" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';">
+                              <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Image failed to load</div>`;
+                thumbnailHTML = `<img src="${p.media_url}" alt="Post thumbnail" class="post-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EImage not available%3C/text%3E%3C/svg%3E'">`;
+                debugLog('Image post - URL:', p.media_url); // Debug
             } else if (p.media_url && p.media_type === 'video') {
-                mediaHTML = `<video controls src="${p.media_url}"></video>`;
-                thumbnailHTML = `<video src="${p.media_url}" class="post-thumbnail" muted></video>`;
+                // Add error handler for videos that fail to load
+                mediaHTML = `<video controls src="${p.media_url}" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';"></video>
+                              <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Video failed to load</div>`;
+                thumbnailHTML = `<video src="${p.media_url}" class="post-thumbnail" muted onerror="this.style.display='none';"></video>`;
             } else if (p.media_url && p.media_type === 'link') {
-                mediaHTML = `<a href="${p.media_url}" target="_blank" rel="noopener">🔗 ${p.media_url}</a>`;
+                // Validate and display URL
+                let displayUrl = p.media_url;
+                try {
+                    const urlObj = new URL(p.media_url);
+                    displayUrl = urlObj.hostname || p.media_url;
+                } catch (e) {
+                    debugLog('Invalid URL format:', p.media_url);
+                }
+                mediaHTML = `<a href="${p.media_url}" target="_blank" rel="noopener noreferrer">🔗 ${displayUrl}</a>`;
                 thumbnailHTML = `<div class="post-text-preview">🔗 Link</div>`;
             }
             if (!thumbnailHTML && p.text) {
                 const preview = p.text.length > 50 ? p.text.substring(0, 50) + '...' : p.text;
                 thumbnailHTML = `<div class="post-text-preview">${preview}</div>`;
             }
-            console.log('MediaHTML:', mediaHTML); // Debug: see what media HTML is created
+            debugLog('MediaHTML:', mediaHTML); // Debug: see what media HTML is created
             post.setAttribute('data-text', p.text || '');
             post.setAttribute('data-media', mediaHTML);
             post.setAttribute('data-user-id', p.user_id || 'User');
@@ -1002,7 +1125,7 @@ async function renderPostsFromSupabase() {
         });
         updatePostCounter();
     } catch (e) {
-        console.error('Fetch posts failed:', e);
+        debugError('Fetch posts failed:', e);
         renderSavedPosts();
     }
 }
@@ -1016,18 +1139,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Open post in modal
 function openPostModal(postElement) {
-    console.log('Opening modal for post:', postElement);
+    debugLog('Opening modal for post:', postElement);
     const text = postElement.getAttribute('data-text');
     const media = postElement.getAttribute('data-media');
     const author = postElement.getAttribute('data-user-id');
     const time = postElement.getAttribute('data-time');
     
-    console.log('Post data:', { text, media, author, time });
+    debugLog('Post data:', { text, media, author, time });
     
     // Create modal if it doesn't exist
     let modal = document.getElementById('postModal');
     if (!modal) {
-        console.log('Creating new modal');
+        debugLog('Creating new modal');
         modal = document.createElement('div');
         modal.id = 'postModal';
         modal.className = 'post-modal';
@@ -1053,10 +1176,16 @@ function openPostModal(postElement) {
     // Update modal content
     modal.querySelector('.modal-author').textContent = author;
     modal.querySelector('.modal-time').textContent = time;
-    modal.querySelector('.modal-media').innerHTML = media || '';
+    // Safely inject media content using innerHTML only for trusted HTML from our system
+    const mediaDiv = modal.querySelector('.modal-media');
+    mediaDiv.innerHTML = ''; // Clear first
+    if (media) {
+        // Media HTML is constructed by our code only from database URLs, so it's safe
+        mediaDiv.innerHTML = media;
+    }
     modal.querySelector('.modal-text').textContent = text || '';
     
-    console.log('Showing modal');
+    debugLog('Showing modal');
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -1110,7 +1239,7 @@ document.querySelector('.partner-form form')?.addEventListener('submit', (e) => 
     const data = Object.fromEntries(formData);
     
     // In a real application, you would send this data to a server
-    console.log('Form submitted:', data);
+    debugLog('Form submitted:', data);
     
     // Show success message
     alert('Thank you for your interest! We will get back to you soon.');
@@ -1223,5 +1352,138 @@ rainbowStyle.textContent = `
 `;
 document.head.appendChild(rainbowStyle);
 
-console.log('🤖 LV Robotics website loaded successfully!');
-console.log('💡 Tip: Try the Konami code for a surprise!');
+// Community Highlights - Load gallery images from Supabase
+async function loadGalleryFromSupabase() {
+    const container = document.getElementById('galleryContainer');
+    const indicatorsContainer = document.getElementById('galleryIndicators');
+    
+    if (!container || !indicatorsContainer) {
+        debugLog('Gallery containers not found');
+        return;
+    }
+    
+    // Wait for Supabase to be ready
+    let attempts = 0;
+    while (!sbClient && attempts < 50) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+    }
+    
+    if (!sbClient) {
+        debugLog('Supabase client not initialized, showing fallback gallery');
+        return;
+    }
+    
+    try {
+        debugLog('Fetching gallery images from Supabase...');
+        
+        // Fetch image posts, sorted by newest first, limit to 7
+        const { data, error } = await sbClient
+            .from('posts')
+            .select('id, media_url, media_type, text, created_at')
+            .eq('media_type', 'image')
+            .order('created_at', { ascending: false })
+            .limit(7);
+        
+        if (error) {
+            debugError('Error fetching gallery images:', error);
+            return;
+        }
+        
+        if (!data || data.length === 0) {
+            debugLog('No image posts found in Supabase');
+            container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #a8e6a1;"><p>No community highlights yet. Be the first to share! 📸</p></div>';
+            return;
+        }
+        
+        debugLog(`Found ${data.length} image posts for gallery`);
+        
+        // Clear container and generate slides
+        container.innerHTML = '';
+        indicatorsContainer.innerHTML = '';
+        
+        data.forEach((post, index) => {
+            // Create slide
+            const slide = document.createElement('a');
+            slide.href = 'community.html';
+            slide.className = 'gallery-slide';
+            if (index === 0) slide.classList.add('active');
+            
+            const img = document.createElement('img');
+            img.src = post.media_url;
+            img.alt = `Community Highlight ${index + 1}`;
+            img.className = 'gallery-image';
+            img.onerror = function() {
+                debugError('Failed to load gallery image:', post.media_url);
+                this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22450%22%3E%3Crect fill=%22%231e293b%22 width=%22800%22 height=%22450%22/%3E%3C/svg%3E';
+            };
+            
+            slide.appendChild(img);
+            container.appendChild(slide);
+            
+            // Create indicator
+            const indicator = document.createElement('span');
+            indicator.className = 'indicator';
+            indicator.dataset.slide = index;
+            if (index === 0) indicator.classList.add('active');
+            indicatorsContainer.appendChild(indicator);
+        });
+        
+        // Initialize rotation with the new slides
+        initializeGalleryRotation();
+        debugLog('Gallery rotation initialized with ' + data.length + ' images');
+        
+    } catch (err) {
+        debugError('Exception loading gallery:', err);
+    }
+}
+
+// Community Highlights - Auto-rotating gallery
+function initializeGalleryRotation() {
+    const slides = document.querySelectorAll('.gallery-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    
+    if (slides.length === 0) return;
+    
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    
+    // Set first slide as active
+    slides[0].classList.add('active');
+    
+    function showSlide(n) {
+        // Remove active class from all slides and indicators
+        slides.forEach(slide => slide.classList.remove('active'));
+        indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Add active class to current slide and indicator
+        slides[n].classList.add('active');
+        indicators[n].classList.add('active');
+    }
+    
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        showSlide(currentSlide);
+    }
+    
+    // Auto-rotate every 5 seconds
+    setInterval(nextSlide, 5000);
+    
+    // Allow clicking indicators to navigate
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentSlide = index;
+            showSlide(currentSlide);
+        });
+    });
+}
+
+// Initialize gallery from Supabase when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadGalleryFromSupabase);
+} else {
+    loadGalleryFromSupabase();
+}
+
+debugLog('🤖 LV Robotics website loaded successfully!');
+debugLog('💡 Tip: Try the Konami code for a surprise!');

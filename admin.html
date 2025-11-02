@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LV Robotics Admin Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --admin-primary: #8b5cf6;
+            --admin-secondary: #a78bfa;
+            --admin-danger: #ef4444;
+            --admin-warning: #f59e0b;
+            --admin-success: #10b981;
+            --admin-bg: #0f172a;
+            --admin-card: #1e293b;
+            --admin-border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--admin-bg);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .admin-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            width: 250px;
+            background: var(--admin-card);
+            border-right: 2px solid var(--admin-border);
+            overflow-y: auto;
+            padding: 1.5rem 0;
+        }
+
+        .admin-logo {
+            padding: 1rem 1.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--admin-primary);
+            border-bottom: 2px solid var(--admin-border);
+            margin-bottom: 1rem;
+        }
+
+        .admin-nav {
+            list-style: none;
+        }
+
+        .admin-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .admin-nav button {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: #cbd5e0;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .admin-nav button:hover,
+        .admin-nav button.active {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--admin-primary);
+            padding-left: 2rem;
+        }
+
+        .admin-nav i {
+            width: 20px;
+        }
+
+        /* Main Content */
+        .admin-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: var(--admin-card);
+            border-bottom: 2px solid var(--admin-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            color: var(--admin-secondary);
+            font-size: 1.75rem;
+        }
+
+        .admin-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-user-email {
+            color: #cbd5e0;
+            font-size: 0.9rem;
+        }
+
+        .admin-logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--admin-danger);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin-logout-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        /* Content Area */
+        .admin-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Section Title */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--admin-border);
+        }
+
+        .section-header h2 {
+            color: var(--admin-primary);
+            font-size: 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--admin-card);
+            border: 2px solid var(--admin-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--admin-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            color: var(--admin-secondary);
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-top: 0.5rem;
+            opacity: 0.5;
+        }
+
+        /* Tables */
+        .admin-table {
+            width: 100%;
+            background: var(--admin-card);
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 2px solid var(--admin-border);
+        }
+
+        .admin-table thead {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .admin-table th {
+            padding: 1rem;
+            text-align: left;
+            color: var(--admin-primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--admin-border);
+        }
+
+        .admin-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+            color: #cbd5e0;
+        }
+
+        .admin-table tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-view {
+            background: var(--admin-primary);
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: var(--admin-secondary);
+        }
+
+        .btn-edit {
+            background: var(--admin-warning);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #d97706;
+        }
+
+        .btn-delete {
+            background: var(--admin-danger);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        .btn-approve {
+            background: var(--admin-success);
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #059669;
+        }
+
+        /* Forms */
+        .admin-form {
+            background: var(--admin-card);
+            border: 2px solid var(--admin-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--admin-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--admin-bg);
+            border: 2px solid var(--admin-border);
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--admin-primary);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn-submit {
+            background: var(--admin-primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-submit:hover {
+            background: var(--admin-secondary);
+            transform: scale(1.05);
+        }
+
+        /* Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-modal.active {
+            display: flex;
+        }
+
+        .admin-modal-content {
+            background: var(--admin-card);
+            border: 2px solid var(--admin-border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--admin-danger);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--admin-success);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--admin-danger);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--admin-warning);
+        }
+
+        .badge-info {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--admin-primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--admin-success);
+            color: var(--admin-success);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid var(--admin-danger);
+            color: var(--admin-danger);
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid var(--admin-warning);
+            color: var(--admin-warning);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--admin-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--admin-primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--admin-secondary);
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--admin-primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid var(--admin-border);
+                padding: 0.5rem 0;
+            }
+
+            .admin-nav button {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <i class="fas fa-robot"></i> LV Robotics
+            </div>
+            <ul class="admin-nav">
+                <li><button class="nav-btn active" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</button></li>
+                <li><button class="nav-btn" data-section="analytics"><i class="fas fa-bar-chart"></i> Analytics</button></li>
+                <li><button class="nav-btn" data-section="users"><i class="fas fa-users"></i> Users</button></li>
+                <li><button class="nav-btn" data-section="moderation"><i class="fas fa-shield-alt"></i> Moderation</button></li>
+                <li><button class="nav-btn" data-section="events"><i class="fas fa-calendar"></i> Events</button></li>
+                <li><button class="nav-btn" data-section="gallery"><i class="fas fa-images"></i> Gallery Curation</button></li>
+                <li><button class="nav-btn" data-section="settings"><i class="fas fa-cog"></i> Settings</button></li>
+                <li style="margin-top: 2rem; border-top: 2px solid var(--admin-border); padding-top: 1rem;">
+                    <button class="nav-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <h1 id="sectionTitle">Dashboard</h1>
+                <div class="admin-user-info">
+                    <div>
+                        <div style="color: #e2e8f0; font-weight: 600;">Admin Panel</div>
+                        <div class="admin-user-email" id="userEmail">Loading...</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="admin-content">
+                <!-- Dashboard Section -->
+                <section class="admin-section active" id="dashboard">
+                    <div class="section-header">
+                        <h2>Dashboard Overview</h2>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Users</div>
+                            <div class="stat-value" id="statUsers">0</div>
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Posts</div>
+                            <div class="stat-value" id="statPosts">0</div>
+                            <div class="stat-icon"><i class="fas fa-images"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Events</div>
+                            <div class="stat-value" id="statEvents">0</div>
+                            <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Pending Moderation</div>
+                            <div class="stat-value" id="statModerations">0</div>
+                            <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        </div>
+                    </div>
+
+                    <div id="dashboardAlerts"></div>
+                </section>
+
+                <!-- Analytics Section -->
+                <section class="admin-section" id="analytics">
+                    <div class="section-header">
+                        <h2>Analytics & Insights</h2>
+                    </div>
+                    <div id="analyticsContent">
+                        <p style="color: #94a3b8;">Loading analytics...</p>
+                    </div>
+                </section>
+
+                <!-- Users Section -->
+                <section class="admin-section" id="users">
+                    <div class="section-header">
+                        <h2>User Management</h2>
+                        <button class="btn-submit"><i class="fas fa-plus"></i> Add User</button>
+                    </div>
+                    <div id="usersContent">
+                        <p style="color: #94a3b8;">Loading users...</p>
+                    </div>
+                </section>
+
+                <!-- Moderation Section -->
+                <section class="admin-section" id="moderation">
+                    <div class="section-header">
+                        <h2>Content Moderation</h2>
+                        <select id="moderationFilter" style="padding: 0.5rem 1rem; background: var(--admin-card); border: 2px solid var(--admin-border); border-radius: 6px; color: #e2e8f0; cursor: pointer;">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="reviewed">Reviewed</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div id="moderationContent">
+                        <p style="color: #94a3b8;">Loading moderation queue...</p>
+                    </div>
+                </section>
+
+                <!-- Events Section -->
+                <section class="admin-section" id="events">
+                    <div class="section-header">
+                        <h2>Events Management</h2>
+                        <button class="btn-submit" id="createEventBtn"><i class="fas fa-plus"></i> Create Event</button>
+                    </div>
+
+                    <div class="admin-form" id="eventForm" style="display: none;">
+                        <h3 style="color: var(--admin-primary); margin-bottom: 1rem;">Create/Edit Event</h3>
+                        <form>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Event Title</label>
+                                    <input type="text" id="eventTitle" placeholder="e.g., FIRST Robotics Meetup" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <input type="text" id="eventLocation" placeholder="e.g., UNLV Engineering Building">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="eventDescription" placeholder="Event details..."></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Start Date/Time</label>
+                                    <input type="datetime-local" id="eventStartDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>End Date/Time</label>
+                                    <input type="datetime-local" id="eventEndDate" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Max Attendees</label>
+                                    <input type="number" id="eventMaxAttendees" placeholder="Leave blank for unlimited">
+                                </div>
+                                <div class="form-group">
+                                    <label>Registration URL</label>
+                                    <input type="url" id="eventRegUrl" placeholder="https://...">
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button type="button" class="btn-submit" id="saveEventBtn"><i class="fas fa-save"></i> Save Event</button>
+                                <button type="button" class="btn-submit" style="background: #64748b;" id="cancelEventBtn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="eventsContent">
+                        <p style="color: #94a3b8;">Loading events...</p>
+                    </div>
+                </section>
+
+                <!-- Gallery Curation Section -->
+                <section class="admin-section" id="gallery">
+                    <div class="section-header">
+                        <h2>Community Highlights Curation</h2>
+                    </div>
+                    <div id="galleryCurationContent">
+                        <p style="color: #94a3b8;">Loading available images...</p>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section class="admin-section" id="settings">
+                    <div class="section-header">
+                        <h2>Site Settings</h2>
+                    </div>
+                    <div class="alert alert-warning">
+                        <span><i class="fas fa-lock"></i> Only Super Admins can modify these settings</span>
+                    </div>
+                    <div id="settingsContent">
+                        <p style="color: #94a3b8;">Loading settings...</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="admin-modal" id="confirmModal">
+        <div class="admin-modal-content">
+            <button class="modal-close" onclick="closeConfirmModal()"></button>
+            <h3 style="color: var(--admin-primary); margin-bottom: 1rem;" id="confirmTitle">Confirm Action</h3>
+            <p id="confirmMessage" style="color: #cbd5e0; margin-bottom: 1.5rem;"></p>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn-submit" onclick="executeConfirmAction()">Confirm</button>
+                <button class="btn-submit" style="background: #64748b;" onclick="closeConfirmModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase initialization
+        const SUPABASE_URL = 'https://cbgevvuvleuwjjmefjza.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ2V2dnV2bGV1d2pqbWVmanphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjQwMjksImV4cCI6MjA3NzM0MDAyOX0.sEED3-kLSZE74bHsrJvVhyaH_GEXEVECeZNWpCnFK84';
+        
+        let sbClient = null;
+        let currentUser = null;
+        let isAdmin = false;
+        let isSuperAdmin = false;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            
+            // Check if user is logged in
+            const { data } = await sbClient.auth.getSession();
+            if (!data.session) {
+                alert('You must be logged in to access the admin panel.');
+                window.location.href = 'community.html';
+                return;
+            }
+
+            currentUser = data.session.user;
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            // Check if user is admin
+            await checkAdminStatus();
+            
+            if (!isAdmin) {
+                alert('You do not have permission to access the admin panel.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load initial data
+            loadDashboard();
+            setupEventListeners();
+        });
+
+        // Check if user is admin
+        async function checkAdminStatus() {
+            try {
+                const { data, error } = await sbClient
+                    .from('admin_users')
+                    .select('role')
+                    .eq('email', currentUser.email)
+                    .single();
+
+                if (error) {
+                    console.error('Not an admin:', error);
+                    return false;
+                }
+
+                isAdmin = true;
+                isSuperAdmin = data.role === 'super_admin';
+                
+                // Hide settings if not super admin
+                if (!isSuperAdmin) {
+                    document.querySelector('[data-section="settings"]').style.display = 'none';
+                }
+
+                return true;
+            } catch (err) {
+                console.error('Error checking admin status:', err);
+                return false;
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const section = e.currentTarget.dataset.section;
+                    if (section === 'logout') return;
+                    switchSection(section);
+                });
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                await sbClient.auth.signOut();
+                window.location.href = 'index.html';
+            });
+
+            // Event form
+            document.getElementById('createEventBtn').addEventListener('click', () => {
+                document.getElementById('eventForm').style.display = 'block';
+                document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            document.getElementById('cancelEventBtn').addEventListener('click', () => {
+                document.getElementById('eventForm').style.display = 'none';
+                document.getElementById('eventForm').reset();
+            });
+
+            document.getElementById('saveEventBtn').addEventListener('click', saveEvent);
+
+            // Moderation filter
+            document.getElementById('moderationFilter').addEventListener('change', loadModerationQueue);
+        }
+
+        // Switch section
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            
+            // Update header
+            const titles = {
+                dashboard: 'Dashboard',
+                analytics: 'Analytics & Insights',
+                users: 'User Management',
+                moderation: 'Content Moderation',
+                events: 'Events Management',
+                gallery: 'Community Highlights',
+                settings: 'Site Settings'
+            };
+            
+            document.getElementById('sectionTitle').textContent = titles[sectionId];
+
+            // Load section data
+            switch (sectionId) {
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'moderation':
+                    loadModerationQueue();
+                    break;
+                case 'events':
+                    loadEvents();
+                    break;
+                case 'gallery':
+                    loadGalleryCuration();
+                    break;
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+            }
+        }
+
+        // Load Dashboard
+        async function loadDashboard() {
+            try {
+                // Get stats
+                const [usersRes, postsRes, eventsRes, moderationRes] = await Promise.all([
+                    sbClient.from('auth.users').select('count', { count: 'exact' }),
+                    sbClient.from('posts').select('count', { count: 'exact' }),
+                    sbClient.from('events').select('count', { count: 'exact' }).eq('is_active', true),
+                    sbClient.from('moderation_queue').select('count', { count: 'exact' }).eq('status', 'pending')
+                ]);
+
+                // Update stats (these might be 0 if RLS prevents reading)
+                document.getElementById('statUsers').textContent = usersRes.count || '0';
+                document.getElementById('statPosts').textContent = postsRes.count || '0';
+                document.getElementById('statEvents').textContent = eventsRes.count || '0';
+                document.getElementById('statModerations').textContent = moderationRes.count || '0';
+
+            } catch (err) {
+                console.error('Error loading dashboard:', err);
+            }
+        }
+
+        // Load Users
+        async function loadUsers() {
+            try {
+                const { data, error } = await sbClient.from('members').select('*').order('created_at', { ascending: false });
+                
+                if (error) throw error;
+
+                const content = document.getElementById('usersContent');
+                if (!data || data.length === 0) {
+                    content.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No users found</p></div>';
+                    return;
+                }
+
+                let html = `
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Location</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.forEach(user => {
+                    html += `
+                        <tr>
+                            <td>${user.first_name} ${user.last_name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phone || '-'}</td>
+                            <td>${user.location || '-'}</td>
+                            <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-icon btn-view" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon btn-delete" title="Ban" onclick="banUser('${user.user_id}', '${user.email}')"><i class="fas fa-ban"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                content.innerHTML = html;
+
+            } catch (err) {
+                console.error('Error loading users:', err);
+                document.getElementById('usersContent').innerHTML = `<div class="alert alert-error">Error loading users: ${err.message}</div>`;
+            }
+        }
+
+        // Load Moderation Queue
+        async function loadModerationQueue() {
+            try {
+                const filter = document.getElementById('moderationFilter').value;
+                let query = sbClient.from('moderation_queue').select(`
+                    id, 
+                    post_id, 
+                    reason, 
+                    status, 
+                    created_at,
+                    posts(text, media_url, media_type)
+                }`).order('created_at', { ascending: false });
+
+                if (filter) {
+                    query = query.eq('status', filter);
+                }
+
+                const { data, error } = await query;
+                
+                if (error) throw error;
+
+                const content = document.getElementById('moderationContent');
+                if (!data || data.length === 0) {
+                    content.innerHTML = '<div class="empty-state"><i class="fas fa-check-circle"></i><p>No moderation items</p></div>';
+                    return;
+                }
+
+                let html = `
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Post Content</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Reported</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.forEach(item => {
+                    const postText = item.posts?.text?.substring(0, 50) || 'Media post';
+                    const statusBadge = `<span class="badge badge-${item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning'}">${item.status}</span>`;
+                    
+                    html += `
+                        <tr>
+                            <td>${postText}</td>
+                            <td>${item.reason || 'Not specified'}</td>
+                            <td>${statusBadge}</td>
+                            <td>${new Date(item.created_at).toLocaleDateString()}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-icon btn-approve" title="Approve" onclick="updateModerationStatus('${item.id}', 'approved')"><i class="fas fa-check"></i></button>
+                                    <button class="btn-icon btn-delete" title="Reject" onclick="updateModerationStatus('${item.id}', 'rejected')"><i class="fas fa-times"></i></button>
+                                    <button class="btn-icon btn-delete" title="Delete Post" onclick="deletePostFromModeration('${item.post_id}')"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                content.innerHTML = html;
+
+            } catch (err) {
+                console.error('Error loading moderation queue:', err);
+                document.getElementById('moderationContent').innerHTML = `<div class="alert alert-error">Error loading moderation queue: ${err.message}</div>`;
+            }
+        }
+
+        // Load Events
+        async function loadEvents() {
+            try {
+                const { data, error } = await sbClient
+                    .from('events')
+                    .select('*')
+                    .order('start_date', { ascending: true });
+                
+                if (error) throw error;
+
+                const content = document.getElementById('eventsContent');
+                if (!data || data.length === 0) {
+                    content.innerHTML = '<div class="empty-state"><i class="fas fa-calendar"></i><p>No events yet</p></div>';
+                    return;
+                }
+
+                let html = `
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Attendees</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.forEach(event => {
+                    const startDate = new Date(event.start_date).toLocaleDateString();
+                    const statusBadge = `<span class="badge ${event.is_active ? 'badge-success' : 'badge-danger'}">${event.is_active ? 'Active' : 'Inactive'}</span>`;
+                    
+                    html += `
+                        <tr>
+                            <td>${event.title}</td>
+                            <td>${startDate}</td>
+                            <td>${event.location || '-'}</td>
+                            <td>${event.max_attendees || 'Unlimited'}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-icon btn-edit" title="Edit" onclick="editEvent('${event.id}')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon btn-delete" title="Delete" onclick="deleteEvent('${event.id}')"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                content.innerHTML = html;
+
+            } catch (err) {
+                console.error('Error loading events:', err);
+                document.getElementById('eventsContent').innerHTML = `<div class="alert alert-error">Error loading events: ${err.message}</div>`;
+            }
+        }
+
+        // Load Gallery Curation
+        async function loadGalleryCuration() {
+            try {
+                const { data: allImages, error } = await sbClient
+                    .from('posts')
+                    .select('id, text, media_url, created_at, user_id')
+                    .eq('media_type', 'image')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+                
+                if (error) throw error;
+
+                const { data: featured } = await sbClient
+                    .from('featured_gallery_posts')
+                    .select('post_id, position');
+
+                const featuredIds = new Set(featured?.map(f => f.post_id) || []);
+
+                const content = document.getElementById('galleryCurationContent');
+                if (!allImages || allImages.length === 0) {
+                    content.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No images available</p></div>';
+                    return;
+                }
+
+                let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">';
+
+                allImages.forEach(img => {
+                    const isFeatured = featuredIds.has(img.id);
+                    html += `
+                        <div style="background: var(--admin-card); border: 2px solid var(--admin-border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;" 
+                             onmouseover="this.style.borderColor = 'var(--admin-primary)'" 
+                             onmouseout="this.style.borderColor = 'var(--admin-border)'">
+                            <img src="${img.media_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22%3E%3Crect fill=%22%231e293b%22 width=%22200%22 height=%22150%22/%3E%3C/svg%3E'">
+                            <div style="padding: 1rem;">
+                                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem;">${img.text?.substring(0, 30) || 'No description'}</p>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-icon ${isFeatured ? 'btn-approve' : 'btn-view'}" style="flex: 1;" title="${isFeatured ? 'Remove from gallery' : 'Add to gallery'}" onclick="toggleFeaturedImage('${img.id}', ${isFeatured})">
+                                        <i class="fas ${isFeatured ? 'fa-star' : 'fa-star-o'}"></i> ${isFeatured ? 'Featured' : 'Feature'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+                content.innerHTML = html;
+
+            } catch (err) {
+                console.error('Error loading gallery curation:', err);
+                document.getElementById('galleryCurationContent').innerHTML = `<div class="alert alert-error">Error loading images: ${err.message}</div>`;
+            }
+        }
+
+        // Load Analytics
+        async function loadAnalytics() {
+            try {
+                const { data: postsData } = await sbClient.from('posts').select('created_at').order('created_at', { ascending: false });
+                const { data: membersData } = await sbClient.from('members').select('created_at').order('created_at', { ascending: false });
+
+                let html = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Posts Last 7 Days</div>
+                            <div class="stat-value">${postsData?.filter(p => new Date(p.created_at) > new Date(Date.now() - 7*24*60*60*1000)).length || 0}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">New Members Last 7 Days</div>
+                            <div class="stat-value">${membersData?.filter(m => new Date(m.created_at) > new Date(Date.now() - 7*24*60*60*1000)).length || 0}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Posts</div>
+                            <div class="stat-value">${postsData?.length || 0}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Members</div>
+                            <div class="stat-value">${membersData?.length || 0}</div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('analyticsContent').innerHTML = html;
+
+            } catch (err) {
+                console.error('Error loading analytics:', err);
+                document.getElementById('analyticsContent').innerHTML = `<div class="alert alert-error">Error loading analytics: ${err.message}</div>`;
+            }
+        }
+
+        // Load Settings
+        async function loadSettings() {
+            if (!isSuperAdmin) {
+                document.getElementById('settingsContent').innerHTML = '<div class="alert alert-error">Only Super Admins can access settings</div>';
+                return;
+            }
+
+            let html = `
+                <div class="admin-form">
+                    <h3 style="color: var(--admin-primary); margin-bottom: 1rem;">Site Configuration</h3>
+                    <div class="form-group">
+                        <label>Site Name</label>
+                        <input type="text" value="LV Robotics" placeholder="Site name">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Email</label>
+                        <input type="email" value="contact@lvrobotics.com" placeholder="contact@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Post Size (MB)</label>
+                        <input type="number" value="50" min="1" max="1000">
+                    </div>
+                    <div class="form-group">
+                        <label>Enable Community Posts</label>
+                        <select>
+                            <option value="1">Enabled</option>
+                            <option value="0">Disabled</option>
+                        </select>
+                    </div>
+                    <button class="btn-submit"><i class="fas fa-save"></i> Save Settings</button>
+                </div>
+            `;
+
+            document.getElementById('settingsContent').innerHTML = html;
+        }
+
+        // Event handlers
+        async function saveEvent() {
+            const title = document.getElementById('eventTitle').value;
+            const description = document.getElementById('eventDescription').value;
+            const location = document.getElementById('eventLocation').value;
+            const startDate = document.getElementById('eventStartDate').value;
+            const endDate = document.getElementById('eventEndDate').value;
+            const maxAttendees = document.getElementById('eventMaxAttendees').value;
+            const regUrl = document.getElementById('eventRegUrl').value;
+
+            if (!title || !startDate || !endDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            try {
+                const { error } = await sbClient.from('events').insert({
+                    title,
+                    description,
+                    location,
+                    start_date: new Date(startDate).toISOString(),
+                    end_date: new Date(endDate).toISOString(),
+                    max_attendees: maxAttendees ? parseInt(maxAttendees) : null,
+                    registration_url: regUrl,
+                    created_by: currentUser.id
+                });
+
+                if (error) throw error;
+
+                alert('Event created successfully!');
+                document.getElementById('eventForm').style.display = 'none';
+                document.getElementById('eventForm').reset();
+                loadEvents();
+
+            } catch (err) {
+                alert('Error saving event: ' + err.message);
+            }
+        }
+
+        async function updateModerationStatus(id, status) {
+            try {
+                const { error } = await sbClient
+                    .from('moderation_queue')
+                    .update({
+                        status,
+                        reviewed_by: currentUser.id,
+                        reviewed_at: new Date().toISOString()
+                    })
+                    .eq('id', id);
+
+                if (error) throw error;
+                loadModerationQueue();
+
+            } catch (err) {
+                alert('Error updating status: ' + err.message);
+            }
+        }
+
+        async function deletePostFromModeration(postId) {
+            if (!confirm('Delete this post?')) return;
+
+            try {
+                const { error } = await sbClient
+                    .from('posts')
+                    .delete()
+                    .eq('id', postId);
+
+                if (error) throw error;
+                loadModerationQueue();
+
+            } catch (err) {
+                alert('Error deleting post: ' + err.message);
+            }
+        }
+
+        async function toggleFeaturedImage(postId, isFeatured) {
+            try {
+                if (isFeatured) {
+                    await sbClient.from('featured_gallery_posts').delete().eq('post_id', postId);
+                } else {
+                    const { data: featured } = await sbClient.from('featured_gallery_posts').select('position').order('position', { ascending: false }).limit(1);
+                    const nextPosition = (featured?.[0]?.position || 0) + 1;
+
+                    await sbClient.from('featured_gallery_posts').insert({
+                        post_id: postId,
+                        position: nextPosition,
+                        featured_by: currentUser.id
+                    });
+                }
+                loadGalleryCuration();
+
+            } catch (err) {
+                alert('Error toggling featured image: ' + err.message);
+            }
+        }
+
+        function banUser(userId, email) {
+            showConfirm('Ban User', `Ban ${email}?`, async () => {
+                alert('Ban feature coming soon');
+            });
+        }
+
+        function deleteEvent(eventId) {
+            showConfirm('Delete Event', 'Delete this event?', async () => {
+                try {
+                    const { error } = await sbClient.from('events').delete().eq('id', eventId);
+                    if (error) throw error;
+                    loadEvents();
+                } catch (err) {
+                    alert('Error deleting event: ' + err.message);
+                }
+            });
+        }
+
+        // Confirm modal
+        let confirmCallback = null;
+
+        function showConfirm(title, message, callback) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            confirmCallback = callback;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function executeConfirmAction() {
+            if (confirmCallback) confirmCallback();
+            closeConfirmModal();
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            confirmCallback = null;
+        }
+    </script>
+</body>
+</html>
