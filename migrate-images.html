@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Migrate Images to Posts</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0"></script>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; background: #667eea; color: white; border: none; border-radius: 5px; }
+        button:hover { background: #5568d3; }
+        #output { margin-top: 20px; padding: 20px; background: #f0f0f0; border-radius: 5px; white-space: pre-wrap; font-family: monospace; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Migrate Images to Posts</h1>
+    <p>Scan storage bucket and populate posts table</p>
+    
+    <button onclick="scanAndMigrate()">START MIGRATION</button>
+    <button onclick="clearOutput()">Clear</button>
+    
+    <div id="output"></div>
+
+    <script>
+        const SUPABASE_URL = 'https://cbgevvuvleuwjjmefjza.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ2V2dnV2bGV1d2pqbWVmanphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjQwMjksImV4cCI6MjA3NzM0MDAyOX0.sEED3-kLSZE74bHsrJvVhyaH_GEXEVECeZNWpCnFK84';
+        
+        let supabase;
+        const output = document.getElementById('output');
+
+        function log(msg) {
+            output.innerHTML += msg + '\n';
+            console.log(msg);
+        }
+
+        function clearOutput() {
+            output.innerHTML = '';
+        }
+
+        async function scanAndMigrate() {
+            clearOutput();
+            log('🔄 Starting migration process...\n');
+
+            try {
+                // Initialize Supabase
+                log('📝 Initializing Supabase...');
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                log('✅ Supabase initialized\n');
+
+                // Get list of files
+                log('📂 Scanning community-media bucket...');
+                const { data: files, error: listError } = await supabase.storage
+                    .from('community-media')
+                    .list('', { limit: 1000 });
+
+                if (listError) throw listError;
+                log(`✅ Found ${files.length} items\n`);
+
+                // Filter images
+                const images = files.filter(f => /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name));
+                log(`📸 Found ${images.length} image files:\n`);
+                images.forEach(img => log(`  - ${img.name}`));
+
+                if (images.length === 0) {
+                    log('\n❌ No images found!');
+                    return;
+                }
+
+                // Get a user ID (we'll need an authenticated user)
+                log('\n👤 Fetching user for posts...');
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                
+                if (!user) {
+                    log('⚠️ Not authenticated. Checking for any auth session...');
+                    // Try to get any session
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (!session) {
+                        log('❌ No user authenticated. Please log in first on the main site.\n');
+                        log('💡 Tip: Visit http://localhost:8000/index.html and log in, then come back here.');
+                        return;
+                    }
+                }
+
+                const userId = user?.id || session?.user?.id;
+                if (!userId) {
+                    log('❌ Could not get user ID');
+                    return;
+                }
+                log(`✅ Using user: ${userId}\n`);
+
+                // Migrate images
+                log('🚀 Migrating images to posts table...\n');
+                let success = 0, failed = 0;
+
+                for (const img of images) {
+                    try {
+                        const url = `${SUPABASE_URL}/storage/v1/object/public/community-media/${img.name}`;
+                        
+                        const { error: insertError } = await supabase
+                            .from('posts')
+                            .insert({
+                                user_id: userId,
+                                text: `Gallery: ${img.name}`,
+                                media_url: url,
+                                media_type: 'image',
+                                created_at: new Date().toISOString()
+                            });
+
+                        if (insertError) throw insertError;
+                        log(`✅ ${img.name}`);
+                        success++;
+                    } catch (err) {
+                        log(`❌ ${img.name}: ${err.message}`);
+                        failed++;
+                    }
+                }
+
+                log(`\n✅ MIGRATION COMPLETE!`);
+                log(`━━━━━━━━━━━━━━━━━━━━━━━━`);
+                log(`Success: ${success}`);
+                log(`Failed: ${failed}`);
+                log(`Total: ${success + failed}\n`);
+                log(`🎉 Refresh your page to see the gallery updated!`);
+
+                output.classList.add('success');
+
+            } catch (err) {
+                log(`\n❌ ERROR: ${err.message}`);
+                log(err.stack);
+                output.classList.add('error');
+            }
+        }
+    </script>
+</body>
+</html>

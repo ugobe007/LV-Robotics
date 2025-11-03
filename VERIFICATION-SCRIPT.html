@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Setup Verification - LV Robotics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #a8e6a1;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+        .section {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .section h2 {
+            color: #a8e6a1;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.3rem;
+        }
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .status.success { background: #16a34a; color: white; }
+        .status.error { background: #dc2626; color: white; }
+        .status.loading { background: #f59e0b; color: white; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 2rem;
+            color: #a8e6a1;
+            font-weight: bold;
+        }
+        .stat-card .label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #475569;
+            background: #0f172a;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: #a8e6a1;
+        }
+        .gallery-item img, .gallery-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .gallery-item.error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #7f1d1d;
+            color: #fca5a5;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 0.5rem;
+        }
+        .log {
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #cbd5e0;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        .log-entry {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border-left: 3px solid #475569;
+            padding-left: 0.75rem;
+        }
+        .log-entry.success { border-left-color: #16a34a; }
+        .log-entry.error { border-left-color: #dc2626; }
+        .log-entry.info { border-left-color: #0ea5e9; }
+        button {
+            background: #a8e6a1;
+            color: #0f172a;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.3s;
+        }
+        button:hover { background: #7cc576; }
+        button:disabled {
+            background: #475569;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        .modal-content {
+            background: #1e293b;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #a8e6a1;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #a8e6a1;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover { color: #7cc576; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        table th, table td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #475569;
+        }
+        table th {
+            background: #0f172a;
+            color: #a8e6a1;
+            font-weight: 600;
+        }
+        table tr:hover {
+            background: #0f172a;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Supabase Setup Verification</h1>
+        
+        <!-- Connection Status -->
+        <div class="section">
+            <h2>
+                <i class="fas fa-plug"></i> Connection Status
+                <span id="connectionStatus" class="status loading">Checking...</span>
+            </h2>
+            <div class="log" id="connectionLog"></div>
+            <button onclick="testConnection()">Test Connection</button>
+        </div>
+
+        <!-- Tables Statistics -->
+        <div class="section">
+            <h2>
+                <i class="fas fa-database"></i> Database Tables
+                <span id="tablesStatus" class="status loading">Loading...</span>
+            </h2>
+            <div class="stats" id="tableStats"></div>
+            <button onclick="loadTableStats()">Refresh Stats</button>
+        </div>
+
+        <!-- Members Table -->
+        <div class="section">
+            <h2>
+                <i class="fas fa-users"></i> Members (Membership Form Data)
+                <span id="membersStatus" class="status loading">Loading...</span>
+            </h2>
+            <div id="membersContent">
+                <p style="color: #94a3b8;">Loading members...</p>
+            </div>
+            <button onclick="loadMembers()">Refresh Members</button>
+        </div>
+
+        <!-- Posts & Images Gallery -->
+        <div class="section">
+            <h2>
+                <i class="fas fa-images"></i> Community Posts (18 Images You Uploaded)
+                <span id="imagesStatus" class="status loading">Loading...</span>
+            </h2>
+            <div class="gallery" id="imageGallery">
+                <p style="color: #94a3b8; grid-column: 1 / -1;">Loading images...</p>
+            </div>
+            <div style="margin-top: 1.5rem;">
+                <button onclick="loadImages()">Refresh Gallery</button>
+                <button onclick="showPostsTable()" style="margin-left: 0.5rem;">View Posts Table</button>
+            </div>
+        </div>
+
+        <!-- RLS Policies -->
+        <div class="section">
+            <h2>
+                <i class="fas fa-shield"></i> Row Level Security Policies
+                <span id="rlsStatus" class="status loading">Loading...</span>
+            </h2>
+            <div id="rlsContent">
+                <p style="color: #94a3b8;">Loading RLS information...</p>
+            </div>
+            <button onclick="checkRLS()">Check RLS Policies</button>
+        </div>
+
+        <!-- Storage Buckets -->
+        <div class="section">
+            <h2>
+                <i class="fas fa-cloud"></i> Storage Buckets
+                <span id="storageStatus" class="status loading">Loading...</span>
+            </h2>
+            <div id="storageContent">
+                <p style="color: #94a3b8;">Loading storage information...</p>
+            </div>
+            <button onclick="checkStorage()">Check Storage</button>
+        </div>
+
+        <!-- All Tests -->
+        <div class="section">
+            <h2>
+                <i class="fas fa-flask"></i> Run All Tests
+            </h2>
+            <p style="color: #94a3b8; margin-bottom: 1rem;">Run the complete verification suite:</p>
+            <button onclick="runAllTests()" style="background: #fbbf24; color: #0f172a;">
+                <i class="fas fa-play"></i> Run All Tests
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal for details -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://cbgevvuvleuwjjmefjza.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ2V2dnV2bGV1d2pqbWVmanphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjQwMjksImV4cCI6MjA3NzM0MDAyOX0.sEED3-kLSZE74bHsrJvVhyaH_GEXEVECeZNWpCnFK84';
+
+        let supabase = null;
+
+        async function initSupabase() {
+            if (!supabase && window.supabase) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                return true;
+            }
+            return !!supabase;
+        }
+
+        function log(section, message, type = 'info') {
+            const logEl = document.getElementById(section + 'Log');
+            if (logEl) {
+                const entry = document.createElement('div');
+                entry.className = `log-entry ${type}`;
+                entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                logEl.appendChild(entry);
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+        }
+
+        async function testConnection() {
+            const status = document.getElementById('connectionStatus');
+            status.textContent = 'Testing...';
+            status.className = 'status loading';
+            
+            log('connection', 'Initializing Supabase client...');
+            
+            if (!await initSupabase()) {
+                status.textContent = 'Failed';
+                status.className = 'status error';
+                log('connection', 'Failed to initialize Supabase client', 'error');
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase.auth.getSession();
+                if (error) throw error;
+
+                log('connection', '✓ Connected to Supabase', 'success');
+                log('connection', `Session: ${data.session ? 'Active' : 'Not authenticated'}`);
+                
+                status.textContent = 'Connected';
+                status.className = 'status success';
+            } catch (e) {
+                status.textContent = 'Error';
+                status.className = 'status error';
+                log('connection', `Error: ${e.message}`, 'error');
+            }
+        }
+
+        async function loadTableStats() {
+            const status = document.getElementById('tablesStatus');
+            status.textContent = 'Loading...';
+            status.className = 'status loading';
+
+            if (!await initSupabase()) {
+                status.textContent = 'Failed';
+                status.className = 'status error';
+                return;
+            }
+
+            try {
+                const [membersRes, postsRes] = await Promise.all([
+                    supabase.from('members').select('count', { count: 'exact', head: true }),
+                    supabase.from('posts').select('count', { count: 'exact', head: true })
+                ]);
+
+                const membersCount = membersRes.count || 0;
+                const postsCount = postsRes.count || 0;
+
+                document.getElementById('tableStats').innerHTML = `
+                    <div class="stat-card">
+                        <div class="number">${membersCount}</div>
+                        <div class="label">Members Registered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">${postsCount}</div>
+                        <div class="label">Community Posts</div>
+                    </div>
+                `;
+
+                status.textContent = 'Success';
+                status.className = 'status success';
+            } catch (e) {
+                document.getElementById('tableStats').innerHTML = `
+                    <div class="stat-card" style="background: #7f1d1d; color: #fca5a5;">
+                        <div class="number">Error</div>
+                        <div class="label">${e.message}</div>
+                    </div>
+                `;
+                status.textContent = 'Error';
+                status.className = 'status error';
+            }
+        }
+
+        async function loadMembers() {
+            const status = document.getElementById('membersStatus');
+            status.textContent = 'Loading...';
+            status.className = 'status loading';
+
+            if (!await initSupabase()) {
+                document.getElementById('membersContent').innerHTML = '<p style="color: #fca5a5;">Failed to connect</p>';
+                status.textContent = 'Failed';
+                status.className = 'status error';
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('members')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    document.getElementById('membersContent').innerHTML = '<p style="color: #94a3b8;">No members registered yet. Try the membership form at <a href="membership.html" style="color: #a8e6a1;">membership.html</a></p>';
+                    status.textContent = '0 Members';
+                    status.className = 'status';
+                    return;
+                }
+
+                let html = `<p style="color: #94a3b8; margin-bottom: 1rem;">${data.length} members registered:</p>`;
+                html += '<table><tr><th>Name</th><th>Email</th><th>Phone</th><th>Location</th><th>Experience</th></tr>';
+                data.forEach(m => {
+                    html += `<tr>
+                        <td>${m.first_name} ${m.last_name}</td>
+                        <td>${m.email}</td>
+                        <td>${m.phone}</td>
+                        <td>${m.location || '-'}</td>
+                        <td>${m.experience_level || '-'}</td>
+                    </tr>`;
+                });
+                html += '</table>';
+                document.getElementById('membersContent').innerHTML = html;
+                status.textContent = `${data.length} Members`;
+                status.className = 'status success';
+            } catch (e) {
+                document.getElementById('membersContent').innerHTML = `<p style="color: #fca5a5;">Error: ${e.message}</p>`;
+                status.textContent = 'Error';
+                status.className = 'status error';
+            }
+        }
+
+        async function loadImages() {
+            const status = document.getElementById('imagesStatus');
+            status.textContent = 'Loading...';
+            status.className = 'status loading';
+
+            if (!await initSupabase()) {
+                document.getElementById('imageGallery').innerHTML = '<p style="color: #fca5a5;">Failed to connect</p>';
+                status.textContent = 'Failed';
+                status.className = 'status error';
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('posts')
+                    .select('*')
+                    .eq('media_type', 'image')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    document.getElementById('imageGallery').innerHTML = '<p style="color: #94a3b8; grid-column: 1 / -1;">No images uploaded yet. Try posting at <a href="bulletin.html" style="color: #a8e6a1;">bulletin.html</a></p>';
+                    status.textContent = '0 Images';
+                    status.className = 'status';
+                    return;
+                }
+
+                let html = '';
+                data.forEach((post, idx) => {
+                    if (post.media_url) {
+                        html += `
+                            <div class="gallery-item" onclick="openImageModal('${post.media_url}', '${post.text || 'Community post'}', '${new Date(post.created_at).toLocaleString()}')">
+                                <img src="${post.media_url}" alt="Post ${idx + 1}" 
+                                     onerror="this.parentElement.classList.add('error'); this.parentElement.textContent='⚠️ Failed to load';">
+                            </div>
+                        `;
+                    }
+                });
+
+                document.getElementById('imageGallery').innerHTML = html || '<p style="color: #94a3b8; grid-column: 1 / -1;">No valid images found</p>';
+                status.textContent = `${data.length} Images`;
+                status.className = 'status success';
+            } catch (e) {
+                document.getElementById('imageGallery').innerHTML = `<p style="color: #fca5a5; grid-column: 1 / -1;">Error: ${e.message}</p>`;
+                status.textContent = 'Error';
+                status.className = 'status error';
+            }
+        }
+
+        async function checkRLS() {
+            const status = document.getElementById('rlsStatus');
+            status.textContent = 'Checking...';
+            status.className = 'status loading';
+
+            if (!await initSupabase()) {
+                document.getElementById('rlsContent').innerHTML = '<p style="color: #fca5a5;">Failed to connect</p>';
+                status.textContent = 'Failed';
+                status.className = 'status error';
+                return;
+            }
+
+            const policies = {
+                'members': ['Users can insert their own member profile', 'Everyone can view member profiles', 'Users can update their own profile', 'Users can delete their own profile'],
+                'posts': ['Public can view posts', 'Users can insert own posts', 'Users can update own posts', 'Users can delete own posts'],
+                'storage': ['Anyone can upload member photos', 'Member photos are publicly accessible', 'Upload to own folder', 'Delete own media', 'Community media are publicly accessible']
+            };
+
+            let html = '<p style="color: #94a3b8; margin-bottom: 1rem;">✓ RLS Policies Expected:</p>';
+            for (const [table, pols] of Object.entries(policies)) {
+                html += `<div style="margin-bottom: 1rem;"><strong style="color: #a8e6a1;">${table}:</strong><ul style="margin-left: 1rem; color: #cbd5e0;">`;
+                pols.forEach(p => html += `<li>✓ ${p}</li>`);
+                html += '</ul></div>';
+            }
+
+            document.getElementById('rlsContent').innerHTML = html;
+            status.textContent = 'Configured';
+            status.className = 'status success';
+        }
+
+        async function checkStorage() {
+            const status = document.getElementById('storageStatus');
+            status.textContent = 'Checking...';
+            status.className = 'status loading';
+
+            if (!await initSupabase()) {
+                document.getElementById('storageContent').innerHTML = '<p style="color: #fca5a5;">Failed to connect</p>';
+                status.textContent = 'Failed';
+                status.className = 'status error';
+                return;
+            }
+
+            try {
+                const buckets = [
+                    { name: 'member-photos', desc: 'Profile photos (Public, anyone can upload)' },
+                    { name: 'community-media', desc: 'Community posts media (Public, authenticated users upload to own folder)' }
+                ];
+
+                let html = '<p style="color: #94a3b8; margin-bottom: 1rem;">Storage Buckets:</p>';
+                buckets.forEach(b => {
+                    html += `<div style="padding: 0.75rem; background: #0f172a; border-radius: 6px; margin-bottom: 0.5rem; border-left: 3px solid #a8e6a1;">
+                        <strong style="color: #a8e6a1;">${b.name}</strong><br>
+                        <span style="color: #cbd5e0; font-size: 0.9rem;">${b.desc}</span>
+                    </div>`;
+                });
+
+                document.getElementById('storageContent').innerHTML = html;
+                status.textContent = 'Configured';
+                status.className = 'status success';
+            } catch (e) {
+                document.getElementById('storageContent').innerHTML = `<p style="color: #fca5a5;">Error: ${e.message}</p>`;
+                status.textContent = 'Error';
+                status.className = 'status error';
+            }
+        }
+
+        function openModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('detailModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function openImageModal(url, text, time) {
+            let content = `
+                <img src="${url}" alt="Image" style="max-width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                <p><strong>Text:</strong> ${text}</p>
+                <p><strong>Posted:</strong> ${time}</p>
+                <p><strong>URL:</strong> <a href="${url}" target="_blank" style="color: #a8e6a1;">${url}</a></p>
+            `;
+            openModal('Image Details', content);
+        }
+
+        async function showPostsTable() {
+            if (!await initSupabase()) return;
+
+            try {
+                const { data } = await supabase
+                    .from('posts')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                let html = '<table style="font-size: 0.85rem;"><tr><th>Text</th><th>Type</th><th>Posted</th></tr>';
+                (data || []).forEach(p => {
+                    html += `<tr>
+                        <td>${p.text ? p.text.substring(0, 50) : '(media only)'}</td>
+                        <td>${p.media_type || '-'}</td>
+                        <td>${new Date(p.created_at).toLocaleString()}</td>
+                    </tr>`;
+                });
+                html += '</table>';
+                openModal('All Posts', html);
+            } catch (e) {
+                openModal('Error', `<p style="color: #fca5a5;">${e.message}</p>`);
+            }
+        }
+
+        async function runAllTests() {
+            document.querySelectorAll('.section button').forEach(b => b.disabled = true);
+            
+            await testConnection();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await loadTableStats();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await loadMembers();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await loadImages();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await checkRLS();
+            await checkStorage();
+            
+            document.querySelectorAll('.section button').forEach(b => b.disabled = false);
+            alert('✓ All tests completed!');
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                runAllTests();
+            }, 500);
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

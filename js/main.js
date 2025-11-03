@@ -1605,26 +1605,42 @@ async function loadGalleryFromSupabase() {
 }
 
 // Community Highlights - Auto-rotating gallery
+let galleryRotationInterval = null; // Store interval ID to prevent duplicates
+
 function initializeGalleryRotation() {
     const slides = document.querySelectorAll('.gallery-slide');
     const indicators = document.querySelectorAll('.indicator');
     
-    if (slides.length === 0) return;
+    debugLog(`Gallery rotation: Found ${slides.length} slides and ${indicators.length} indicators`);
+    
+    if (slides.length === 0) {
+        debugError('Gallery rotation: No slides found!');
+        return;
+    }
+    
+    if (slides.length !== indicators.length) {
+        debugError(`Gallery rotation: Mismatch! ${slides.length} slides but ${indicators.length} indicators`);
+    }
     
     let currentSlide = 0;
     const totalSlides = slides.length;
     
     // Set first slide as active
     slides[0].classList.add('active');
+    indicators[0].classList.add('active');
+    debugLog('Gallery rotation: First slide activated');
     
     function showSlide(n) {
+        debugLog(`Gallery rotation: Switching to slide ${n}`);
         // Remove active class from all slides and indicators
         slides.forEach(slide => slide.classList.remove('active'));
         indicators.forEach(indicator => indicator.classList.remove('active'));
         
         // Add active class to current slide and indicator
         slides[n].classList.add('active');
-        indicators[n].classList.add('active');
+        if (indicators[n]) {
+            indicators[n].classList.add('active');
+        }
     }
     
     function nextSlide() {
@@ -1632,14 +1648,26 @@ function initializeGalleryRotation() {
         showSlide(currentSlide);
     }
     
-    // Auto-rotate every 5 seconds
-    setInterval(nextSlide, 5000);
+    // Clear any existing interval to prevent duplicates
+    if (galleryRotationInterval) {
+        clearInterval(galleryRotationInterval);
+        debugLog('Gallery rotation: Cleared previous rotation interval');
+    }
+    
+    // First rotation after 2 seconds, then every 5 seconds
+    setTimeout(() => {
+        debugLog('Gallery rotation: First rotation triggered');
+        nextSlide();
+        galleryRotationInterval = setInterval(nextSlide, 5000);
+        debugLog('Gallery rotation: Started auto-rotation interval (5s repeating)');
+    }, 2000);
     
     // Allow clicking indicators to navigate
     indicators.forEach((indicator, index) => {
         indicator.addEventListener('click', () => {
             currentSlide = index;
             showSlide(currentSlide);
+            debugLog(`Gallery rotation: Manual navigation to slide ${index}`);
         });
     });
 }
