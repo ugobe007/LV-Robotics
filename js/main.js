@@ -1439,8 +1439,11 @@ async function loadFallbackGallery() {
         const slide = document.createElement('a');
         slide.href = 'community.html';
         slide.className = 'gallery-slide';
-        slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;';
-        if (index === 0) slide.classList.add('active');
+        slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;';
+        if (index === 0) {
+            slide.classList.add('active');
+            slide.style.opacity = '1';
+        }
         
         const img = document.createElement('img');
         img.src = imageData.src;
@@ -1539,8 +1542,11 @@ async function loadGalleryFromSupabase() {
             const slide = document.createElement('a');
             slide.href = 'community.html';
             slide.className = 'gallery-slide';
-            slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;';
-            if (index === 0) slide.classList.add('active');
+            slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;';
+            if (index === 0) {
+                slide.classList.add('active');
+                slide.style.opacity = '1';
+            }
             
             const img = document.createElement('img');
             // Handle different URL formats
@@ -1657,6 +1663,7 @@ function initializeGalleryRotation() {
         slides.forEach((slide, idx) => {
             const hadActive = slide.classList.contains('active');
             slide.classList.remove('active');
+            slide.style.opacity = '0'; // Explicitly hide via opacity
             if (hadActive) debugLog(`  - Removed active from slide ${idx}`);
         });
         
@@ -1669,6 +1676,7 @@ function initializeGalleryRotation() {
         
         // Add active class to current slide
         slides[n].classList.add('active');
+        slides[n].style.opacity = '1'; // Explicitly show via opacity
         debugLog(`  - Added active to slide ${n}`);
         
         // Add active class to indicator
