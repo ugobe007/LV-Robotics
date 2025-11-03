@@ -1608,68 +1608,109 @@ async function loadGalleryFromSupabase() {
 let galleryRotationInterval = null; // Store interval ID to prevent duplicates
 
 function initializeGalleryRotation() {
-    const slides = document.querySelectorAll('.gallery-slide');
-    const indicators = document.querySelectorAll('.indicator');
+    const slides = Array.from(document.querySelectorAll('.gallery-slide'));
+    const indicators = Array.from(document.querySelectorAll('.indicator'));
     
-    debugLog(`Gallery rotation: Found ${slides.length} slides and ${indicators.length} indicators`);
+    debugLog(`🎬 Gallery rotation START: Found ${slides.length} slides and ${indicators.length} indicators`);
     
     if (slides.length === 0) {
-        debugError('Gallery rotation: No slides found!');
+        debugError('🎬 Gallery rotation FAILED: No slides found!');
         return;
-    }
-    
-    if (slides.length !== indicators.length) {
-        debugError(`Gallery rotation: Mismatch! ${slides.length} slides but ${indicators.length} indicators`);
     }
     
     let currentSlide = 0;
     const totalSlides = slides.length;
     
     // Set first slide as active
+    debugLog('🎬 Removing active class from all slides...');
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+    });
+    
+    debugLog('🎬 Setting first slide to active');
     slides[0].classList.add('active');
-    indicators[0].classList.add('active');
-    debugLog('Gallery rotation: First slide activated');
+    
+    if (indicators.length > 0) {
+        indicators.forEach(ind => ind.classList.remove('active'));
+        indicators[0].classList.add('active');
+    }
+    
+    // Verify first slide is now active
+    const firstSlideActive = slides[0].classList.contains('active');
+    const firstIndicatorActive = indicators.length > 0 ? indicators[0].classList.contains('active') : null;
+    debugLog(`🎬 Verification: First slide active=${firstSlideActive}, First indicator active=${firstIndicatorActive}`);
     
     function showSlide(n) {
-        debugLog(`Gallery rotation: Switching to slide ${n}`);
-        // Remove active class from all slides and indicators
-        slides.forEach(slide => slide.classList.remove('active'));
-        indicators.forEach(indicator => indicator.classList.remove('active'));
+        debugLog(`🎬 ROTATE: Activating slide ${n}/${totalSlides}`);
         
-        // Add active class to current slide and indicator
+        // Show which slide is becoming inactive
+        const activeBeforeCount = slides.filter(s => s.classList.contains('active')).length;
+        debugLog(`  - Slides with active class before: ${activeBeforeCount}`);
+        
+        // Remove active class from all slides
+        slides.forEach((slide, idx) => {
+            const hadActive = slide.classList.contains('active');
+            slide.classList.remove('active');
+            if (hadActive) debugLog(`  - Removed active from slide ${idx}`);
+        });
+        
+        // Remove active class from all indicators
+        indicators.forEach((indicator, idx) => {
+            const hadActive = indicator.classList.contains('active');
+            indicator.classList.remove('active');
+            if (hadActive) debugLog(`  - Removed active from indicator ${idx}`);
+        });
+        
+        // Add active class to current slide
         slides[n].classList.add('active');
+        debugLog(`  - Added active to slide ${n}`);
+        
+        // Add active class to indicator
         if (indicators[n]) {
             indicators[n].classList.add('active');
+            debugLog(`  - Added active to indicator ${n}`);
         }
+        
+        // Verify
+        const activeAfterCount = slides.filter(s => s.classList.contains('active')).length;
+        debugLog(`  - Slides with active class after: ${activeAfterCount} (should be 1)`);
     }
     
     function nextSlide() {
         currentSlide = (currentSlide + 1) % totalSlides;
+        debugLog(`🎬 nextSlide() called - moving to slide ${currentSlide}`);
         showSlide(currentSlide);
     }
     
     // Clear any existing interval to prevent duplicates
     if (galleryRotationInterval) {
         clearInterval(galleryRotationInterval);
-        debugLog('Gallery rotation: Cleared previous rotation interval');
+        debugLog('🎬 Cleared previous rotation interval');
     }
     
-    // First rotation after 2 seconds, then every 5 seconds
+    // Auto-rotate: Start rotating after 3 seconds, then every 5 seconds
+    debugLog('🎬 Starting auto-rotate timer (first rotation in 3 seconds)');
     setTimeout(() => {
-        debugLog('Gallery rotation: First rotation triggered');
+        debugLog('🎬 TIMER FIRED: First auto-rotation executing');
         nextSlide();
-        galleryRotationInterval = setInterval(nextSlide, 5000);
-        debugLog('Gallery rotation: Started auto-rotation interval (5s repeating)');
-    }, 2000);
+        
+        galleryRotationInterval = setInterval(() => {
+            debugLog('🎬 INTERVAL FIRED: Regular rotation executing');
+            nextSlide();
+        }, 5000);
+        debugLog('🎬 Rotation interval started (repeats every 5 seconds)');
+    }, 3000);
     
     // Allow clicking indicators to navigate
     indicators.forEach((indicator, index) => {
         indicator.addEventListener('click', () => {
+            debugLog(`🎬 Indicator clicked: Navigation to slide ${index}`);
             currentSlide = index;
             showSlide(currentSlide);
-            debugLog(`Gallery rotation: Manual navigation to slide ${index}`);
         });
     });
+    
+    debugLog(`🎬 Gallery rotation READY with ${totalSlides} slides`);
 }
 
 // Initialize gallery from Supabase when DOM is ready
