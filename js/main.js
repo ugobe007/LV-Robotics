@@ -51,78 +51,6 @@ async function deletePostSupabase(postId, mediaUrl) {
     }
 }
 
-// Mobile Menu Toggle
-const hamburger = document.getElementById('hamburger');
-const navMenu = document.getElementById('nav-menu');
-
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-    
-    // Animate hamburger icon
-    const spans = hamburger.querySelectorAll('span');
-    spans[0].style.transform = navMenu.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
-    spans[1].style.opacity = navMenu.classList.contains('active') ? '0' : '1';
-    spans[2].style.transform = navMenu.classList.contains('active') ? 'rotate(-45deg) translate(7px, -6px)' : 'none';
-});
-
-// Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        
-        // Reset hamburger icon
-        const spans = hamburger.querySelectorAll('span');
-        spans.forEach(span => {
-            span.style.transform = 'none';
-            span.style.opacity = '1';
-        });
-    });
-});
-
-// Dropdown toggle for mobile
-document.querySelectorAll('.dropdown > .nav-link').forEach(dropdownToggle => {
-    dropdownToggle.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-            e.preventDefault();
-            const dropdown = dropdownToggle.parentElement;
-            dropdown.classList.toggle('active');
-        }
-    });
-});
-
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            const navbarHeight = document.querySelector('.navbar').offsetHeight;
-            const targetPosition = target.offsetTop - navbarHeight;
-            
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// Navbar scroll effect
-let lastScroll = 0;
-const navbar = document.getElementById('navbar');
-
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-    
-    lastScroll = currentScroll;
-});
-
 // Particle animation for hero section
 function createParticles() {
     const particlesContainer = document.getElementById('particles');
@@ -172,11 +100,8 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initialize particles
-createParticles();
-
 // Debug mode - disable in production
-const DEBUG = false; // Set to true only during development
+const DEBUG = true; // Set to true only during development
 const debugLog = (...args) => { if (DEBUG) console.log(...args); };
 const debugError = (...args) => { if (DEBUG) console.error(...args); };
 
@@ -188,33 +113,150 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 let sbClient = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.supabase) {
-        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        initAuth();
+    // Initialize Supabase with error handling
+    console.log('DOMContentLoaded: Checking for Supabase library...');
+    console.log('window.supabase available?', !!window.supabase);
+    console.log('window.supabase.createClient available?', typeof window.supabase?.createClient);
+    console.log('SUPABASE_URL:', SUPABASE_URL);
+    console.log('SUPABASE_ANON_KEY exists?', !!SUPABASE_ANON_KEY && SUPABASE_ANON_KEY.length > 0);
+    
+    // Try to initialize Supabase
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+        try {
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✓ Supabase client initialized successfully');
+                initAuth();
+            } else {
+                console.warn('⚠ Supabase library not fully loaded yet, retrying in 500ms...');
+                setTimeout(() => {
+                    try {
+                        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                        console.log('✓ Supabase client initialized successfully (retry)');
+                        initAuth();
+                    } catch (retryError) {
+                        console.error('✗ Supabase initialization failed on retry:', retryError);
+                    }
+                }, 500);
+            }
+        } catch (error) {
+            console.error('✗ Supabase client initialization error:', error);
+            console.error('Error details:', { message: error.message, stack: error.stack });
+        }
+    } else {
+        console.error('✗ Supabase credentials not available');
+        console.log('Details:', {
+            'url': !!SUPABASE_URL,
+            'key': !!SUPABASE_ANON_KEY
+        });
+    }
+    
+    // Initialize particles
+    createParticles();
+    
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+    
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            
+            // Animate hamburger icon
+            const spans = hamburger.querySelectorAll('span');
+            spans[0].style.transform = navMenu.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
+            spans[1].style.opacity = navMenu.classList.contains('active') ? '0' : '1';
+            spans[2].style.transform = navMenu.classList.contains('active') ? 'rotate(-45deg) translate(7px, -6px)' : 'none';
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                
+                // Reset hamburger icon
+                const spans = hamburger.querySelectorAll('span');
+                spans.forEach(span => {
+                    span.style.transform = 'none';
+                    span.style.opacity = '1';
+                });
+            });
+        });
+    }
+    
+    // Dropdown toggle for mobile
+    document.querySelectorAll('.dropdown > .nav-link').forEach(dropdownToggle => {
+        dropdownToggle.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdown = dropdownToggle.parentElement;
+                dropdown.classList.toggle('active');
+            }
+        });
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const navbarHeight = document.querySelector('.navbar').offsetHeight;
+                const targetPosition = target.offsetTop - navbarHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
     }
 });
 
 async function initAuth() {
-    const { data } = await sbClient.auth.getSession();
-    debugLog('=== INITIAL SESSION CHECK ===');
-    debugLog('Session exists:', !!data.session);
-    debugLog('User:', data.session?.user?.email || 'Not signed in');
-    debugLog('============================');
+    if (!sbClient) {
+        console.error('✗ Cannot initialize auth: sbClient is null');
+        return;
+    }
     
-    updateAuthUI(data.session?.user || null);
-    
-    sbClient.auth.onAuthStateChange((event, session) => {
-        debugLog('=== AUTH STATE CHANGED ===');
-        debugLog('Event:', event);
-        debugLog('Session exists:', !!session);
-        debugLog('User:', session?.user?.email || 'Not signed in');
-        debugLog('========================');
+    try {
+        const { data } = await sbClient.auth.getSession();
+        debugLog('=== INITIAL SESSION CHECK ===');
+        debugLog('Session exists:', !!data.session);
+        debugLog('User:', data.session?.user?.email || 'Not signed in');
+        debugLog('============================');
         
-        updateAuthUI(session?.user || null);
-        if (document.getElementById('bulletinPosts')) {
-            renderPostsFromSupabase();
-        }
-    });
+        updateAuthUI(data.session?.user || null);
+        
+        sbClient.auth.onAuthStateChange((event, session) => {
+            debugLog('=== AUTH STATE CHANGED ===');
+            debugLog('Event:', event);
+            debugLog('Session exists:', !!session);
+            debugLog('User:', session?.user?.email || 'Not signed in');
+            debugLog('========================');
+            
+            updateAuthUI(session?.user || null);
+            if (document.getElementById('bulletinPosts')) {
+                renderPostsFromSupabase();
+            }
+        });
+    } catch (error) {
+        console.error('✗ Auth initialization error:', error);
+    }
 }
 
 function updateAuthUI(user) {
@@ -716,29 +758,24 @@ async function addPost() {
     updatePostCounter();
     textArea.value = '';
 
-    // Check if user is authenticated for saving to Supabase
-    const { data: saveSessionData } = sbClient ? await sbClient.auth.getSession() : { data: null };
-    const isAuthenticated = saveSessionData?.session?.user != null;
-    
-    // Persist: Supabase if authenticated, localStorage as fallback
+    // Persist to Supabase (works for authenticated AND anonymous users)
     let persisted = false;
-    if (isAuthenticated) {
-        persisted = await savePostSupabase({
-            text: postText,
-            mediaType: currentMediaType,
-            media: uploadedUrl || currentMedia
-        });
-    }
+    const mediaTypeToSave = currentMediaType;
+    persisted = await savePostSupabase({
+        text: postText,
+        mediaType: mediaTypeToSave,
+        media: uploadedUrl || currentMedia
+    });
     
     // Clear media AFTER saving
     clearMedia();
     
-    // If not authenticated or Supabase save failed, save to localStorage
-    if (!isAuthenticated || !persisted) {
-        debugLog('Saving post locally (unauthenticated or cloud save failed)');
+    // If Supabase save failed, save to localStorage as fallback
+    if (!persisted) {
+        debugLog('Saving post locally (Supabase save failed)');
         savePostLocal({ 
             text: postText, 
-            mediaType: currentMediaType, 
+            mediaType: mediaTypeToSave, 
             media: uploadedUrl || currentMedia 
         });
     }
@@ -746,6 +783,12 @@ async function addPost() {
 
     // Re-render from Supabase to avoid duplicates and ensure canonical view
     await renderPostsFromSupabase();
+    
+    // Refresh gallery if new image post was added
+    if (mediaTypeToSave === 'image' && persisted) {
+        debugLog('Refreshing gallery with new image');
+        await loadGalleryFromSupabase();
+    }
 
     if (postBtn) {
         postBtn.disabled = false;
@@ -852,12 +895,10 @@ async function tryUploadToSupabase(dataUrl, kind) {
             debugError('Supabase client not available or invalid data URL');
             return null;
         }
+        
+        // Get user ID if authenticated, otherwise use "anonymous"
         const { data: sessionData } = await sbClient.auth.getSession();
-        const userId = sessionData?.session?.user?.id;
-        if (!userId) {
-            debugError('User not authenticated - cannot upload to Supabase storage');
-            return null;
-        }
+        const userId = sessionData?.session?.user?.id || 'anonymous';
         
         // Safely parse base64 data URL
         const mimeMatch = dataUrl.match(/^data:([^;]+);base64,/);
@@ -978,12 +1019,8 @@ async function savePostSupabase(post) {
             return false;
         }
         const { data: sessionData } = await sbClient.auth.getSession();
-        const userId = sessionData?.session?.user?.id;
-        debugLog('👤 User ID:', userId);
-        if (!userId) {
-            debugError('❌ No user ID - user not signed in');
-            return false;
-        }
+        const userId = sessionData?.session?.user?.id || null;
+        debugLog('👤 User ID:', userId || 'anonymous');
         const insertData = {
             text: post.text || null,
             media_url: post.media || null,
@@ -1065,12 +1102,22 @@ async function renderPostsFromSupabase() {
             post.dataset.userId = p.user_id || '';
             let mediaHTML = '';
             let thumbnailHTML = '';
+            
+            // Helper function to convert photo IDs to full Unsplash URLs
+            const getImageUrl = (url) => {
+                if (!url) return url;
+                if (url.startsWith('http')) return url;
+                // If it doesn't start with http, assume it's an Unsplash photo ID
+                return `https://images.unsplash.com/photo-${url}?w=800&q=80`;
+            };
+            
             if (p.media_url && p.media_type === 'image') {
+                const imageUrl = getImageUrl(p.media_url);
                 // Add error handler for images that fail to load
-                mediaHTML = `<img src="${p.media_url}" alt="Post image" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';">
+                mediaHTML = `<img src="${imageUrl}" alt="Post image" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';">
                               <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Image failed to load</div>`;
-                thumbnailHTML = `<img src="${p.media_url}" alt="Post thumbnail" class="post-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EImage not available%3C/text%3E%3C/svg%3E'">`;
-                debugLog('Image post - URL:', p.media_url); // Debug
+                thumbnailHTML = `<img src="${imageUrl}" alt="Post thumbnail" class="post-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EImage not available%3C/text%3E%3C/svg%3E'">`;
+                debugLog('Image post - URL:', imageUrl); // Debug
             } else if (p.media_url && p.media_type === 'video') {
                 // Add error handler for videos that fail to load
                 mediaHTML = `<video controls src="${p.media_url}" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';"></video>
@@ -1363,10 +1410,11 @@ async function loadFallbackGallery() {
     debugLog('Loading fallback gallery with placeholder images...');
     
     const fallbackImages = [
-        { src: 'images/community-1.jpg', alt: 'Community Workshop' },
-        { src: 'images/community-2.jpg', alt: 'Robotics Project' },
-        { src: 'images/community-3.jpg', alt: 'Team Collaboration' },
-        { src: 'images/humanoid.jpg', alt: 'Humanoid Robot' },
+        { src: 'images/Anybots.jpg', alt: 'Anybots - Community Robots' },
+        { src: 'images/unitree_running.jpg', alt: 'Unitree Robot in Motion' },
+        { src: 'images/Humanoid_bending.jpg', alt: 'Humanoid Robot Demo' },
+        { src: 'images/Robot_Vegas.png', alt: 'Robot Vegas Project' },
+        { src: 'images/humanoid.jpg', alt: 'Humanoid Showcase' },
     ];
     
     container.innerHTML = '';
@@ -1437,8 +1485,17 @@ async function loadGalleryFromSupabase() {
             return;
         }
         
+        debugLog('Gallery query result:', { data, error });
+        
         if (!data || data.length === 0) {
             debugLog('No image posts found in Supabase, showing fallback');
+            // Debug: fetch all posts to see what media_types exist
+            const { data: allPosts } = await sbClient
+                .from('posts')
+                .select('id, media_url, media_type, text')
+                .order('created_at', { ascending: false })
+                .limit(10);
+            debugLog('All recent posts for debugging:', allPosts);
             loadFallbackGallery();
             return;
         }
@@ -1449,6 +1506,13 @@ async function loadGalleryFromSupabase() {
         container.innerHTML = '';
         indicatorsContainer.innerHTML = '';
         
+        debugLog('=== GALLERY DEBUG INFO ===');
+        debugLog('Container dimensions:', {
+            width: container.offsetWidth,
+            height: container.offsetHeight,
+            computed: window.getComputedStyle(container)
+        });
+        
         data.forEach((post, index) => {
             // Create slide
             const slide = document.createElement('a');
@@ -1457,12 +1521,46 @@ async function loadGalleryFromSupabase() {
             if (index === 0) slide.classList.add('active');
             
             const img = document.createElement('img');
-            img.src = post.media_url;
+            // Handle incomplete Unsplash URLs - if it doesn't start with http, assume it's an Unsplash photo ID
+            let imageUrl = post.media_url;
+            if (imageUrl && !imageUrl.startsWith('http')) {
+                imageUrl = `https://images.unsplash.com/photo-${imageUrl}?w=800&q=80`;
+            }
+            img.src = imageUrl;
             img.alt = `Community Highlight ${index + 1}`;
             img.className = 'gallery-image';
+            img.style.cssText = 'display: block; width: 100%; height: 100%; object-fit: cover;';
+            
+            // Add error handling with retry
             img.onerror = function() {
-                debugError('Failed to load gallery image:', post.media_url);
-                this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22450%22%3E%3Crect fill=%22%231e293b%22 width=%22800%22 height=%22450%22/%3E%3C/svg%3E';
+                debugError('Failed to load image:', imageUrl);
+                // Try one more time with cache buster
+                if (!this.dataset.retried) {
+                    this.dataset.retried = true;
+                    this.src = imageUrl + (imageUrl.includes('?') ? '&' : '?') + 'cache=' + Math.random();
+                } else {
+                    // Show placeholder with post text
+                    this.style.display = 'none';
+                    const placeholder = document.createElement('div');
+                    placeholder.style.cssText = `
+                        width: 100%;
+                        height: 100%;
+                        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #94a3b8;
+                        text-align: center;
+                        padding: 2rem;
+                        font-size: 0.9rem;
+                    `;
+                    placeholder.textContent = post.text || 'Community highlight';
+                    slide.appendChild(placeholder);
+                }
+            };
+            
+            img.onload = function() {
+                debugLog('Image loaded successfully:', imageUrl);
             };
             
             slide.appendChild(img);
@@ -1527,10 +1625,37 @@ function initializeGalleryRotation() {
 }
 
 // Initialize gallery from Supabase when DOM is ready
+function initializeGallery() {
+    console.log('📸 Initializing gallery...');
+    try {
+        loadGalleryFromSupabase();
+    } catch (err) {
+        console.error('Gallery initialization error:', err);
+        // Fallback to local gallery
+        loadFallbackGallery();
+    }
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadGalleryFromSupabase);
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeGallery();
+        // Add a safety timeout in case Supabase takes too long
+        setTimeout(() => {
+            if (!document.querySelector('.gallery-slide')) {
+                console.warn('Gallery still not loaded, forcing fallback');
+                loadFallbackGallery();
+            }
+        }, 3000);
+    });
 } else {
-    loadGalleryFromSupabase();
+    initializeGallery();
+    // Add a safety timeout
+    setTimeout(() => {
+        if (!document.querySelector('.gallery-slide')) {
+            console.warn('Gallery still not loaded, forcing fallback');
+            loadFallbackGallery();
+        }
+    }, 3000);
 }
 
 debugLog('🤖 LV Robotics website loaded successfully!');

@@ -428,7 +428,33 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/main.js?v=3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="js/main.js?v=6"></script>
+    <script>
+        // Diagnostic logging
+        console.log('='.repeat(60));
+        console.log('LV ROBOTICS - Script Diagnostics');
+        console.log('='.repeat(60));
+        
+        window.addEventListener('load', () => {
+            console.log('📊 FINAL Script Load Status:');
+            console.log('  1. Supabase library:', !!window.supabase ? '✓ Loaded' : '✗ NOT loaded');
+            console.log('  2. Supabase.createClient:', typeof window.supabase?.createClient === 'function' ? '✓ Available' : '✗ NOT available');
+            console.log('  3. Gallery functions:', typeof loadGalleryFromSupabase !== 'undefined' ? '✓ Available' : '✗ NOT available');
+            console.log('  4. sbClient status:', typeof sbClient !== 'undefined' ? `✓ Created: ${sbClient ? 'YES' : 'NO'}` : '✗ Not set');
+            
+            if (!window.supabase) {
+                console.error('❌ CRITICAL: Supabase library failed to load!');
+                document.body.innerHTML += '<div style="background:red;color:white;padding:20px;margin:20px;">ERROR: Supabase library not loaded. Gallery features will not work.</div>';
+            }
+        });
+        
+        // Also log after a small delay
+        setTimeout(() => {
+            console.log('📊 Delayed diagnostics (500ms):');
+            console.log('  sbClient:', sbClient);
+            console.log('  window.supabase.createClient type:', typeof window.supabase?.createClient);
+        }, 500);
+    </script>
 </body>
 </html>
