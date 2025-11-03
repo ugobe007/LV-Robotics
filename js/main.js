@@ -1353,6 +1353,50 @@ rainbowStyle.textContent = `
 document.head.appendChild(rainbowStyle);
 
 // Community Highlights - Load gallery images from Supabase
+async function loadFallbackGallery() {
+    // Show placeholder gallery with local images
+    const container = document.getElementById('galleryContainer');
+    const indicatorsContainer = document.getElementById('galleryIndicators');
+    
+    if (!container || !indicatorsContainer) return;
+    
+    debugLog('Loading fallback gallery with placeholder images...');
+    
+    const fallbackImages = [
+        { src: 'images/community-1.jpg', alt: 'Community Workshop' },
+        { src: 'images/community-2.jpg', alt: 'Robotics Project' },
+        { src: 'images/community-3.jpg', alt: 'Team Collaboration' },
+        { src: 'images/humanoid.jpg', alt: 'Humanoid Robot' },
+    ];
+    
+    container.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
+    
+    fallbackImages.forEach((imageData, index) => {
+        const slide = document.createElement('a');
+        slide.href = 'community.html';
+        slide.className = 'gallery-slide';
+        if (index === 0) slide.classList.add('active');
+        
+        const img = document.createElement('img');
+        img.src = imageData.src;
+        img.alt = imageData.alt;
+        img.className = 'gallery-image';
+        
+        slide.appendChild(img);
+        container.appendChild(slide);
+        
+        const indicator = document.createElement('span');
+        indicator.className = 'indicator';
+        indicator.dataset.slide = index;
+        if (index === 0) indicator.classList.add('active');
+        indicatorsContainer.appendChild(indicator);
+    });
+    
+    initializeGalleryRotation();
+    debugLog('Fallback gallery loaded with ' + fallbackImages.length + ' placeholder images');
+}
+
 async function loadGalleryFromSupabase() {
     const container = document.getElementById('galleryContainer');
     const indicatorsContainer = document.getElementById('galleryIndicators');
@@ -1362,15 +1406,17 @@ async function loadGalleryFromSupabase() {
         return;
     }
     
-    // Wait for Supabase to be ready
+    // Wait for Supabase to be ready (with timeout)
     let attempts = 0;
-    while (!sbClient && attempts < 50) {
+    const maxAttempts = 30; // 3 seconds max
+    while (!sbClient && attempts < maxAttempts) {
         await new Promise(resolve => setTimeout(resolve, 100));
         attempts++;
     }
     
     if (!sbClient) {
-        debugLog('Supabase client not initialized, showing fallback gallery');
+        debugLog('Supabase client not initialized after timeout, showing fallback gallery');
+        loadFallbackGallery();
         return;
     }
     
@@ -1387,12 +1433,13 @@ async function loadGalleryFromSupabase() {
         
         if (error) {
             debugError('Error fetching gallery images:', error);
+            loadFallbackGallery();
             return;
         }
         
         if (!data || data.length === 0) {
-            debugLog('No image posts found in Supabase');
-            container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #a8e6a1;"><p>No community highlights yet. Be the first to share! 📸</p></div>';
+            debugLog('No image posts found in Supabase, showing fallback');
+            loadFallbackGallery();
             return;
         }
         
@@ -1435,6 +1482,7 @@ async function loadGalleryFromSupabase() {
         
     } catch (err) {
         debugError('Exception loading gallery:', err);
+        loadFallbackGallery();
     }
 }
 
