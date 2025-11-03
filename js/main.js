@@ -112,43 +112,50 @@ const SUPABASE_URL = 'https://tzitghqmrmsxddysxhvc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6aXRnaHFtcm1zeGRkeXN4aHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDAzMjMsImV4cCI6MjA3NzUxNjMyM30.f5rZPAdCOHe6ZXr_TYgmhUkZkcWsSYX_qMLXUgg9dZ8';
 let sbClient = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Supabase with error handling
-    console.log('DOMContentLoaded: Checking for Supabase library...');
-    console.log('window.supabase available?', !!window.supabase);
-    console.log('window.supabase.createClient available?', typeof window.supabase?.createClient);
+// Initialize Supabase with error handling - with retries
+async function initializeSupabase() {
+    console.log('Initializing Supabase...');
     console.log('SUPABASE_URL:', SUPABASE_URL);
     console.log('SUPABASE_ANON_KEY exists?', !!SUPABASE_ANON_KEY && SUPABASE_ANON_KEY.length > 0);
     
-    // Try to initialize Supabase
-    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-        try {
-            if (window.supabase && typeof window.supabase.createClient === 'function') {
-                sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✓ Supabase client initialized successfully');
-                initAuth();
-            } else {
-                console.warn('⚠ Supabase library not fully loaded yet, retrying in 500ms...');
-                setTimeout(() => {
-                    try {
-                        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                        console.log('✓ Supabase client initialized successfully (retry)');
-                        initAuth();
-                    } catch (retryError) {
-                        console.error('✗ Supabase initialization failed on retry:', retryError);
-                    }
-                }, 500);
-            }
-        } catch (error) {
-            console.error('✗ Supabase client initialization error:', error);
-            console.error('Error details:', { message: error.message, stack: error.stack });
-        }
-    } else {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
         console.error('✗ Supabase credentials not available');
-        console.log('Details:', {
-            'url': !!SUPABASE_URL,
-            'key': !!SUPABASE_ANON_KEY
-        });
+        return false;
+    }
+    
+    // Try up to 10 times with 200ms delay between attempts (total: 2 seconds)
+    for (let attempt = 1; attempt <= 10; attempt++) {
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            try {
+                sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✓ Supabase client initialized successfully on attempt', attempt);
+                return true;
+            } catch (error) {
+                console.error(`✗ Supabase initialization error on attempt ${attempt}:`, error);
+                return false;
+            }
+        }
+        
+        if (attempt < 10) {
+            console.log(`⚠ Waiting for Supabase library (attempt ${attempt}/10)...`);
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+    }
+    
+    console.error('✗ Supabase library failed to load after 10 attempts');
+    return false;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOMContentLoaded: Starting initialization...');
+    
+    // Initialize Supabase
+    const supabaseReady = await initializeSupabase();
+    
+    if (supabaseReady) {
+        initAuth();
+    } else {
+        console.warn('⚠ Supabase not available, some features may not work');
     }
     
     // Initialize particles
@@ -1109,7 +1116,8 @@ async function renderPostsFromSupabase() {
             const getImageUrl = (url) => {
                 if (!url) return url;
                 if (url.startsWith('http')) return url;
-                // If it doesn't start with http, assume it's an Unsplash photo ID
+                if (url.startsWith('/')) return url; // Support local/relative paths
+                // If it doesn't start with http or /, assume it's an Unsplash photo ID
                 return `https://images.unsplash.com/photo-${url}?w=800&q=80`;
             };
             
@@ -1476,13 +1484,13 @@ async function loadGalleryFromSupabase() {
     try {
         debugLog('Fetching gallery images from Supabase...');
         
-        // Fetch image posts, sorted by newest first, limit to 7
+        // Fetch image posts, sorted by newest first, limit to 50
         const { data, error } = await sbClient
             .from('posts')
             .select('id, media_url, media_type, text, created_at')
             .eq('media_type', 'image')
             .order('created_at', { ascending: false })
-            .limit(7);
+            .limit(50);
         
         if (error) {
             debugError('Error fetching gallery images:', error);
@@ -1529,10 +1537,14 @@ async function loadGalleryFromSupabase() {
             if (index === 0) slide.classList.add('active');
             
             const img = document.createElement('img');
-            // Handle incomplete Unsplash URLs - if it doesn't start with http, assume it's an Unsplash photo ID
+            // Handle different URL formats
             let imageUrl = post.media_url;
-            if (imageUrl && !imageUrl.startsWith('http')) {
-                imageUrl = `https://images.unsplash.com/photo-${imageUrl}?w=800&q=80`;
+            if (imageUrl) {
+                if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                    // Assume it's an Unsplash photo ID
+                    imageUrl = `https://images.unsplash.com/photo-${imageUrl}?w=800&q=80`;
+                }
+                // If it starts with / or http, use as-is
             }
             img.src = imageUrl;
             img.alt = `Community Highlight ${index + 1}`;

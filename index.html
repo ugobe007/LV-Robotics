@@ -428,8 +428,8 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="js/main.js?v=11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
+    <script src="js/main.js?v=12" defer></script>
     <script>
         // Diagnostic logging
         console.log('='.repeat(60));
@@ -452,7 +452,7 @@
         // Also log after a small delay
         setTimeout(() => {
             console.log('📊 Delayed diagnostics (500ms):');
-            console.log('  sbClient:', sbClient);
+            console.log('  sbClient:', typeof sbClient !== 'undefined' ? (sbClient ? 'INITIALIZED' : 'null') : 'NOT DEFINED');
             console.log('  window.supabase.createClient type:', typeof window.supabase?.createClient);
         }, 500);
     </script>

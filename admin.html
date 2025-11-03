@@ -758,7 +758,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script>
         // Supabase initialization
         const SUPABASE_URL = 'https://cbgevvuvleuwjjmefjza.supabase.co';
@@ -769,8 +769,28 @@
         let isAdmin = false;
         let isSuperAdmin = false;
 
+        // Wait for Supabase library to load
+        async function waitForSupabase() {
+            for (let attempt = 1; attempt <= 10; attempt++) {
+                if (window.supabase && typeof window.supabase.createClient === 'function') {
+                    return true;
+                }
+                if (attempt < 10) {
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+            }
+            return false;
+        }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', async () => {
+            // Wait for Supabase to be available
+            const supabaseReady = await waitForSupabase();
+            if (!supabaseReady) {
+                alert('Failed to load Supabase library. Please refresh the page.');
+                return;
+            }
+            
             sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             
             // Check if user is logged in
