@@ -108,8 +108,8 @@ const debugError = (...args) => { if (DEBUG) console.error(...args); };
 // Bulletin Board Functionality
 // Bulletin Board functionality
 // Supabase client setup
-const SUPABASE_URL = 'https://cbgevvuvleuwjjmefjza.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ2V2dnV2bGV1d2pqbWVmanphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjQwMjksImV4cCI6MjA3NzM0MDAyOX0.sEED3-kLSZE74bHsrJvVhyaH_GEXEVECeZNWpCnFK84';
+const SUPABASE_URL = 'https://tzitghqmrmsxddysxhvc.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6aXRnaHFtcm1zeGRkeXN4aHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDAzMjMsImV4cCI6MjA3NzUxNjMyM30.f5rZPAdCOHe6ZXr_TYgmhUkZkcWsSYX_qMLXUgg9dZ8';
 let sbClient = null;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1022,7 +1022,7 @@ async function savePostSupabase(post) {
         const userId = sessionData?.session?.user?.id || null;
         debugLog('👤 User ID:', userId || 'anonymous');
         const insertData = {
-            text: post.text || null,
+            text: post.text || '',  // Always send text, empty string if null
             media_url: post.media || null,
             media_type: post.mediaType || null,
             user_id: userId
@@ -1031,6 +1031,8 @@ async function savePostSupabase(post) {
         const { data, error } = await sbClient.from('posts').insert(insertData);
         if (error) {
             debugError('❌ Supabase insert error:', error);
+            debugError('❌ Error details:', JSON.stringify(error));
+            alert(`Failed to save post: ${error.message || 'Unknown error'}\n\nPlease try again or contact support.`);
             return false;
         }
         debugLog('✅ Post saved successfully!', data);
@@ -1116,7 +1118,7 @@ async function renderPostsFromSupabase() {
                 // Add error handler for images that fail to load
                 mediaHTML = `<img src="${imageUrl}" alt="Post image" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';">
                               <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Image failed to load</div>`;
-                thumbnailHTML = `<img src="${imageUrl}" alt="Post thumbnail" class="post-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EImage not available%3C/text%3E%3C/svg%3E'">`;
+                thumbnailHTML = `<img src="${imageUrl}" alt="Post thumbnail" class="post-thumbnail" style="background: #f0f0f0;" onerror="this.style.background='#e0e0e0'; this.style.opacity='0.5'; console.log('Image failed:', this.src);">`;
                 debugLog('Image post - URL:', imageUrl); // Debug
             } else if (p.media_url && p.media_type === 'video') {
                 // Add error handler for videos that fail to load
@@ -1417,13 +1419,16 @@ async function loadFallbackGallery() {
         { src: 'images/humanoid.jpg', alt: 'Humanoid Showcase' },
     ];
     
+    // CRITICAL: Clear loading message and reset container
     container.innerHTML = '';
+    container.style.display = 'flex';
     indicatorsContainer.innerHTML = '';
     
     fallbackImages.forEach((imageData, index) => {
         const slide = document.createElement('a');
         slide.href = 'community.html';
         slide.className = 'gallery-slide';
+        slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;';
         if (index === 0) slide.classList.add('active');
         
         const img = document.createElement('img');
@@ -1488,22 +1493,24 @@ async function loadGalleryFromSupabase() {
         debugLog('Gallery query result:', { data, error });
         
         if (!data || data.length === 0) {
-            debugLog('No image posts found in Supabase, showing fallback');
+            debugLog('⚠️ No image posts found in Supabase, showing fallback');
             // Debug: fetch all posts to see what media_types exist
             const { data: allPosts } = await sbClient
                 .from('posts')
-                .select('id, media_url, media_type, text')
+                .select('id, media_url, media_type, text, created_at')
                 .order('created_at', { ascending: false })
                 .limit(10);
-            debugLog('All recent posts for debugging:', allPosts);
+            debugLog('📊 All recent posts for debugging:', allPosts);
+            debugLog('📊 Media types found:', allPosts?.map(p => p.media_type));
             loadFallbackGallery();
             return;
         }
         
         debugLog(`Found ${data.length} image posts for gallery`);
         
-        // Clear container and generate slides
+        // CRITICAL: Clear loading message and reset container
         container.innerHTML = '';
+        container.style.display = 'flex';
         indicatorsContainer.innerHTML = '';
         
         debugLog('=== GALLERY DEBUG INFO ===');
@@ -1518,6 +1525,7 @@ async function loadGalleryFromSupabase() {
             const slide = document.createElement('a');
             slide.href = 'community.html';
             slide.className = 'gallery-slide';
+            slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;';
             if (index === 0) slide.classList.add('active');
             
             const img = document.createElement('img');
@@ -1625,13 +1633,27 @@ function initializeGalleryRotation() {
 }
 
 // Initialize gallery from Supabase when DOM is ready
-function initializeGallery() {
+async function initializeGallery() {
     console.log('📸 Initializing gallery...');
+    
+    // Wait for Supabase to be ready
+    let attempts = 0;
+    while (!sbClient && attempts < 50) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+    }
+    
+    if (!sbClient) {
+        console.warn('⚠️ Supabase not ready after 5 seconds, using fallback');
+        loadFallbackGallery();
+        return;
+    }
+    
+    console.log('✅ Supabase ready, loading gallery...');
     try {
-        loadGalleryFromSupabase();
+        await loadGalleryFromSupabase();
     } catch (err) {
         console.error('Gallery initialization error:', err);
-        // Fallback to local gallery
         loadFallbackGallery();
     }
 }
@@ -1639,23 +1661,9 @@ function initializeGallery() {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initializeGallery();
-        // Add a safety timeout in case Supabase takes too long
-        setTimeout(() => {
-            if (!document.querySelector('.gallery-slide')) {
-                console.warn('Gallery still not loaded, forcing fallback');
-                loadFallbackGallery();
-            }
-        }, 3000);
     });
 } else {
     initializeGallery();
-    // Add a safety timeout
-    setTimeout(() => {
-        if (!document.querySelector('.gallery-slide')) {
-            console.warn('Gallery still not loaded, forcing fallback');
-            loadFallbackGallery();
-        }
-    }, 3000);
 }
 
 debugLog('🤖 LV Robotics website loaded successfully!');
