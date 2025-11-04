@@ -706,12 +706,23 @@
                             <!-- Date & Time -->
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Start Date/Time *</label>
-                                    <input type="datetime-local" id="eventStartDate" required>
+                                    <label>Start Date *</label>
+                                    <input type="date" id="eventStartDateOnly" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>End Date/Time</label>
-                                    <input type="datetime-local" id="eventEndDate">
+                                    <label>Start Time *</label>
+                                    <input type="time" id="eventStartTimeOnly" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input type="date" id="eventEndDateOnly">
+                                </div>
+                                <div class="form-group">
+                                    <label>End Time</label>
+                                    <input type="time" id="eventEndTimeOnly">
                                 </div>
                             </div>
 
@@ -762,12 +773,32 @@
                             </div>
 
                             <!-- Media -->
+                            <div class="form-group">
+                                <label style="color: var(--admin-primary); font-weight: 600; font-size: 1.1rem;">📸 Event Media</label>
+                            </div>
+                            
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Event Image</label>
+                                    <label>Main Event Image (banner)</label>
                                     <input type="file" id="eventImageUpload" accept="image/*" onchange="handleEventImageUpload(event)">
                                     <div id="eventImagePreview" style="margin-top: 0.5rem;"></div>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Additional Photos & Videos</label>
+                                <small style="color: #8cd682; display: block; margin-bottom: 0.5rem;">Upload multiple photos/videos for your event gallery</small>
+                                <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+                                    <button type="button" class="btn-submit" onclick="document.getElementById('eventGalleryPhotos').click()" style="background: #6366f1; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fas fa-images"></i> Add Photos
+                                    </button>
+                                    <button type="button" class="btn-submit" onclick="document.getElementById('eventGalleryVideos').click()" style="background: #8b5cf6; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fas fa-video"></i> Add Videos
+                                    </button>
+                                </div>
+                                <input type="file" id="eventGalleryPhotos" accept="image/*" multiple style="display: none;" onchange="handleEventGalleryUpload(event, 'image')">
+                                <input type="file" id="eventGalleryVideos" accept="video/*" multiple style="display: none;" onchange="handleEventGalleryUpload(event, 'video')">
+                                <div id="eventGalleryPreview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem;"></div>
                             </div>
 
                             <!-- Contact -->

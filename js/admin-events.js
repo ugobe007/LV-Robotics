@@ -3,6 +3,7 @@
 
 let currentEventId = null;
 let currentEventImageUrl = null;
+let eventGalleryMedia = []; // Array to store gallery photos/videos
 
 // Initialize event management
 document.addEventListener('DOMContentLoaded', () => {
@@ -48,8 +49,10 @@ function cancelEventForm() {
     document.getElementById('eventForm').style.display = 'none';
     document.getElementById('eventFormElement').reset();
     document.getElementById('eventImagePreview').innerHTML = '';
+    document.getElementById('eventGalleryPreview').innerHTML = '';
     currentEventId = null;
     currentEventImageUrl = null;
+    eventGalleryMedia = [];
 }
 
 // Populate form with event data for editing
@@ -60,12 +63,16 @@ function populateEventForm(event) {
     document.getElementById('eventShortDesc').value = event.short_description || '';
     document.getElementById('eventDescription').value = event.description || '';
     
-    // Format datetime for input
+    // Split datetime into separate date and time fields
     if (event.start_date) {
-        document.getElementById('eventStartDate').value = new Date(event.start_date).toISOString().slice(0, 16);
+        const startDate = new Date(event.start_date);
+        document.getElementById('eventStartDateOnly').value = startDate.toISOString().split('T')[0];
+        document.getElementById('eventStartTimeOnly').value = startDate.toTimeString().slice(0, 5);
     }
     if (event.end_date) {
-        document.getElementById('eventEndDate').value = new Date(event.end_date).toISOString().slice(0, 16);
+        const endDate = new Date(event.end_date);
+        document.getElementById('eventEndDateOnly').value = endDate.toISOString().split('T')[0];
+        document.getElementById('eventEndTimeOnly').value = endDate.toTimeString().slice(0, 5);
     }
     
     document.getElementById('eventLocationType').value = event.location_type || 'in-person';
@@ -89,6 +96,12 @@ function populateEventForm(event) {
         document.getElementById('eventImagePreview').innerHTML = `
             <img src="${event.image_url}" style="max-width: 200px; border-radius: 8px; border: 2px solid var(--admin-border);">
         `;
+    }
+    
+    // Show gallery media if exists
+    if (event.gallery_media && event.gallery_media.length > 0) {
+        eventGalleryMedia = event.gallery_media;
+        renderGalleryPreview();
     }
     
     // Show publishing status
@@ -134,19 +147,99 @@ async function handleEventImageUpload(event) {
     }
 }
 
+// Handle gallery upload (multiple photos/videos)
+async function handleEventGalleryUpload(event, mediaType) {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+    
+    try {
+        for (let file of files) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const filePath = `${fileName}`;
+            
+            const { data, error } = await sbClient.storage
+                .from('event-images')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+            
+            if (error) throw error;
+            
+            // Get public URL
+            const { data: urlData } = sbClient.storage
+                .from('event-images')
+                .getPublicUrl(filePath);
+            
+            // Add to gallery array
+            eventGalleryMedia.push({
+                url: urlData.publicUrl,
+                type: mediaType,
+                filename: file.name
+            });
+        }
+        
+        // Update preview
+        renderGalleryPreview();
+        
+    } catch (err) {
+        console.error('Error uploading gallery media:', err);
+        alert('Error uploading media: ' + err.message);
+    }
+}
+
+// Render gallery preview
+function renderGalleryPreview() {
+    const previewDiv = document.getElementById('eventGalleryPreview');
+    if (!eventGalleryMedia || eventGalleryMedia.length === 0) {
+        previewDiv.innerHTML = '';
+        return;
+    }
+    
+    previewDiv.innerHTML = eventGalleryMedia.map((media, index) => `
+        <div style="position: relative; border: 2px solid var(--admin-primary); border-radius: 8px; overflow: hidden;">
+            ${media.type === 'image' ? 
+                `<img src="${media.url}" style="width: 100%; height: 120px; object-fit: cover;">` :
+                `<video src="${media.url}" style="width: 100%; height: 120px; object-fit: cover;"></video>`
+            }
+            <button onclick="removeGalleryMedia(${index})" 
+                style="position: absolute; top: 4px; right: 4px; background: rgba(220, 38, 38, 0.9); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">
+                ×
+            </button>
+        </div>
+    `).join('');
+}
+
+// Remove gallery media item
+function removeGalleryMedia(index) {
+    eventGalleryMedia.splice(index, 1);
+    renderGalleryPreview();
+}
+
 // Save event
 async function saveEvent() {
     try {
         // Validate required fields
         const title = document.getElementById('eventTitle').value.trim();
         const category = document.getElementById('eventCategory').value;
-        const startDate = document.getElementById('eventStartDate').value;
+        const startDateOnly = document.getElementById('eventStartDateOnly').value;
+        const startTimeOnly = document.getElementById('eventStartTimeOnly').value;
         const locationType = document.getElementById('eventLocationType').value;
         const status = document.getElementById('eventStatus').value;
         
-        if (!title || !category || !startDate || !locationType) {
+        if (!title || !category || !startDateOnly || !startTimeOnly || !locationType) {
             alert('Please fill in all required fields (marked with *)');
             return;
+        }
+        
+        // Combine date and time into ISO format
+        const startDateTime = `${startDateOnly}T${startTimeOnly}`;
+        let endDateTime = null;
+        const endDateOnly = document.getElementById('eventEndDateOnly').value;
+        const endTimeOnly = document.getElementById('eventEndTimeOnly').value;
+        if (endDateOnly && endTimeOnly) {
+            endDateTime = `${endDateOnly}T${endTimeOnly}`;
         }
         
         // Prepare event data
@@ -155,9 +248,8 @@ async function saveEvent() {
             category,
             short_description: document.getElementById('eventShortDesc').value || null,
             description: document.getElementById('eventDescription').value || null,
-            start_date: new Date(startDate).toISOString(),
-            end_date: document.getElementById('eventEndDate').value ? 
-                new Date(document.getElementById('eventEndDate').value).toISOString() : null,
+            start_date: new Date(startDateTime).toISOString(),
+            end_date: endDateTime ? new Date(endDateTime).toISOString() : null,
             location_type: locationType,
             location_name: document.getElementById('eventLocationName').value || null,
             location_address: document.getElementById('eventLocationAddress').value || null,
@@ -171,6 +263,7 @@ async function saveEvent() {
             status,
             is_featured: document.getElementById('eventFeatured').checked,
             image_url: currentEventImageUrl,
+            gallery_media: eventGalleryMedia.length > 0 ? eventGalleryMedia : null,
             updated_at: new Date().toISOString()
         };
         
