@@ -641,8 +641,9 @@ section {
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     background: #000;
-    aspect-ratio: 16 / 9;
-    min-height: 400px;
+    /* Padding-bottom hack for 16:9 aspect ratio (9/16 = 0.5625) */
+    padding-bottom: 56.25%;
+    height: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -650,7 +651,7 @@ section {
 
 @media (max-width: 768px) {
     .rotating-gallery {
-        min-height: 250px;
+        padding-bottom: 56.25%;
     }
 }
 

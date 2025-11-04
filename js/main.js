@@ -1429,10 +1429,6 @@ async function loadFallbackGallery() {
     
     // CRITICAL: Clear loading message and reset container
     container.innerHTML = '';
-    container.style.display = 'flex';
-    // Force height calculation: aspect-ratio 16:9 based on width
-    const width = container.offsetWidth;
-    container.style.height = (width * 9 / 16) + 'px';
     indicatorsContainer.innerHTML = '';
     
     fallbackImages.forEach((imageData, index) => {
@@ -1524,10 +1520,6 @@ async function loadGalleryFromSupabase() {
         
         // CRITICAL: Clear loading message and reset container
         container.innerHTML = '';
-        container.style.display = 'flex';
-        // Force height calculation: aspect-ratio 16:9 based on width
-        const width = container.offsetWidth;
-        container.style.height = (width * 9 / 16) + 'px';
         indicatorsContainer.innerHTML = '';
         
         debugLog('=== GALLERY DEBUG INFO ===');
