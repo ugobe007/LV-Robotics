@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --admin-primary: #8b5cf6;
-            --admin-secondary: #a78bfa;
+            --admin-primary: #a8e6a1;
+            --admin-secondary: #8cd682;
             --admin-danger: #ef4444;
             --admin-warning: #f59e0b;
             --admin-success: #10b981;
@@ -26,7 +26,7 @@
 
         body {
             background: var(--admin-bg);
-            color: #e2e8f0;
+            color: #a8e6a1;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -67,7 +67,7 @@
             padding: 0.75rem 1.5rem;
             background: none;
             border: none;
-            color: #cbd5e0;
+            color: #a8e6a1;
             text-align: left;
             cursor: pointer;
             font-size: 0.95rem;
@@ -79,7 +79,7 @@
 
         .admin-nav button:hover,
         .admin-nav button.active {
-            background: rgba(139, 92, 246, 0.1);
+            background: rgba(168, 230, 161, 0.1);
             color: var(--admin-primary);
             padding-left: 2rem;
         }
@@ -117,7 +117,7 @@
         }
 
         .admin-user-email {
-            color: #cbd5e0;
+            color: #a8e6a1;
             font-size: 0.9rem;
         }
 
@@ -191,11 +191,11 @@
         .stat-card:hover {
             border-color: var(--admin-primary);
             transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 20px rgba(168, 230, 161, 0.2);
         }
 
         .stat-label {
-            color: #94a3b8;
+            color: #a8e6a1;
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
@@ -239,12 +239,12 @@
 
         .admin-table td {
             padding: 0.75rem 1rem;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
-            color: #cbd5e0;
+            border-bottom: 1px solid rgba(168, 230, 161, 0.1);
+            color: #a8e6a1;
         }
 
         .admin-table tr:hover {
-            background: rgba(139, 92, 246, 0.05);
+            background: rgba(168, 230, 161, 0.05);
         }
 
         /* Action Buttons */
@@ -330,7 +330,7 @@
             background: var(--admin-bg);
             border: 2px solid var(--admin-border);
             border-radius: 6px;
-            color: #e2e8f0;
+            color: #a8e6a1;
             font-size: 0.95rem;
             transition: all 0.3s ease;
         }
@@ -340,7 +340,7 @@
         .form-group select:focus {
             outline: none;
             border-color: var(--admin-primary);
-            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 10px rgba(168, 230, 161, 0.2);
         }
 
         .form-group textarea {
@@ -457,7 +457,7 @@
         .empty-state {
             text-align: center;
             padding: 3rem;
-            color: #64748b;
+            color: #a8e6a1;
         }
 
         .empty-state i {
@@ -584,7 +584,7 @@
                 <h1 id="sectionTitle">Dashboard</h1>
                 <div class="admin-user-info">
                     <div>
-                        <div style="color: #e2e8f0; font-weight: 600;">Admin Panel</div>
+                        <div style="color: #a8e6a1; font-weight: 600;">Admin Panel</div>
                         <div class="admin-user-email" id="userEmail">Loading...</div>
                     </div>
                 </div>
@@ -630,7 +630,7 @@
                         <h2>Analytics & Insights</h2>
                     </div>
                     <div id="analyticsContent">
-                        <p style="color: #94a3b8;">Loading analytics...</p>
+                        <p style="color: #a8e6a1;">Loading analytics...</p>
                     </div>
                 </section>
 
@@ -641,7 +641,7 @@
                         <button class="btn-submit"><i class="fas fa-plus"></i> Add User</button>
                     </div>
                     <div id="usersContent">
-                        <p style="color: #94a3b8;">Loading users...</p>
+                        <p style="color: #a8e6a1;">Loading users...</p>
                     </div>
                 </section>
 
@@ -649,7 +649,7 @@
                 <section class="admin-section" id="moderation">
                     <div class="section-header">
                         <h2>Content Moderation</h2>
-                        <select id="moderationFilter" style="padding: 0.5rem 1rem; background: var(--admin-card); border: 2px solid var(--admin-border); border-radius: 6px; color: #e2e8f0; cursor: pointer;">
+                        <select id="moderationFilter" style="padding: 0.5rem 1rem; background: var(--admin-card); border: 2px solid var(--admin-border); border-radius: 6px; color: #a8e6a1; cursor: pointer;">
                             <option value="">All Status</option>
                             <option value="pending">Pending</option>
                             <option value="reviewed">Reviewed</option>
@@ -658,7 +658,7 @@
                         </select>
                     </div>
                     <div id="moderationContent">
-                        <p style="color: #94a3b8;">Loading moderation queue...</p>
+                        <p style="color: #a8e6a1;">Loading moderation queue...</p>
                     </div>
                 </section>
 
@@ -714,7 +714,7 @@
                     </div>
 
                     <div id="eventsContent">
-                        <p style="color: #94a3b8;">Loading events...</p>
+                        <p style="color: #a8e6a1;">Loading events...</p>
                     </div>
                 </section>
 
@@ -724,7 +724,7 @@
                         <h2>Community Highlights Curation</h2>
                     </div>
                     <div id="galleryCurationContent">
-                        <p style="color: #94a3b8;">Loading available images...</p>
+                        <p style="color: #a8e6a1;">Loading available images...</p>
                     </div>
                 </section>
 
@@ -737,7 +737,7 @@
                         <span><i class="fas fa-lock"></i> Only Super Admins can modify these settings</span>
                     </div>
                     <div id="settingsContent">
-                        <p style="color: #94a3b8;">Loading settings...</p>
+                        <p style="color: #a8e6a1;">Loading settings...</p>
                     </div>
                 </section>
             </div>
@@ -749,7 +749,7 @@
         <div class="admin-modal-content">
             <button class="modal-close" onclick="closeConfirmModal()"></button>
             <h3 style="color: var(--admin-primary); margin-bottom: 1rem;" id="confirmTitle">Confirm Action</h3>
-            <p id="confirmMessage" style="color: #cbd5e0; margin-bottom: 1.5rem;"></p>
+            <p id="confirmMessage" style="color: #a8e6a1; margin-bottom: 1.5rem;"></p>
             <div style="display: flex; gap: 1rem;">
                 <button class="btn-submit" onclick="executeConfirmAction()">Confirm</button>
                 <button class="btn-submit" style="background: #64748b;" onclick="closeConfirmModal()">Cancel</button>
@@ -1163,8 +1163,8 @@
                              onmouseout="this.style.borderColor = 'var(--admin-border)'">
                             <img src="${img.media_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22%3E%3Crect fill=%22%231e293b%22 width=%22200%22 height=%22150%22/%3E%3C/svg%3E'">
                             <div style="padding: 1rem;">
-                                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem;">${img.text?.substring(0, 30) || 'No description'}</p>
-                                <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">${new Date(img.created_at).toLocaleDateString()}</p>
+                                <p style="font-size: 0.85rem; color: #a8e6a1; margin-bottom: 0.5rem;">${img.text?.substring(0, 30) || 'No description'}</p>
+                                <p style="font-size: 0.75rem; color: #8cd682; margin-bottom: 0.5rem;">${new Date(img.created_at).toLocaleDateString()}</p>
                                 <div style="display: flex; gap: 0.5rem;">
                                     <button class="btn-icon btn-delete" style="flex: 1;" title="Delete image" onclick="deleteImageFromGallery('${img.id}', '${img.media_url}')">
                                         <i class="fas fa-trash"></i> Delete
@@ -1430,21 +1430,21 @@
                         <h3 style="color: var(--admin-primary); margin-bottom: 1rem;">Member Profile</h3>
                         <div class="form-row">
                             <div>
-                                <label style="color: #94a3b8;">First Name:</label>
+                                <label style="color: #a8e6a1;">First Name:</label>
                                 <p>${data.first_name || '-'}</p>
                             </div>
                             <div>
-                                <label style="color: #94a3b8;">Last Name:</label>
+                                <label style="color: #a8e6a1;">Last Name:</label>
                                 <p>${data.last_name || '-'}</p>
                             </div>
                         </div>
                         <div class="form-row">
                             <div>
-                                <label style="color: #94a3b8;">Email:</label>
+                                <label style="color: #a8e6a1;">Email:</label>
                                 <p>${data.email}</p>
                             </div>
                             <div>
-                                <label style="color: #94a3b8;">Phone:</label>
+                                <label style="color: #a8e6a1;">Phone:</label>
                                 <p>${data.phone || '-'}</p>
                             </div>
                         </div>
