@@ -761,8 +761,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script>
         // Supabase initialization
-        const SUPABASE_URL = 'https://cbgevvuvleuwjjmefjza.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ2V2dnV2bGV1d2pqbWVmanphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjQwMjksImV4cCI6MjA3NzM0MDAyOX0.sEED3-kLSZE74bHsrJvVhyaH_GEXEVECeZNWpCnFK84';
+        const SUPABASE_URL = 'https://tzitghqmrmsxddysxhvc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6aXRnaHFtcm1zeGRkeXN4aHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDAzMjMsImV4cCI6MjA3NzUxNjMyM30.f5rZPAdCOHe6ZXr_TYgmhUkZkcWsSYX_qMLXUgg9dZ8';
+        
+        // Admin emails - hardcoded for now
+        const ADMIN_EMAILS = ['ugobe1@mac.com', 'ugobe07@gmail.com'];
         
         let sbClient = null;
         let currentUser = null;
@@ -821,23 +824,13 @@
         // Check if user is admin
         async function checkAdminStatus() {
             try {
-                const { data, error } = await sbClient
-                    .from('admin_users')
-                    .select('role')
-                    .eq('email', currentUser.email)
-                    .single();
+                // Check if user's email is in the admin list
+                isAdmin = ADMIN_EMAILS.includes(currentUser.email);
+                isSuperAdmin = isAdmin; // All admins are super admins for now
 
-                if (error) {
-                    console.error('Not an admin:', error);
+                if (!isAdmin) {
+                    console.error('User not in admin list:', currentUser.email);
                     return false;
-                }
-
-                isAdmin = true;
-                isSuperAdmin = data.role === 'super_admin';
-                
-                // Hide settings if not super admin
-                if (!isSuperAdmin) {
-                    document.querySelector('[data-section="settings"]').style.display = 'none';
                 }
 
                 return true;
@@ -936,18 +929,15 @@
         async function loadDashboard() {
             try {
                 // Get stats
-                const [usersRes, postsRes, eventsRes, moderationRes] = await Promise.all([
-                    sbClient.from('auth.users').select('count', { count: 'exact' }),
-                    sbClient.from('posts').select('count', { count: 'exact' }),
-                    sbClient.from('events').select('count', { count: 'exact' }).eq('is_active', true),
-                    sbClient.from('moderation_queue').select('count', { count: 'exact' }).eq('status', 'pending')
+                const [postsRes] = await Promise.all([
+                    sbClient.from('posts').select('count', { count: 'exact' })
                 ]);
 
-                // Update stats (these might be 0 if RLS prevents reading)
-                document.getElementById('statUsers').textContent = usersRes.count || '0';
+                // Update stats
+                document.getElementById('statUsers').textContent = '-';
                 document.getElementById('statPosts').textContent = postsRes.count || '0';
-                document.getElementById('statEvents').textContent = eventsRes.count || '0';
-                document.getElementById('statModerations').textContent = moderationRes.count || '0';
+                document.getElementById('statEvents').textContent = '-';
+                document.getElementById('statModerations').textContent = '-';
 
             } catch (err) {
                 console.error('Error loading dashboard:', err);
@@ -1158,12 +1148,6 @@
                 
                 if (error) throw error;
 
-                const { data: featured } = await sbClient
-                    .from('featured_gallery_posts')
-                    .select('post_id, position');
-
-                const featuredIds = new Set(featured?.map(f => f.post_id) || []);
-
                 const content = document.getElementById('galleryCurationContent');
                 if (!allImages || allImages.length === 0) {
                     content.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No images available</p></div>';
@@ -1173,7 +1157,6 @@
                 let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">';
 
                 allImages.forEach(img => {
-                    const isFeatured = featuredIds.has(img.id);
                     html += `
                         <div style="background: var(--admin-card); border: 2px solid var(--admin-border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;" 
                              onmouseover="this.style.borderColor = 'var(--admin-primary)'" 
@@ -1181,9 +1164,10 @@
                             <img src="${img.media_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22%3E%3Crect fill=%22%231e293b%22 width=%22200%22 height=%22150%22/%3E%3C/svg%3E'">
                             <div style="padding: 1rem;">
                                 <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem;">${img.text?.substring(0, 30) || 'No description'}</p>
+                                <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">${new Date(img.created_at).toLocaleDateString()}</p>
                                 <div style="display: flex; gap: 0.5rem;">
-                                    <button class="btn-icon ${isFeatured ? 'btn-approve' : 'btn-view'}" style="flex: 1;" title="${isFeatured ? 'Remove from gallery' : 'Add to gallery'}" onclick="toggleFeaturedImage('${img.id}', ${isFeatured})">
-                                        <i class="fas ${isFeatured ? 'fa-star' : 'fa-star-o'}"></i> ${isFeatured ? 'Featured' : 'Feature'}
+                                    <button class="btn-icon btn-delete" style="flex: 1;" title="Delete image" onclick="deleteImageFromGallery('${img.id}', '${img.media_url}')">
+                                        <i class="fas fa-trash"></i> Delete
                                     </button>
                                 </div>
                             </div>
@@ -1197,6 +1181,35 @@
             } catch (err) {
                 console.error('Error loading gallery curation:', err);
                 document.getElementById('galleryCurationContent').innerHTML = `<div class="alert alert-error">Error loading images: ${err.message}</div>`;
+            }
+        }
+
+        // Delete image from gallery
+        async function deleteImageFromGallery(postId, mediaUrl) {
+            if (!confirm('Delete this image? This will remove it from both the gallery and community posts.')) return;
+
+            try {
+                // Delete the post
+                const { error } = await sbClient.from('posts').delete().eq('id', postId);
+                if (error) throw error;
+
+                // Optionally delete from storage
+                if (mediaUrl && mediaUrl.includes('/storage/v1/object/public/community-media/')) {
+                    try {
+                        const key = mediaUrl.split('/community-media/')[1];
+                        if (key) {
+                            await sbClient.storage.from('community-media').remove([key]);
+                        }
+                    } catch (storageErr) {
+                        console.error('Error deleting from storage:', storageErr);
+                    }
+                }
+
+                alert('Image deleted successfully');
+                loadGalleryCuration();
+
+            } catch (err) {
+                alert('Error deleting image: ' + err.message);
             }
         }
 
@@ -1399,27 +1412,6 @@
 
             } catch (err) {
                 alert('Error deleting post: ' + err.message);
-            }
-        }
-
-        async function toggleFeaturedImage(postId, isFeatured) {
-            try {
-                if (isFeatured) {
-                    await sbClient.from('featured_gallery_posts').delete().eq('post_id', postId);
-                } else {
-                    const { data: featured } = await sbClient.from('featured_gallery_posts').select('position').order('position', { ascending: false }).limit(1);
-                    const nextPosition = (featured?.[0]?.position || 0) + 1;
-
-                    await sbClient.from('featured_gallery_posts').insert({
-                        post_id: postId,
-                        position: nextPosition,
-                        featured_by: currentUser.id
-                    });
-                }
-                loadGalleryCuration();
-
-            } catch (err) {
-                alert('Error toggling featured image: ' + err.message);
             }
         }
 
