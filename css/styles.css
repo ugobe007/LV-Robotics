@@ -734,6 +734,116 @@ section {
     background: rgba(255, 255, 255, 0.5);
 }
 
+/* Gallery Share Section */
+.gallery-share-section {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.share-label {
+    font-size: 1rem;
+    color: #a8e6a1;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    color: #a8e6a1;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-family: var(--font-family);
+}
+
+.share-btn:hover {
+    background: rgba(124, 58, 237, 0.25);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.share-btn:active {
+    transform: translateY(0);
+}
+
+/* Platform-specific button colors on hover */
+.share-facebook:hover {
+    border-color: #1877F2;
+    color: #1877F2;
+}
+
+.share-twitter:hover {
+    border-color: #000000;
+    color: #000000;
+}
+
+.share-linkedin:hover {
+    border-color: #0A66C2;
+    color: #0A66C2;
+}
+
+.share-copy:hover {
+    border-color: #10b981;
+    color: #10b981;
+}
+
+/* Slide overlay share buttons */
+.slide-share-overlay {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.gallery-slide:hover .slide-share-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.slide-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(168, 230, 161, 0.5);
+    color: #a8e6a1;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.slide-share-btn:hover {
+    background: rgba(124, 58, 237, 0.6);
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
 /* Animations for rotating gallery */
 @keyframes rotateSlide {
     from {

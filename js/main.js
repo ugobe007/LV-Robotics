@@ -1592,6 +1592,10 @@ async function loadGalleryFromSupabase() {
             };
             
             slide.appendChild(img);
+            
+            // Attach share buttons overlay to slide
+            attachSlidShareButtons(slide, index);
+            
             container.appendChild(slide);
             
             // Create indicator
@@ -1759,12 +1763,125 @@ async function initializeGallery() {
     }
 }
 
+// ===== GALLERY SHARE FUNCTIONALITY =====
+
+// Get the current displayed image for sharing
+function getCurrentGalleryImage() {
+    const gallery = document.getElementById('galleryContainer');
+    const activeSlide = gallery.querySelector('.gallery-slide.active');
+    if (!activeSlide) return null;
+    
+    const img = activeSlide.querySelector('img');
+    if (!img) return null;
+    
+    return {
+        url: img.src,
+        alt: img.alt || 'LV Robotics Community Highlight'
+    };
+}
+
+// Generate share URL with current slide index
+function getShareUrl() {
+    const activeSlide = document.querySelector('.gallery-slide.active');
+    if (!activeSlide) return window.location.href;
+    
+    const slideIndex = Array.from(activeSlide.parentElement.children).indexOf(activeSlide);
+    return `${window.location.href}#gallery-slide-${slideIndex}`;
+}
+
+// Share handlers
+function shareToFacebook() {
+    const url = getShareUrl();
+    const shareText = 'Check out this amazing moment from the LV Robotics community! 🤖';
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
+    window.open(facebookUrl, 'share-facebook', 'width=600,height=400');
+}
+
+function shareToTwitter() {
+    const url = getShareUrl();
+    const shareText = 'Amazing robotics community moment! Check out the LV Robotics highlights 🤖 #robotics #LVRobotics';
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`;
+    window.open(twitterUrl, 'share-twitter', 'width=600,height=400');
+}
+
+function shareToLinkedIn() {
+    const url = getShareUrl();
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    window.open(linkedInUrl, 'share-linkedin', 'width=600,height=400');
+}
+
+function copyShareLink() {
+    const url = getShareUrl();
+    navigator.clipboard.writeText(url).then(() => {
+        // Show feedback
+        const shareBtn = event.target.closest('.share-btn');
+        if (shareBtn) {
+            const originalText = shareBtn.innerHTML;
+            shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+                shareBtn.innerHTML = originalText;
+            }, 2000);
+        }
+    }).catch(() => {
+        alert('Failed to copy. Please try again.');
+    });
+}
+
+// Attach share buttons to gallery slides
+function attachSlidShareButtons(slide, index) {
+    const overlay = document.createElement('div');
+    overlay.className = 'slide-share-overlay';
+    
+    const platforms = [
+        { name: 'facebook', icon: 'fab fa-facebook-f', title: 'Share on Facebook' },
+        { name: 'twitter', icon: 'fab fa-twitter', title: 'Share on Twitter/X' },
+        { name: 'linkedin', icon: 'fab fa-linkedin-in', title: 'Share on LinkedIn' }
+    ];
+    
+    platforms.forEach(platform => {
+        const btn = document.createElement('button');
+        btn.className = 'slide-share-btn';
+        btn.title = platform.title;
+        btn.innerHTML = `<i class="${platform.icon}"></i>`;
+        btn.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (platform.name === 'facebook') shareToFacebook();
+            else if (platform.name === 'twitter') shareToTwitter();
+            else if (platform.name === 'linkedin') shareToLinkedIn();
+        };
+        overlay.appendChild(btn);
+    });
+    
+    slide.appendChild(overlay);
+}
+
+// Setup gallery share buttons below gallery
+function setupGalleryShareButtons() {
+    const shareButtonsContainer = document.getElementById('galleryShareButtons');
+    if (!shareButtonsContainer) return;
+    
+    const buttons = shareButtonsContainer.querySelectorAll('.share-btn');
+    buttons.forEach(btn => {
+        const platform = btn.dataset.platform;
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (platform === 'facebook') shareToFacebook();
+            else if (platform === 'twitter') shareToTwitter();
+            else if (platform === 'linkedin') shareToLinkedIn();
+            else if (platform === 'copy') copyShareLink();
+        });
+    });
+}
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initializeGallery();
+        setupGalleryShareButtons();
     });
 } else {
     initializeGallery();
+    setupGalleryShareButtons();
 }
 
 debugLog('🤖 LV Robotics website loaded successfully!');
