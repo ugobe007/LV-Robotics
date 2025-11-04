@@ -641,14 +641,19 @@ section {
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     background: #000;
-    /* Padding-bottom hack for 16:9 aspect ratio (9/16 = 0.5625) */
-    padding-bottom: 56.25%;
-    height: 0;
+    /* 16:9 aspect ratio - fixed height for large screens */
+    height: 562px;
 }
 
 @media (max-width: 768px) {
     .rotating-gallery {
-        padding-bottom: 56.25%;
+        height: 315px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rotating-gallery {
+        height: 225px;
     }
 }
 

@@ -1534,7 +1534,7 @@ async function loadGalleryFromSupabase() {
             const slide = document.createElement('a');
             slide.href = 'community.html';
             slide.className = 'gallery-slide';
-            slide.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0;';
+            slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;';
             if (index === 0) {
                 slide.classList.add('active');
                 slide.style.opacity = '1';
