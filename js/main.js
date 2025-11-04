@@ -1154,17 +1154,45 @@ async function renderPostsFromSupabase() {
             post.setAttribute('data-media', mediaHTML);
             post.setAttribute('data-user-id', p.user_id || 'User');
             post.setAttribute('data-time', new Date(p.created_at).toLocaleString());
+            post.setAttribute('data-post-id', p.id);
             const canDelete = currentUserId && p.user_id === currentUserId;
             post.innerHTML = `
                 ${thumbnailHTML}
-                <div class="post-author-badge">Member${canDelete ? ' · <button class="media-btn" data-delete="1">Delete</button>' : ''}</div>
+                <div class="post-footer">
+                    <div class="post-author-badge">Member${canDelete ? ' · <button class="media-btn" data-delete="1">Delete</button>' : ''}</div>
+                    <div class="post-share-buttons">
+                        <button class="post-share-btn" title="Share on Facebook" data-platform="facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="post-share-btn" title="Share on Twitter/X" data-platform="twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="post-share-btn" title="Share on LinkedIn" data-platform="linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                        </button>
+                        <button class="post-share-btn" title="Copy Link" data-platform="copy">
+                            <i class="fas fa-link"></i>
+                        </button>
+                    </div>
+                </div>
             `;
             
-            // Add click handler to open modal (but not for delete button)
+            // Add click handler to open modal (but not for delete or share buttons)
             post.addEventListener('click', (e) => {
-                // Don't open modal if clicking delete button
-                if (e.target.closest('[data-delete="1"]')) return;
+                // Don't open modal if clicking delete or share buttons
+                if (e.target.closest('[data-delete="1"]') || e.target.closest('[data-platform]')) return;
                 openPostModal(post);
+            });
+            
+            // Add share button handlers
+            const shareButtons = post.querySelectorAll('.post-share-btn');
+            shareButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const platform = btn.getAttribute('data-platform');
+                    const postId = post.getAttribute('data-post-id');
+                    sharePost(platform, postId, p);
+                });
             });
             
             if (canDelete) {
@@ -1184,6 +1212,57 @@ async function renderPostsFromSupabase() {
     } catch (e) {
         debugError('Fetch posts failed:', e);
         renderSavedPosts();
+    }
+}
+
+// Share post function
+function sharePost(platform, postId, postData) {
+    // Generate shareable URL (use window location + post ID for now, or you could create a unique post page)
+    const shareUrl = `${window.location.origin}${window.location.pathname}?post=${postId}`;
+    const postText = postData.text || 'Check out this community post!';
+    const postTitle = 'LV Robotics Community Post';
+    
+    // Build share message
+    const shareMessage = `${postTitle}: ${postText.substring(0, 100)}${postText.length > 100 ? '...' : ''}`;
+    
+    switch(platform) {
+        case 'facebook':
+            // Facebook Share Dialog
+            const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+            window.open(facebookShareUrl, 'facebook-share', 'width=600,height=400');
+            break;
+            
+        case 'twitter':
+            // Twitter/X Share
+            const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage)}&url=${encodeURIComponent(shareUrl)}`;
+            window.open(twitterShareUrl, 'twitter-share', 'width=600,height=400');
+            break;
+            
+        case 'linkedin':
+            // LinkedIn Share
+            const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+            window.open(linkedinShareUrl, 'linkedin-share', 'width=600,height=400');
+            break;
+            
+        case 'copy':
+            // Copy link to clipboard
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                // Show feedback
+                const btn = event.target.closest('.post-share-btn');
+                if (btn) {
+                    const originalTitle = btn.title;
+                    btn.title = 'Copied!';
+                    btn.style.color = '#a8e6a1';
+                    setTimeout(() => {
+                        btn.title = originalTitle;
+                        btn.style.color = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Failed to copy link:', err);
+                alert('Failed to copy link to clipboard');
+            });
+            break;
     }
 }
 
@@ -1435,18 +1514,26 @@ async function loadFallbackGallery() {
         const slide = document.createElement('a');
         slide.href = 'community.html';
         slide.className = 'gallery-slide';
-        slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;';
-        if (index === 0) {
-            slide.classList.add('active');
-            slide.style.opacity = '1';
-        }
+        slide.style.position = 'absolute';
+        slide.style.top = '0';
+        slide.style.left = '0';
+        slide.style.width = '100%';
+        slide.style.height = '100%';
+        slide.style.opacity = index === 0 ? '1' : '0';
         
         const img = document.createElement('img');
         img.src = imageData.src;
         img.alt = imageData.alt;
         img.className = 'gallery-image';
+        img.style.display = 'block';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
         
         slide.appendChild(img);
+        if (index === 0) {
+            slide.classList.add('active');
+        }
         container.appendChild(slide);
         
         const indicator = document.createElement('span');
@@ -1504,6 +1591,7 @@ async function loadGalleryFromSupabase() {
         
         if (!data || data.length === 0) {
             debugLog('⚠️ No image posts found in Supabase, showing fallback');
+            console.warn('⚠️ No image posts in database, showing fallback gallery');
             // Debug: fetch all posts to see what media_types exist
             const { data: allPosts } = await sbClient
                 .from('posts')
@@ -1512,11 +1600,30 @@ async function loadGalleryFromSupabase() {
                 .limit(10);
             debugLog('📊 All recent posts for debugging:', allPosts);
             debugLog('📊 Media types found:', allPosts?.map(p => p.media_type));
+            console.log('All posts:', allPosts);
             loadFallbackGallery();
             return;
         }
         
         debugLog(`Found ${data.length} image posts for gallery`);
+        
+        // Filter out posts with invalid media URLs - only show posts with valid image URLs
+        const validPosts = data.filter(post => {
+            if (!post.media_url) return false;
+            // Accept: full URLs (http/https), local paths (/...), or valid Unsplash IDs
+            const isValidUrl = post.media_url.startsWith('http') || 
+                               post.media_url.startsWith('/') ||
+                               (post.media_url.length > 5 && /^[\w\-]+$/.test(post.media_url)); // Unsplash ID format
+            return isValidUrl;
+        });
+        
+        if (validPosts.length === 0) {
+            debugLog('⚠️ No valid image posts found, showing fallback');
+            loadFallbackGallery();
+            return;
+        }
+        
+        debugLog(`Using ${validPosts.length} valid image posts (filtered from ${data.length})`);
         
         // CRITICAL: Clear loading message and reset container
         container.innerHTML = '';
@@ -1533,16 +1640,17 @@ async function loadGalleryFromSupabase() {
         debugLog(`  CSS position: ${computed.position}`);
         debugLog(`  CSS display: ${computed.display}`);
         
-        data.forEach((post, index) => {
+        validPosts.forEach((post, index) => {
             // Create slide
             const slide = document.createElement('a');
             slide.href = 'community.html';
             slide.className = 'gallery-slide';
-            slide.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;';
-            if (index === 0) {
-                slide.classList.add('active');
-                slide.style.opacity = '1';
-            }
+            slide.style.position = 'absolute';
+            slide.style.top = '0';
+            slide.style.left = '0';
+            slide.style.width = '100%';
+            slide.style.height = '100%';
+            slide.style.opacity = index === 0 ? '1' : '0';
             
             const img = document.createElement('img');
             // Handle different URL formats
@@ -1557,7 +1665,10 @@ async function loadGalleryFromSupabase() {
             img.src = imageUrl;
             img.alt = `Community Highlight ${index + 1}`;
             img.className = 'gallery-image';
-            img.style.cssText = 'display: block; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;';
+            img.style.display = 'block';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
             
             // Add error handling with retry
             img.onerror = function() {
@@ -1596,6 +1707,10 @@ async function loadGalleryFromSupabase() {
             // Attach share buttons overlay to slide
             attachSlidShareButtons(slide, index);
             
+            if (index === 0) {
+                slide.classList.add('active');
+            }
+            
             container.appendChild(slide);
             
             // Create indicator
@@ -1628,6 +1743,7 @@ async function loadGalleryFromSupabase() {
 
 // Community Highlights - Auto-rotating gallery
 let galleryRotationInterval = null; // Store interval ID to prevent duplicates
+let galleryTimeoutId = null; // Store timeout ID for first rotation
 
 function initializeGalleryRotation() {
     const slides = Array.from(document.querySelectorAll('.gallery-slide'));
@@ -1638,6 +1754,18 @@ function initializeGalleryRotation() {
     if (slides.length === 0) {
         debugError('🎬 Gallery rotation FAILED: No slides found!');
         return;
+    }
+    
+    // Clear any existing timeouts/intervals to prevent duplicates
+    if (galleryTimeoutId) {
+        clearTimeout(galleryTimeoutId);
+        galleryTimeoutId = null;
+        debugLog('🎬 Cleared previous timeout');
+    }
+    if (galleryRotationInterval) {
+        clearInterval(galleryRotationInterval);
+        galleryRotationInterval = null;
+        debugLog('🎬 Cleared previous rotation interval');
     }
     
     let currentSlide = 0;
@@ -1706,15 +1834,9 @@ function initializeGalleryRotation() {
         showSlide(currentSlide);
     }
     
-    // Clear any existing interval to prevent duplicates
-    if (galleryRotationInterval) {
-        clearInterval(galleryRotationInterval);
-        debugLog('🎬 Cleared previous rotation interval');
-    }
-    
     // Auto-rotate: Start rotating after 3 seconds, then every 5 seconds
     debugLog('🎬 Starting auto-rotate timer (first rotation in 3 seconds)');
-    setTimeout(() => {
+    galleryTimeoutId = setTimeout(() => {
         debugLog('🎬 TIMER FIRED: First auto-rotation executing');
         nextSlide();
         
@@ -1723,6 +1845,7 @@ function initializeGalleryRotation() {
             nextSlide();
         }, 5000);
         debugLog('🎬 Rotation interval started (repeats every 5 seconds)');
+        galleryTimeoutId = null; // Clear reference after timeout fires
     }, 3000);
     
     // Allow clicking indicators to navigate
@@ -1737,9 +1860,53 @@ function initializeGalleryRotation() {
     debugLog(`🎬 Gallery rotation READY with ${totalSlides} slides`);
 }
 
+// Health check - Restart gallery if it appears to be stuck
+let lastActiveSlideIndex = -1;
+
+function startGalleryHealthCheck() {
+    // Check every 15 seconds if gallery is still rotating
+    setInterval(() => {
+        const slides = document.querySelectorAll('.gallery-slide');
+        const activeSlide = document.querySelector('.gallery-slide.active');
+        
+        if (slides.length === 0) {
+            console.warn('⚠️ Gallery health check: No slides found at all!');
+            return;
+        }
+        
+        if (!activeSlide) {
+            console.warn('⚠️ Gallery health check FAILED: No active slide found!');
+            console.log('Attempting to restart gallery rotation...');
+            initializeGalleryRotation();
+            return;
+        }
+        
+        // Check if the active slide index has changed
+        const currentIndex = Array.from(slides).indexOf(activeSlide);
+        if (lastActiveSlideIndex !== -1 && lastActiveSlideIndex === currentIndex) {
+            console.warn('⚠️ Gallery appears stuck on slide ' + currentIndex);
+            console.log('Restarting gallery rotation...');
+            // Clear intervals and restart
+            if (galleryRotationInterval) {
+                clearInterval(galleryRotationInterval);
+                galleryRotationInterval = null;
+            }
+            initializeGalleryRotation();
+        }
+        lastActiveSlideIndex = currentIndex;
+        console.log('✓ Gallery health check OK - Active slide: ' + currentIndex + '/' + slides.length);
+    }, 15000);
+}
+
 // Initialize gallery from Supabase when DOM is ready
 async function initializeGallery() {
     console.log('📸 Initializing gallery...');
+    
+    const container = document.getElementById('galleryContainer');
+    if (!container) {
+        console.error('❌ Gallery container not found in DOM');
+        return;
+    }
     
     // Wait for Supabase to be ready
     let attempts = 0;
@@ -1756,6 +1923,9 @@ async function initializeGallery() {
     
     console.log('✅ Supabase ready, loading gallery...');
     try {
+        // Set container visibility before loading
+        container.style.visibility = 'visible';
+        container.style.height = '420px';
         await loadGalleryFromSupabase();
     } catch (err) {
         console.error('Gallery initialization error:', err);
@@ -1878,10 +2048,12 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initializeGallery();
         setupGalleryShareButtons();
+        startGalleryHealthCheck();
     });
 } else {
     initializeGallery();
     setupGalleryShareButtons();
+    startGalleryHealthCheck();
 }
 
 debugLog('🤖 LV Robotics website loaded successfully!');

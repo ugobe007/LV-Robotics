@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LV Robotics Admin Dashboard</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?v=32">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -873,6 +873,7 @@
             document.getElementById('cancelEventBtn').addEventListener('click', () => {
                 document.getElementById('eventForm').style.display = 'none';
                 document.getElementById('eventForm').reset();
+                editingEventId = null;
             });
 
             document.getElementById('saveEventBtn').addEventListener('click', saveEvent);
@@ -962,7 +963,7 @@
 
                 const content = document.getElementById('usersContent');
                 if (!data || data.length === 0) {
-                    content.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No users found</p></div>';
+                    content.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No members found</p></div>';
                     return;
                 }
 
@@ -974,6 +975,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Location</th>
+                                <th>Skills</th>
                                 <th>Joined</th>
                                 <th>Actions</th>
                             </tr>
@@ -982,17 +984,19 @@
                 `;
 
                 data.forEach(user => {
+                    const skills = user.skills ? user.skills.substring(0, 30) : '-';
                     html += `
                         <tr>
-                            <td>${user.first_name} ${user.last_name}</td>
+                            <td>${user.first_name || ''} ${user.last_name || ''}</td>
                             <td>${user.email}</td>
                             <td>${user.phone || '-'}</td>
                             <td>${user.location || '-'}</td>
+                            <td>${skills}</td>
                             <td>${new Date(user.created_at).toLocaleDateString()}</td>
                             <td>
                                 <div class="action-btns">
-                                    <button class="btn-icon btn-view" title="View"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-icon btn-delete" title="Ban" onclick="banUser('${user.user_id}', '${user.email}')"><i class="fas fa-ban"></i></button>
+                                    <button class="btn-icon btn-edit" title="View Profile" onclick="viewMemberProfile('${user.id}')"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon btn-delete" title="Remove Member" onclick="removeMember('${user.id}', '${user.email}')"><i class="fas fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -1004,7 +1008,7 @@
 
             } catch (err) {
                 console.error('Error loading users:', err);
-                document.getElementById('usersContent').innerHTML = `<div class="alert alert-error">Error loading users: ${err.message}</div>`;
+                document.getElementById('usersContent').innerHTML = `<div class="alert alert-error">Error loading members: ${err.message}</div>`;
             }
         }
 
@@ -1050,12 +1054,13 @@
                 `;
 
                 data.forEach(item => {
-                    const postText = item.posts?.text?.substring(0, 50) || 'Media post';
+                    const postText = item.posts?.text?.substring(0, 40) || 'Media post';
                     const statusBadge = `<span class="badge badge-${item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning'}">${item.status}</span>`;
+                    const hasMedia = item.posts?.media_url ? '📷' : '';
                     
                     html += `
                         <tr>
-                            <td>${postText}</td>
+                            <td title="${item.posts?.text || ''}">${hasMedia} ${postText}</td>
                             <td>${item.reason || 'Not specified'}</td>
                             <td>${statusBadge}</td>
                             <td>${new Date(item.created_at).toLocaleDateString()}</td>
@@ -1123,6 +1128,7 @@
                             <td>${statusBadge}</td>
                             <td>
                                 <div class="action-btns">
+                                    <button class="btn-icon btn-view" title="Toggle Status" onclick="toggleEventStatus('${event.id}', ${event.is_active})"><i class="fas fa-${event.is_active ? 'pause' : 'play'}"></i></button>
                                     <button class="btn-icon btn-edit" title="Edit" onclick="editEvent('${event.id}')"><i class="fas fa-edit"></i></button>
                                     <button class="btn-icon btn-delete" title="Delete" onclick="deleteEvent('${event.id}')"><i class="fas fa-trash"></i></button>
                                 </div>
@@ -1266,6 +1272,8 @@
         }
 
         // Event handlers
+        let editingEventId = null;
+
         async function saveEvent() {
             const title = document.getElementById('eventTitle').value;
             const description = document.getElementById('eventDescription').value;
@@ -1281,26 +1289,80 @@
             }
 
             try {
-                const { error } = await sbClient.from('events').insert({
-                    title,
-                    description,
-                    location,
-                    start_date: new Date(startDate).toISOString(),
-                    end_date: new Date(endDate).toISOString(),
-                    max_attendees: maxAttendees ? parseInt(maxAttendees) : null,
-                    registration_url: regUrl,
-                    created_by: currentUser.id
-                });
+                if (editingEventId) {
+                    // Update existing event
+                    const { error } = await sbClient.from('events').update({
+                        title,
+                        description,
+                        location,
+                        start_date: new Date(startDate).toISOString(),
+                        end_date: new Date(endDate).toISOString(),
+                        max_attendees: maxAttendees ? parseInt(maxAttendees) : null,
+                        registration_url: regUrl
+                    }).eq('id', editingEventId);
 
-                if (error) throw error;
+                    if (error) throw error;
+                    alert('Event updated successfully!');
+                } else {
+                    // Create new event
+                    const { error } = await sbClient.from('events').insert({
+                        title,
+                        description,
+                        location,
+                        start_date: new Date(startDate).toISOString(),
+                        end_date: new Date(endDate).toISOString(),
+                        max_attendees: maxAttendees ? parseInt(maxAttendees) : null,
+                        registration_url: regUrl,
+                        created_by: currentUser.id,
+                        is_active: true
+                    });
 
-                alert('Event created successfully!');
-                document.getElementById('eventForm').style.display = 'none';
+                    if (error) throw error;
+                    alert('Event created successfully!');
+                }
+
+                // Reset form
                 document.getElementById('eventForm').reset();
+                document.getElementById('eventForm').style.display = 'none';
+                editingEventId = null;
                 loadEvents();
 
             } catch (err) {
                 alert('Error saving event: ' + err.message);
+            }
+        }
+
+        async function editEvent(eventId) {
+            try {
+                const { data, error } = await sbClient
+                    .from('events')
+                    .select('*')
+                    .eq('id', eventId)
+                    .single();
+
+                if (error) throw error;
+
+                // Populate form with event data
+                document.getElementById('eventTitle').value = data.title;
+                document.getElementById('eventDescription').value = data.description || '';
+                document.getElementById('eventLocation').value = data.location || '';
+                
+                // Convert ISO dates to datetime-local format
+                const startDate = new Date(data.start_date);
+                const endDate = new Date(data.end_date);
+                document.getElementById('eventStartDate').value = startDate.toISOString().slice(0, 16);
+                document.getElementById('eventEndDate').value = endDate.toISOString().slice(0, 16);
+                
+                document.getElementById('eventMaxAttendees').value = data.max_attendees || '';
+                document.getElementById('eventRegUrl').value = data.registration_url || '';
+
+                // Show form and set editing mode
+                editingEventId = eventId;
+                document.getElementById('eventForm').style.display = 'block';
+                document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                alert('Error loading event: ' + err.message);
             }
         }
 
@@ -1361,10 +1423,115 @@
             }
         }
 
+        async function viewMemberProfile(memberId) {
+            try {
+                const { data, error } = await sbClient
+                    .from('members')
+                    .select('*')
+                    .eq('id', memberId)
+                    .single();
+
+                if (error) throw error;
+
+                let profileHtml = `
+                    <div class="admin-form">
+                        <h3 style="color: var(--admin-primary); margin-bottom: 1rem;">Member Profile</h3>
+                        <div class="form-row">
+                            <div>
+                                <label style="color: #94a3b8;">First Name:</label>
+                                <p>${data.first_name || '-'}</p>
+                            </div>
+                            <div>
+                                <label style="color: #94a3b8;">Last Name:</label>
+                                <p>${data.last_name || '-'}</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <label style="color: #94a3b8;">Email:</label>
+                                <p>${data.email}</p>
+                            </div>
+                            <div>
+                                <label style="color: #94a3b8;">Phone:</label>
+                                <p>${data.phone || '-'}</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <label style="color: #94a3b8;">Location:</label>
+                                <p>${data.location || '-'}</p>
+                            </div>
+                            <div>
+                                <label style="color: #94a3b8;">Company:</label>
+                                <p>${data.company || '-'}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="color: #94a3b8;">Skills:</label>
+                            <p>${data.skills || '-'}</p>
+                        </div>
+                        <div>
+                            <label style="color: #94a3b8;">Bio:</label>
+                            <p>${data.bio || '-'}</p>
+                        </div>
+                        <div>
+                            <label style="color: #94a3b8;">Joined:</label>
+                            <p>${new Date(data.created_at).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                `;
+
+                // Show in a modal-like display
+                let tempDiv = document.createElement('div');
+                tempDiv.innerHTML = profileHtml;
+                const section = document.getElementById('users');
+                const scrollTop = section.scrollTop;
+                section.insertBefore(tempDiv.firstElementChild, section.firstChild);
+
+            } catch (err) {
+                alert('Error loading member profile: ' + err.message);
+            }
+        }
+
+        async function removeMember(memberId, email) {
+            showConfirm('Remove Member', `Remove ${email} from members?`, async () => {
+                try {
+                    const { error } = await sbClient
+                        .from('members')
+                        .delete()
+                        .eq('id', memberId);
+
+                    if (error) throw error;
+                    alert('Member removed successfully');
+                    loadUsers();
+
+                } catch (err) {
+                    alert('Error removing member: ' + err.message);
+                }
+            });
+        }
+
         function banUser(userId, email) {
             showConfirm('Ban User', `Ban ${email}?`, async () => {
                 alert('Ban feature coming soon');
             });
+        }
+
+        async function toggleEventStatus(eventId, currentStatus) {
+            try {
+                const { error } = await sbClient
+                    .from('events')
+                    .update({ is_active: !currentStatus })
+                    .eq('id', eventId);
+
+                if (error) throw error;
+                const status = !currentStatus ? 'activated' : 'deactivated';
+                alert(`Event ${status} successfully`);
+                loadEvents();
+
+            } catch (err) {
+                alert('Error updating event status: ' + err.message);
+            }
         }
 
         function deleteEvent(eventId) {

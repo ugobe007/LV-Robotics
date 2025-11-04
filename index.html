@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LV Robotics - Las Vegas Robotics Community</title>
-    <link rel="stylesheet" href="css/styles.css?v=28">
+    <link rel="stylesheet" href="css/styles.css?v=32">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -36,7 +36,7 @@
                     </ul>
                 </li>
                 <li><a href="community.html" class="nav-link">Community</a></li>
-                <li><a href="sponsorship.html" class="nav-link">Sponsorship</a></li>
+                <li><a href="sponsorship.html" class="nav-link nav-link-sponsorship">Sponsorship</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
         </div>
@@ -44,9 +44,6 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="bulletin-cta">
-            <a href="community.html" class="btn-bulletin">📋 Community Bulletin Board</a>
-        </div>
         <div class="hero-content">
             <div class="hero-title-container">
                 <div class="hero-logo-section">
@@ -176,6 +173,10 @@
                     <h3>Competitions</h3>
                     <p>Test your skills in friendly competition</p>
                 </div>
+            </div>
+            <!-- Bulletin Board CTA -->
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="community.html" class="btn-bulletin">📋 Community Bulletin Board</a>
             </div>
         </div>
     </section>
@@ -336,13 +337,12 @@
             <div class="bulletin-container">
                 <div class="auth-controls">
                     <div id="authSignedOut">
-                        <input type="email" id="authEmail" placeholder="Enter email to sign in" style="padding:0.6rem 1rem;border-radius:8px;border:2px solid #e2e8f0;background:white;margin-right:0.5rem;">
                         <button class="btn btn-primary" onclick="requestMagicLink()">Sign in to post</button>
                         <button class="btn btn-secondary" onclick="oauthSignIn('google')" style="margin-left:0.5rem;">Google</button>
                         <button class="btn btn-secondary" onclick="oauthSignIn('github')" style="margin-left:0.5rem;">GitHub</button>
                     </div>
                     <div id="authSignedIn" style="display:none; align-items:center; gap:0.75rem;">
-                        <span id="authUserEmail" style="color:#e2e8f0;"></span>
+                        <span id="authUserEmail" style="color:#e2e8f0; display:none;"></span>
                         <button class="btn btn-secondary" onclick="signOut()">Sign out</button>
                     </div>
                 </div>
@@ -385,21 +385,21 @@
             <p class="partner-intro">Join leading organizations investing in the next generation of innovators and engineers</p>
 
             <div class="partner-grid">
-                <div class="partner-card">
+                <a href="partner-companies.html" class="partner-card" style="text-decoration: none; cursor: pointer;">
                     <div class="partner-emoji">🏢</div>
                     <h3>For Companies</h3>
                     <p>Sponsor events, offer internships, and connect with top emerging talent in robotics and engineering.</p>
-                </div>
-                <div class="partner-card">
+                </a>
+                <a href="partner-educators.html" class="partner-card" style="text-decoration: none; cursor: pointer;">
                     <div class="partner-emoji">🎓</div>
                     <h3>For Educators</h3>
                     <p>Collaborate on curriculum, host workshops, and join our mentorship network to inspire students.</p>
-                </div>
-                <div class="partner-card">
+                </a>
+                <a href="partner-community.html" class="partner-card" style="text-decoration: none; cursor: pointer;">
                     <div class="partner-emoji">🤝</div>
                     <h3>For Community</h3>
                     <p>Volunteer your time, donate equipment, or help spread the word about STEM education.</p>
-                </div>
+                </a>
             </div>
             
             <div style="text-align: center; margin-top: 3rem;">
@@ -441,13 +441,16 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 LV Robotics. All rights reserved.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p>&copy; 2025 LV Robotics. All rights reserved.</p>
+                    <a href="admin.html" style="font-size: 0.95em; text-decoration: none; color: #a8e6a1; cursor: pointer; transition: all 0.2s; font-weight: 500; padding: 0.4rem 0.8rem; border: 1px solid rgba(168, 230, 161, 0.3); border-radius: 4px;" onmouseover="this.style.background='rgba(168, 230, 161, 0.1)'; this.style.borderColor='#a8e6a1'" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(168, 230, 161, 0.3)'">🔐 Admin Dashboard</a>
+                </div>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
-    <script src="js/main.js?v=14" defer></script>
+    <script src="js/main.js?v=16" defer></script>
     <script>
         // Diagnostic logging
         console.log('='.repeat(60));
