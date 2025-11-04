@@ -3,6 +3,7 @@ FROM nginx:alpine
 # Copy website files to nginx html directory
 COPY index.html /usr/share/nginx/html/
 COPY admin.html /usr/share/nginx/html/
+COPY event.html /usr/share/nginx/html/
 COPY membership.html /usr/share/nginx/html/
 COPY welcome.html /usr/share/nginx/html/
 COPY community.html /usr/share/nginx/html/
