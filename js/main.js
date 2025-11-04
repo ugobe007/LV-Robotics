@@ -1794,9 +1794,79 @@ async function initializeGallery() {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initializeGallery();
+        loadUpcomingEvents();
     });
 } else {
     initializeGallery();
+    loadUpcomingEvents();
+}
+
+// ============================================
+// Dynamic Events Loading
+// ============================================
+async function loadUpcomingEvents() {
+    const eventsSection = document.querySelector('#events .events-grid');
+    if (!eventsSection) return; // Not on homepage
+    
+    try {
+        // Wait for Supabase to be available
+        if (!sbClient) {
+            setTimeout(loadUpcomingEvents, 500);
+            return;
+        }
+        
+        const { data: events, error } = await sbClient
+            .from('events')
+            .select('*')
+            .eq('status', 'published')
+            .gte('start_date', new Date().toISOString())
+            .order('start_date', { ascending: true })
+            .limit(3);
+        
+        if (error) throw error;
+        
+        if (!events || events.length === 0) {
+            // Keep default static events if no database events
+            return;
+        }
+        
+        // Clear existing events and add dynamic ones
+        eventsSection.innerHTML = '';
+        
+        events.forEach(event => {
+            const startDate = new Date(event.start_date);
+            const month = startDate.toLocaleString('en-US', { month: 'short' });
+            const day = startDate.getDate();
+            const time = startDate.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
+            const locationIcon = event.location_type === 'virtual' ? 'video' : 'map-marker-alt';
+            const locationText = event.location_type === 'virtual' ? 'Virtual Event' : 
+                                event.location_name || 'TBA';
+            
+            const eventCard = document.createElement('div');
+            eventCard.className = 'event-card';
+            eventCard.innerHTML = `
+                <div class="event-date">
+                    <span class="month">${month}</span>
+                    <span class="day">${day}</span>
+                </div>
+                <div class="event-details">
+                    <h3>${event.title}</h3>
+                    <p class="event-time"><i class="far fa-clock"></i> ${time}</p>
+                    <p class="event-location"><i class="fas fa-${locationIcon}"></i> ${locationText}</p>
+                    <a href="event.html?slug=${event.slug}" class="btn btn-small">View Details</a>
+                </div>
+            `;
+            
+            eventsSection.appendChild(eventCard);
+        });
+        
+        console.log(`✓ Loaded ${events.length} upcoming events from database`);
+        
+    } catch (err) {
+        console.error('Error loading events:', err);
+        // Keep static events on error
+    }
 }
 
 debugLog('🤖 LV Robotics website loaded successfully!');
