@@ -1522,12 +1522,16 @@ async function loadGalleryFromSupabase() {
         container.innerHTML = '';
         indicatorsContainer.innerHTML = '';
         
+        // Better diagnostics
+        const computed = window.getComputedStyle(container);
         debugLog('=== GALLERY DEBUG INFO ===');
-        debugLog('Container dimensions:', {
-            width: container.offsetWidth,
-            height: container.offsetHeight,
-            computed: window.getComputedStyle(container)
-        });
+        debugLog(`✓ Container found: ${container.id} / ${container.className}`);
+        debugLog(`  offsetWidth: ${container.offsetWidth}px`);
+        debugLog(`  offsetHeight: ${container.offsetHeight}px`);
+        debugLog(`  CSS height: ${computed.height}`);
+        debugLog(`  CSS width: ${computed.width}`);
+        debugLog(`  CSS position: ${computed.position}`);
+        debugLog(`  CSS display: ${computed.display}`);
         
         data.forEach((post, index) => {
             // Create slide
@@ -1599,8 +1603,18 @@ async function loadGalleryFromSupabase() {
         });
         
         // Initialize rotation with the new slides
+        debugLog(`📸 About to initialize rotation, container has ${container.children.length} children`);
+        debugLog(`  Container offset dimensions: ${container.offsetWidth} × ${container.offsetHeight}`);
+        
+        // Check first slide
+        if (container.children.length > 0) {
+            const firstSlide = container.children[0];
+            debugLog(`  First slide computed height: ${window.getComputedStyle(firstSlide).height}`);
+            debugLog(`  First slide opacity: ${window.getComputedStyle(firstSlide).opacity}`);
+        }
+        
         initializeGalleryRotation();
-        debugLog('Gallery rotation initialized with ' + data.length + ' images');
+        debugLog('✓ Gallery rotation initialized with ' + data.length + ' images');
         
     } catch (err) {
         debugError('Exception loading gallery:', err);
