@@ -581,7 +581,17 @@
         <div class="admin-main">
             <!-- Header -->
             <header class="admin-header">
-                <h1 id="sectionTitle">Dashboard</h1>
+                <div>
+                    <h1 id="sectionTitle">Dashboard</h1>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                        <a href="index.html" style="color: #a8e6a1; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.3rem;">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                        <a href="community.html" style="color: #a8e6a1; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.3rem;">
+                            <i class="fas fa-users"></i> Community
+                        </a>
+                    </div>
+                </div>
                 <div class="admin-user-info">
                     <div>
                         <div style="color: #a8e6a1; font-weight: 600;">Admin Panel</div>
@@ -670,21 +680,24 @@
                     </div>
 
                     <div class="admin-form" id="eventForm" style="display: none;">
-                        <h3 style="color: var(--admin-primary); margin-bottom: 1rem;" id="eventFormTitle">Create New Event</h3>
+                        <h3 style="color: var(--admin-primary); margin-bottom: 0.5rem;" id="eventFormTitle">Create New Event</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; padding: 0.75rem; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; border-radius: 4px;">
+                            <span style="color: #ef4444; font-weight: bold;">*</span> = Required field. Fill in all required fields to save your event.
+                        </p>
                         <input type="hidden" id="eventId" value="">
                         <form id="eventFormElement">
                             <!-- Basic Info -->
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Event Title *</label>
-                                    <input type="text" id="eventTitle" placeholder="e.g., FIRST Robotics Meetup" required>
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> Event Title</label>
+                                    <input type="text" id="eventTitle" placeholder="e.g., FIRST Robotics Meetup" required style="border-left: 3px solid #ef4444;">
                                 </div>
                                 <div class="form-group">
-                                    <label>Category *</label>
-                                    <select id="eventCategory" required>
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> Category</label>
+                                    <select id="eventCategory" required style="border-left: 3px solid #ef4444;">
                                         <option value="">Select category...</option>
                                         <option value="workshop">Workshop</option>
-                                        <option value="meetup">Meetup</option>
+                                        <option value="meetup" selected>Meetup</option>
                                         <option value="competition">Competition</option>
                                         <option value="social">Social Event</option>
                                         <option value="conference">Conference</option>
@@ -703,53 +716,75 @@
                                 <textarea id="eventDescription" placeholder="Detailed event information..." rows="6"></textarea>
                             </div>
 
-                            <!-- Date & Time -->
+                            <!-- Date & Time (Single Day Events) -->
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Start Date *</label>
-                                    <input type="date" id="eventStartDateOnly" required>
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> Event Date</label>
+                                    <input type="date" id="eventStartDateOnly" required style="border-left: 3px solid #ef4444;">
                                 </div>
                                 <div class="form-group">
-                                    <label>Start Time *</label>
-                                    <input type="time" id="eventStartTimeOnly" required>
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> Start Time</label>
+                                    <input type="time" id="eventStartTimeOnly" value="18:00" required style="border-left: 3px solid #ef4444;">
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>End Date</label>
-                                    <input type="date" id="eventEndDateOnly">
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> End Time</label>
+                                    <input type="time" id="eventEndTimeOnly" value="20:00" required style="border-left: 3px solid #ef4444;">
                                 </div>
                                 <div class="form-group">
-                                    <label>End Time</label>
-                                    <input type="time" id="eventEndTimeOnly">
+                                    <label>Curfew/Hard Stop Time</label>
+                                    <input type="time" id="eventCurfewTime" placeholder="Venue closing time (if any)">
                                 </div>
                             </div>
 
                             <!-- Location -->
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Location Type *</label>
-                                    <select id="eventLocationType" required>
-                                        <option value="in-person">In-Person</option>
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> Location Type</label>
+                                    <select id="eventLocationType" required style="border-left: 3px solid #ef4444;">
+                                        <option value="in-person" selected>In-Person</option>
                                         <option value="virtual">Virtual</option>
                                         <option value="hybrid">Hybrid</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Location Name</label>
-                                    <input type="text" id="eventLocationName" placeholder="e.g., UNLV Engineering Building">
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> Venue Name</label>
+                                    <input type="text" id="eventLocationName" placeholder="e.g., UNLV Engineering Building" required style="border-left: 3px solid #ef4444;">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label>Address (for in-person/hybrid events)</label>
-                                <input type="text" id="eventLocationAddress" placeholder="Full address for maps">
+                                <label><span style="color: #ef4444; font-weight: bold;">*</span> Venue Address or Meeting URL</label>
+                                <input type="text" id="eventLocationAddress" placeholder="Full address or virtual meeting link" required style="border-left: 3px solid #ef4444;">
+                                <small style="color: #8cd682;">For in-person: full street address. For virtual: Zoom/Teams link</small>
                             </div>
 
+                            <!-- Venue Logistics -->
                             <div class="form-group">
-                                <label>Virtual Link (for virtual/hybrid events)</label>
-                                <input type="url" id="eventVirtualLink" placeholder="Zoom, Teams, or other meeting link">
+                                <label style="color: var(--admin-primary); font-weight: 600; font-size: 1.1rem; margin-top: 1rem;">🏢 Venue Details</label>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Food & Drinks</label>
+                                    <select id="eventFoodDrinks">
+                                        <option value="">Not specified</option>
+                                        <option value="provided">Venue provides food & drinks</option>
+                                        <option value="needed">We need to provide food & drinks</option>
+                                        <option value="none">No food/drinks needed</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>AV Equipment</label>
+                                    <select id="eventAVEquipment">
+                                        <option value="">Not specified</option>
+                                        <option value="provided">Venue has AV equipment</option>
+                                        <option value="needed">We need to bring AV equipment</option>
+                                        <option value="none">No AV needed</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <!-- Registration -->
@@ -801,6 +836,59 @@
                                 <div id="eventGalleryPreview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem;"></div>
                             </div>
 
+                            <!-- Speakers & Partners -->
+                            <div class="form-group">
+                                <label style="color: var(--admin-primary); font-weight: 600; font-size: 1.1rem; margin-top: 1rem;">🎤 Speakers & Partners</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Event Topic/Industry</label>
+                                <select id="eventTopic" onchange="toggleCustomTopic()">
+                                    <option value="">Select topic...</option>
+                                    <option value="space">Robots in Space</option>
+                                    <option value="healthcare">Healthcare Robotics</option>
+                                    <option value="defense">Defense & Security</option>
+                                    <option value="hospitality">Hospitality & Service</option>
+                                    <option value="manufacturing">Manufacturing & Industrial</option>
+                                    <option value="public-safety">Public Safety & Emergency Response</option>
+                                    <option value="office">In-Office Environments</option>
+                                    <option value="education">Education & Training</option>
+                                    <option value="agriculture">Agriculture & Farming</option>
+                                    <option value="general">General Robotics</option>
+                                    <option value="custom">✏️ Enter Custom Topic</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="customTopicField" style="display: none;">
+                                <label>Custom Topic Name</label>
+                                <input type="text" id="eventTopicCustom" placeholder="Enter your custom topic...">
+                                <small style="color: #8cd682;">This will be used instead of the dropdown selection</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Speaker Name(s)</label>
+                                <input type="text" id="eventSpeakers" placeholder="e.g., Dr. Jane Smith, John Doe">
+                                <small style="color: #8cd682;">Separate multiple speakers with commas</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Speaker Bio(s)</label>
+                                <textarea id="eventSpeakerBios" placeholder="Brief bio for each speaker..." rows="4"></textarea>
+                                <small style="color: #8cd682;">Add background info, credentials, and expertise</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Partner Organizations</label>
+                                <input type="text" id="eventPartners" placeholder="e.g., UNLV, Tech Company Inc.">
+                                <small style="color: #8cd682;">Co-hosting organizations or sponsors</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Background Materials / Resources</label>
+                                <textarea id="eventResources" placeholder="Links to slides, papers, videos, or other resources..." rows="3"></textarea>
+                                <small style="color: #8cd682;">Share materials the community should review before or after the event</small>
+                            </div>
+
                             <!-- Contact -->
                             <div class="form-row">
                                 <div class="form-group">
@@ -816,10 +904,10 @@
                             <!-- Status & Publishing -->
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Status *</label>
-                                    <select id="eventStatus" required>
-                                        <option value="draft">Draft</option>
-                                        <option value="published">Published</option>
+                                    <label><span style="color: #ef4444; font-weight: bold;">*</span> Status</label>
+                                    <select id="eventStatus" required style="border-left: 3px solid #ef4444;">
+                                        <option value="draft" selected>Draft (save without publishing)</option>
+                                        <option value="published">Published (visible to public)</option>
                                         <option value="cancelled">Cancelled</option>
                                         <option value="completed">Completed</option>
                                     </select>
@@ -1714,6 +1802,6 @@
     </script>
     
     <!-- Event Management Functions -->
-    <script src="js/admin-events.js" defer></script>
+    <script src="js/admin-events.js?v=9" defer></script>
 </body>
 </html>

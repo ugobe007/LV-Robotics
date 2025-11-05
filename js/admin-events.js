@@ -5,6 +5,20 @@ let currentEventId = null;
 let currentEventImageUrl = null;
 let eventGalleryMedia = []; // Array to store gallery photos/videos
 
+// Toggle custom topic field
+function toggleCustomTopic() {
+    const topicDropdown = document.getElementById('eventTopic');
+    const customField = document.getElementById('customTopicField');
+    
+    if (topicDropdown && customField) {
+        if (topicDropdown.value === 'custom') {
+            customField.style.display = 'block';
+        } else {
+            customField.style.display = 'none';
+        }
+    }
+}
+
 // Initialize event management
 document.addEventListener('DOMContentLoaded', () => {
     // Create Event button handler
@@ -39,8 +53,17 @@ function showEventForm(eventData = null) {
         document.getElementById('eventFormElement').reset();
         document.getElementById('eventId').value = '';
         document.getElementById('eventImagePreview').innerHTML = '';
+        document.getElementById('eventGalleryPreview').innerHTML = '';
         currentEventId = null;
         currentEventImageUrl = null;
+        eventGalleryMedia = [];
+        
+        // Set sensible defaults for new events
+        document.getElementById('eventCategory').value = 'meetup';
+        document.getElementById('eventStartTimeOnly').value = '18:00';
+        document.getElementById('eventEndTimeOnly').value = '20:00';
+        document.getElementById('eventLocationType').value = 'in-person';
+        document.getElementById('eventStatus').value = 'draft';
     }
 }
 
@@ -63,7 +86,7 @@ function populateEventForm(event) {
     document.getElementById('eventShortDesc').value = event.short_description || '';
     document.getElementById('eventDescription').value = event.description || '';
     
-    // Split datetime into separate date and time fields
+    // Split datetime into separate date and time fields (single-day events)
     if (event.start_date) {
         const startDate = new Date(event.start_date);
         document.getElementById('eventStartDateOnly').value = startDate.toISOString().split('T')[0];
@@ -71,14 +94,49 @@ function populateEventForm(event) {
     }
     if (event.end_date) {
         const endDate = new Date(event.end_date);
-        document.getElementById('eventEndDateOnly').value = endDate.toISOString().split('T')[0];
         document.getElementById('eventEndTimeOnly').value = endDate.toTimeString().slice(0, 5);
     }
     
+    // Venue details
+    const curfewTimeField = document.getElementById('eventCurfewTime');
+    const foodDrinksField = document.getElementById('eventFoodDrinks');
+    const avEquipmentField = document.getElementById('eventAvEquipment');
+    
+    if (curfewTimeField) curfewTimeField.value = event.curfew_time || '';
     document.getElementById('eventLocationType').value = event.location_type || 'in-person';
     document.getElementById('eventLocationName').value = event.location_name || '';
     document.getElementById('eventLocationAddress').value = event.location_address || '';
     document.getElementById('eventVirtualLink').value = event.virtual_link || '';
+    if (foodDrinksField) foodDrinksField.value = event.food_drinks || '';
+    if (avEquipmentField) avEquipmentField.value = event.av_equipment || '';
+    
+    // Speakers & Partners
+    const topicField = document.getElementById('eventTopic');
+    const topicCustomField = document.getElementById('eventTopicCustom');
+    const customTopicDiv = document.getElementById('customTopicField');
+    const speakersField = document.getElementById('eventSpeakers');
+    const speakerBiosField = document.getElementById('eventSpeakerBios');
+    const partnersField = document.getElementById('eventPartners');
+    const resourcesField = document.getElementById('eventResources');
+    
+    // Check if topic is a predefined option or custom
+    if (topicField && event.topic) {
+        const predefinedOptions = ['space', 'healthcare', 'defense', 'hospitality', 'manufacturing', 
+                                   'public-safety', 'office', 'education', 'agriculture', 'general'];
+        if (predefinedOptions.includes(event.topic)) {
+            topicField.value = event.topic;
+        } else {
+            // Custom topic - show custom field
+            topicField.value = 'custom';
+            if (topicCustomField) topicCustomField.value = event.topic;
+            if (customTopicDiv) customTopicDiv.style.display = 'block';
+        }
+    }
+    
+    if (speakersField) speakersField.value = event.speakers || '';
+    if (speakerBiosField) speakerBiosField.value = event.speaker_bios || '';
+    if (partnersField) partnersField.value = event.partners || '';
+    if (resourcesField) resourcesField.value = event.resources || '';
     
     document.getElementById('eventRegRequired').checked = event.registration_required || false;
     document.getElementById('eventMaxAttendees').value = event.max_attendees || '';
@@ -150,7 +208,11 @@ async function handleEventImageUpload(event) {
 // Handle gallery upload (multiple photos/videos)
 async function handleEventGalleryUpload(event, mediaType) {
     const files = event.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {
+        // Reset the file input to prevent issues
+        event.target.value = '';
+        return;
+    }
     
     try {
         for (let file of files) {
@@ -183,15 +245,22 @@ async function handleEventGalleryUpload(event, mediaType) {
         // Update preview
         renderGalleryPreview();
         
+        // Clear the input so the same file can be selected again
+        event.target.value = '';
+        
     } catch (err) {
         console.error('Error uploading gallery media:', err);
         alert('Error uploading media: ' + err.message);
+        // Clear the input on error
+        event.target.value = '';
     }
 }
 
 // Render gallery preview
 function renderGalleryPreview() {
     const previewDiv = document.getElementById('eventGalleryPreview');
+    if (!previewDiv) return; // Safety check
+    
     if (!eventGalleryMedia || eventGalleryMedia.length === 0) {
         previewDiv.innerHTML = '';
         return;
@@ -220,27 +289,76 @@ function removeGalleryMedia(index) {
 // Save event
 async function saveEvent() {
     try {
-        // Validate required fields
+        // Check if user is authenticated
+        const { data: { session } } = await sbClient.auth.getSession();
+        if (!session) {
+            alert('❌ Authentication Required\n\nYou must be logged in to create events.\n\nPlease refresh the page and sign in to the admin panel.');
+            return;
+        }
+        
+        // Get all field values
         const title = document.getElementById('eventTitle').value.trim();
         const category = document.getElementById('eventCategory').value;
         const startDateOnly = document.getElementById('eventStartDateOnly').value;
         const startTimeOnly = document.getElementById('eventStartTimeOnly').value;
+        const endTimeOnly = document.getElementById('eventEndTimeOnly').value;
         const locationType = document.getElementById('eventLocationType').value;
+        const locationName = document.getElementById('eventLocationName').value.trim();
+        const locationAddress = document.getElementById('eventLocationAddress').value.trim();
         const status = document.getElementById('eventStatus').value;
         
-        if (!title || !category || !startDateOnly || !startTimeOnly || !locationType) {
-            alert('Please fill in all required fields (marked with *)');
+        // Check for missing required fields with helpful messages
+        const missing = [];
+        if (!title) missing.push('Event Title');
+        if (!category) missing.push('Category (select from dropdown)');
+        if (!startDateOnly) missing.push('Event Date');
+        if (!startTimeOnly) missing.push('Start Time');
+        if (!endTimeOnly) missing.push('End Time');
+        if (!locationType) missing.push('Location Type');
+        if (!locationName) missing.push('Venue Name');
+        if (!locationAddress) missing.push('Venue Address or Meeting URL');
+        if (!status) missing.push('Status');
+        
+        if (missing.length > 0) {
+            alert('❌ Missing Required Fields:\n\n• ' + missing.join('\n• ') + '\n\nPlease fill in all required fields marked with a red * to continue.');
             return;
         }
         
-        // Combine date and time into ISO format
+        // Combine date and time into ISO format (single-day events)
         const startDateTime = `${startDateOnly}T${startTimeOnly}`;
-        let endDateTime = null;
-        const endDateOnly = document.getElementById('eventEndDateOnly').value;
-        const endTimeOnly = document.getElementById('eventEndTimeOnly').value;
-        if (endDateOnly && endTimeOnly) {
-            endDateTime = `${endDateOnly}T${endTimeOnly}`;
+        const endDateTime = `${startDateOnly}T${endTimeOnly}`;
+        
+        // Get venue details (with safety checks for new fields)
+        const curfewTimeField = document.getElementById('eventCurfewTime');
+        const foodDrinksField = document.getElementById('eventFoodDrinks');
+        const avEquipmentField = document.getElementById('eventAvEquipment');
+        
+        const curfewTime = curfewTimeField ? curfewTimeField.value || null : null;
+        const foodDrinks = foodDrinksField ? foodDrinksField.value || null : null;
+        const avEquipment = avEquipmentField ? avEquipmentField.value || null : null;
+        
+        // Get speaker/partner information (with safety checks for new fields)
+        const topicField = document.getElementById('eventTopic');
+        const topicCustomField = document.getElementById('eventTopicCustom');
+        const speakersField = document.getElementById('eventSpeakers');
+        const speakerBiosField = document.getElementById('eventSpeakerBios');
+        const partnersField = document.getElementById('eventPartners');
+        const resourcesField = document.getElementById('eventResources');
+        
+        // Use custom topic if "custom" is selected, otherwise use dropdown value
+        let topic = null;
+        if (topicField) {
+            if (topicField.value === 'custom' && topicCustomField) {
+                topic = topicCustomField.value.trim() || null;
+            } else {
+                topic = topicField.value || null;
+            }
         }
+        
+        const speakers = speakersField ? speakersField.value.trim() || null : null;
+        const speakerBios = speakerBiosField ? speakerBiosField.value.trim() || null : null;
+        const partners = partnersField ? partnersField.value.trim() || null : null;
+        const resources = resourcesField ? resourcesField.value.trim() || null : null;
         
         // Prepare event data
         const eventData = {
@@ -249,11 +367,19 @@ async function saveEvent() {
             short_description: document.getElementById('eventShortDesc').value || null,
             description: document.getElementById('eventDescription').value || null,
             start_date: new Date(startDateTime).toISOString(),
-            end_date: endDateTime ? new Date(endDateTime).toISOString() : null,
+            end_date: new Date(endDateTime).toISOString(),
+            curfew_time: curfewTime,
             location_type: locationType,
-            location_name: document.getElementById('eventLocationName').value || null,
-            location_address: document.getElementById('eventLocationAddress').value || null,
+            location_name: locationName,
+            location_address: locationAddress,
             virtual_link: document.getElementById('eventVirtualLink').value || null,
+            food_drinks: foodDrinks,
+            av_equipment: avEquipment,
+            topic: topic,
+            speakers: speakers,
+            speaker_bios: speakerBios,
+            partners: partners,
+            resources: resources,
             registration_required: document.getElementById('eventRegRequired').checked,
             max_attendees: document.getElementById('eventMaxAttendees').value ? 
                 parseInt(document.getElementById('eventMaxAttendees').value) : null,
@@ -263,9 +389,13 @@ async function saveEvent() {
             status,
             is_featured: document.getElementById('eventFeatured').checked,
             image_url: currentEventImageUrl,
-            gallery_media: eventGalleryMedia.length > 0 ? eventGalleryMedia : null,
             updated_at: new Date().toISOString()
         };
+        
+        // Add gallery_media only if column exists (requires SQL migration)
+        if (eventGalleryMedia.length > 0) {
+            eventData.gallery_media = eventGalleryMedia;
+        }
         
         let result;
         if (currentEventId) {
