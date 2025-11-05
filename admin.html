@@ -973,7 +973,25 @@
                 <section class="admin-section" id="gallery">
                     <div class="section-header">
                         <h2>Community Highlights Curation</h2>
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button class="btn-submit" onclick="document.getElementById('galleryPhotoUpload').click()" style="background: #6366f1;">
+                                <i class="fas fa-images"></i> Upload Photos
+                            </button>
+                            <button class="btn-submit" onclick="document.getElementById('galleryVideoUpload').click()" style="background: #8b5cf6;">
+                                <i class="fas fa-video"></i> Upload Videos
+                            </button>
+                        </div>
                     </div>
+                    
+                    <!-- Hidden file inputs -->
+                    <input type="file" id="galleryPhotoUpload" accept="image/*" multiple style="display: none;" onchange="handleGalleryUpload(event, 'image')">
+                    <input type="file" id="galleryVideoUpload" accept="video/*" multiple style="display: none;" onchange="handleGalleryUpload(event, 'video')">
+                    
+                    <!-- Upload status message -->
+                    <div id="galleryUploadStatus" style="display: none; margin: 1rem 0; padding: 1rem; background: rgba(140, 214, 130, 0.1); border-left: 3px solid #8cd682; border-radius: 6px;">
+                        <p style="color: #8cd682; margin: 0;"><i class="fas fa-check-circle"></i> <span id="galleryUploadMessage">Files uploaded successfully!</span></p>
+                    </div>
+                    
                     <div id="galleryCurationContent">
                         <p style="color: #a8e6a1;">Loading available images...</p>
                     </div>
@@ -1511,6 +1529,104 @@
 
             } catch (err) {
                 alert('Error deleting image: ' + err.message);
+            }
+        }
+
+        // Handle gallery upload
+        async function handleGalleryUpload(event, mediaType) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            const statusDiv = document.getElementById('galleryUploadStatus');
+            const messageSpan = document.getElementById('galleryUploadMessage');
+            
+            statusDiv.style.display = 'block';
+            messageSpan.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Uploading ${files.length} ${mediaType === 'image' ? 'photo(s)' : 'video(s)'}...`;
+
+            try {
+                let successCount = 0;
+                let failCount = 0;
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    try {
+                        // Upload to storage
+                        const fileExt = file.name.split('.').pop();
+                        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                        const filePath = `${fileName}`;
+
+                        const { data: uploadData, error: uploadError } = await sbClient.storage
+                            .from('community-media')
+                            .upload(filePath, file, {
+                                cacheControl: '3600',
+                                upsert: false
+                            });
+
+                        if (uploadError) throw uploadError;
+
+                        // Get public URL
+                        const { data: urlData } = sbClient.storage
+                            .from('community-media')
+                            .getPublicUrl(filePath);
+
+                        // Create post entry (optional - only if you have posts table)
+                        try {
+                            await sbClient.from('posts').insert([{
+                                user_id: currentUser.id,
+                                text: `Admin uploaded ${mediaType}`,
+                                media_url: urlData.publicUrl,
+                                media_type: mediaType,
+                                created_at: new Date().toISOString()
+                            }]);
+                        } catch (postErr) {
+                            console.log('Post entry skipped (table may not exist):', postErr);
+                        }
+
+                        successCount++;
+                    } catch (fileErr) {
+                        console.error(`Error uploading ${file.name}:`, fileErr);
+                        failCount++;
+                    }
+                }
+
+                // Show results
+                if (successCount > 0) {
+                    messageSpan.innerHTML = `<i class="fas fa-check-circle"></i> Successfully uploaded ${successCount} file(s)${failCount > 0 ? `, ${failCount} failed` : ''}`;
+                    
+                    // Reload gallery to show new uploads
+                    setTimeout(() => {
+                        loadGalleryCuration();
+                    }, 1000);
+                } else {
+                    messageSpan.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Failed to upload files. Please try again.`;
+                    statusDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                    statusDiv.style.borderColor = '#ef4444';
+                }
+
+                // Hide status after 3 seconds
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                    statusDiv.style.background = 'rgba(140, 214, 130, 0.1)';
+                    statusDiv.style.borderColor = '#8cd682';
+                }, 3000);
+
+                // Clear file input
+                event.target.value = '';
+
+            } catch (err) {
+                console.error('Error in gallery upload:', err);
+                messageSpan.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Upload error: ${err.message}`;
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                statusDiv.style.borderColor = '#ef4444';
+                
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                    statusDiv.style.background = 'rgba(140, 214, 130, 0.1)';
+                    statusDiv.style.borderColor = '#8cd682';
+                }, 5000);
+                
+                event.target.value = '';
             }
         }
 
