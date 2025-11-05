@@ -570,6 +570,7 @@
                 <li><button class="nav-btn" data-section="moderation"><i class="fas fa-shield-alt"></i> Moderation</button></li>
                 <li><button class="nav-btn" data-section="events"><i class="fas fa-calendar"></i> Events</button></li>
                 <li><button class="nav-btn" data-section="gallery"><i class="fas fa-images"></i> Gallery Curation</button></li>
+                <li><button class="nav-btn" data-section="moderator"><i class="fas fa-user-shield"></i> My Profile</button></li>
                 <li><button class="nav-btn" data-section="settings"><i class="fas fa-cog"></i> Settings</button></li>
                 <li style="margin-top: 2rem; border-top: 2px solid var(--admin-border); padding-top: 1rem;">
                     <button class="nav-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -972,6 +973,49 @@
                     </div>
                 </section>
 
+                <!-- Moderator Profile Section -->
+                <section class="admin-section" id="moderator">
+                    <div class="section-header">
+                        <h2>Moderator Profile</h2>
+                        <button class="btn-submit" id="saveModeratorBtn"><i class="fas fa-save"></i> Save Profile</button>
+                    </div>
+                    <div class="admin-form">
+                        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; padding: 0.75rem; background: rgba(140, 214, 130, 0.1); border-left: 3px solid #8cd682; border-radius: 4px;">
+                            <i class="fas fa-info-circle"></i> This profile is optional. Add your name and bio to display on the community page.
+                        </p>
+
+                        <div class="form-group">
+                            <label>Moderator Name</label>
+                            <input type="text" id="moderatorName" placeholder="e.g., John Doe">
+                            <small style="color: #8cd682;">Your display name on the community page</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Profile Bio</label>
+                            <textarea id="moderatorBio" placeholder="Tell the community about yourself..." rows="6"></textarea>
+                            <small style="color: #8cd682;">Share your background, interests, and role in the robotics community</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email (optional)</label>
+                            <input type="email" id="moderatorEmail" placeholder="contact@example.com">
+                            <small style="color: #8cd682;">Public contact email (leave blank to keep private)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Social Media Links (optional)</label>
+                            <input type="url" id="moderatorLinkedIn" placeholder="LinkedIn URL" style="margin-bottom: 0.5rem;">
+                            <input type="url" id="moderatorTwitter" placeholder="Twitter/X URL" style="margin-bottom: 0.5rem;">
+                            <input type="url" id="moderatorGithub" placeholder="GitHub URL">
+                            <small style="color: #8cd682;">Add your professional profiles</small>
+                        </div>
+
+                        <div id="moderatorStatus" style="margin-top: 1rem; padding: 0.75rem; background: rgba(140, 214, 130, 0.1); border-radius: 6px; display: none;">
+                            <p style="color: #8cd682; margin: 0;"><i class="fas fa-check-circle"></i> Profile saved successfully!</p>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Settings Section -->
                 <section class="admin-section" id="settings">
                     <div class="section-header">
@@ -1114,6 +1158,7 @@
             });
 
             document.getElementById('saveEventBtn').addEventListener('click', saveEvent);
+            document.getElementById('saveModeratorBtn').addEventListener('click', saveModeratorProfile);
 
             // Moderation filter - DISABLED
             // document.getElementById('moderationFilter').addEventListener('change', loadModerationQueue);
@@ -1141,6 +1186,7 @@
                 moderation: 'Content Moderation',
                 events: 'Events Management',
                 gallery: 'Community Highlights',
+                moderator: 'Moderator Profile',
                 settings: 'Site Settings'
             };
             
@@ -1159,6 +1205,9 @@
                     break;
                 case 'gallery':
                     loadGalleryCuration();
+                    break;
+                case 'moderator':
+                    loadModeratorProfile();
                     break;
                 case 'analytics':
                     loadAnalytics();
@@ -1805,6 +1854,66 @@
         function closeConfirmModal() {
             document.getElementById('confirmModal').classList.remove('active');
             confirmCallback = null;
+        }
+
+        // Moderator Profile Functions
+        async function loadModeratorProfile() {
+            try {
+                // Try to load existing profile for current user
+                const { data, error } = await sbClient
+                    .from('moderator_profiles')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (data) {
+                    // Populate form with existing data
+                    document.getElementById('moderatorName').value = data.name || '';
+                    document.getElementById('moderatorBio').value = data.bio || '';
+                    document.getElementById('moderatorEmail').value = data.email || '';
+                    document.getElementById('moderatorLinkedIn').value = data.linkedin || '';
+                    document.getElementById('moderatorTwitter').value = data.twitter || '';
+                    document.getElementById('moderatorGithub').value = data.github || '';
+                }
+                // If no profile exists yet, form stays empty (which is fine)
+
+            } catch (err) {
+                console.log('No existing profile found, starting fresh');
+                // This is okay - moderator profile is optional
+            }
+        }
+
+        async function saveModeratorProfile() {
+            try {
+                const profileData = {
+                    user_id: currentUser.id,
+                    name: document.getElementById('moderatorName').value.trim() || null,
+                    bio: document.getElementById('moderatorBio').value.trim() || null,
+                    email: document.getElementById('moderatorEmail').value.trim() || null,
+                    linkedin: document.getElementById('moderatorLinkedIn').value.trim() || null,
+                    twitter: document.getElementById('moderatorTwitter').value.trim() || null,
+                    github: document.getElementById('moderatorGithub').value.trim() || null,
+                    updated_at: new Date().toISOString()
+                };
+
+                // Upsert (insert or update)
+                const { error } = await sbClient
+                    .from('moderator_profiles')
+                    .upsert(profileData, { onConflict: 'user_id' });
+
+                if (error) throw error;
+
+                // Show success message
+                const statusDiv = document.getElementById('moderatorStatus');
+                statusDiv.style.display = 'block';
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+
+            } catch (err) {
+                console.error('Error saving moderator profile:', err);
+                alert('Error saving profile: ' + err.message + '\n\nYou may need to create the moderator_profiles table in Supabase first.');
+            }
         }
     </script>
     
