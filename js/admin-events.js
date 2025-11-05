@@ -144,6 +144,9 @@ function populateEventForm(event) {
     document.getElementById('eventContactEmail').value = event.contact_email || '';
     document.getElementById('eventOrganizerName').value = event.organizer_name || '';
     
+    const moderatorField = document.getElementById('eventModerator');
+    if (moderatorField) moderatorField.value = event.moderator || '';
+    
     document.getElementById('eventStatus').value = event.status || 'draft';
     document.getElementById('eventFeatured').checked = event.is_featured || false;
     
@@ -384,6 +387,7 @@ async function saveEvent() {
             registration_url: document.getElementById('eventRegUrl').value || null,
             contact_email: document.getElementById('eventContactEmail').value || null,
             organizer_name: document.getElementById('eventOrganizerName').value || null,
+            moderator: document.getElementById('eventModerator')?.value.trim() || null,
             status,
             is_featured: document.getElementById('eventFeatured').checked,
             image_url: currentEventImageUrl,
