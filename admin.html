@@ -655,7 +655,8 @@
                     </div>
                 </section>
 
-                <!-- Moderation Section -->
+                <!-- Moderation Section - DISABLED (requires posts/bulletin board feature) -->
+                <!--
                 <section class="admin-section" id="moderation">
                     <div class="section-header">
                         <h2>Content Moderation</h2>
@@ -671,6 +672,7 @@
                         <p style="color: #a8e6a1;">Loading moderation queue...</p>
                     </div>
                 </section>
+                -->
 
                 <!-- Events Section -->
                 <section class="admin-section" id="events">
@@ -1113,8 +1115,8 @@
 
             document.getElementById('saveEventBtn').addEventListener('click', saveEvent);
 
-            // Moderation filter
-            document.getElementById('moderationFilter').addEventListener('change', loadModerationQueue);
+            // Moderation filter - DISABLED
+            // document.getElementById('moderationFilter').addEventListener('change', loadModerationQueue);
         }
 
         // Switch section
@@ -1150,7 +1152,7 @@
                     loadUsers();
                     break;
                 case 'moderation':
-                    loadModerationQueue();
+                    // loadModerationQueue(); // DISABLED - requires posts/bulletin board
                     break;
                 case 'events':
                     loadEvents();
@@ -1244,7 +1246,8 @@
             }
         }
 
-        // Load Moderation Queue
+        // Load Moderation Queue - DISABLED (requires posts/bulletin board feature)
+        /*
         async function loadModerationQueue() {
             try {
                 const filter = document.getElementById('moderationFilter').value;
@@ -1315,6 +1318,7 @@
                 document.getElementById('moderationContent').innerHTML = `<div class="alert alert-error">Error loading moderation queue: ${err.message}</div>`;
             }
         }
+        */
 
         // Load Events
         async function loadEvents() {
@@ -1621,6 +1625,8 @@
             }
         }
 
+        // Moderation functions - DISABLED (requires posts/bulletin board feature)
+        /*
         async function updateModerationStatus(id, status) {
             try {
                 const { error } = await sbClient
@@ -1656,6 +1662,7 @@
                 alert('Error deleting post: ' + err.message);
             }
         }
+        */
 
         async function viewMemberProfile(memberId) {
             try {
