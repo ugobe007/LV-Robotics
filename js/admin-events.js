@@ -100,13 +100,12 @@ function populateEventForm(event) {
     // Venue details
     const curfewTimeField = document.getElementById('eventCurfewTime');
     const foodDrinksField = document.getElementById('eventFoodDrinks');
-    const avEquipmentField = document.getElementById('eventAvEquipment');
+    const avEquipmentField = document.getElementById('eventAVEquipment');
     
     if (curfewTimeField) curfewTimeField.value = event.curfew_time || '';
     document.getElementById('eventLocationType').value = event.location_type || 'in-person';
     document.getElementById('eventLocationName').value = event.location_name || '';
     document.getElementById('eventLocationAddress').value = event.location_address || '';
-    document.getElementById('eventVirtualLink').value = event.virtual_link || '';
     if (foodDrinksField) foodDrinksField.value = event.food_drinks || '';
     if (avEquipmentField) avEquipmentField.value = event.av_equipment || '';
     
@@ -331,7 +330,7 @@ async function saveEvent() {
         // Get venue details (with safety checks for new fields)
         const curfewTimeField = document.getElementById('eventCurfewTime');
         const foodDrinksField = document.getElementById('eventFoodDrinks');
-        const avEquipmentField = document.getElementById('eventAvEquipment');
+        const avEquipmentField = document.getElementById('eventAVEquipment');
         
         const curfewTime = curfewTimeField ? curfewTimeField.value || null : null;
         const foodDrinks = foodDrinksField ? foodDrinksField.value || null : null;
@@ -372,7 +371,6 @@ async function saveEvent() {
             location_type: locationType,
             location_name: locationName,
             location_address: locationAddress,
-            virtual_link: document.getElementById('eventVirtualLink').value || null,
             food_drinks: foodDrinks,
             av_equipment: avEquipment,
             topic: topic,
