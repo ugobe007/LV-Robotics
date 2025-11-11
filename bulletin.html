@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Bulletin Board - LV Robotics</title>
-    <link rel="stylesheet" href="css/styles.css?v=32">
+    <link rel="stylesheet" href="css/styles.css?v=18">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -33,12 +33,21 @@
         <p class="page-subtitle" style="display: block; color: #e2e8f0; font-size: 1.3rem; margin-bottom: 1.5rem; text-align: center;">Share your robotics projects, ask questions, and connect with the community</p>
         
         <!-- Auth Controls - Centered -->
-        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 2rem;">
-            <div id="authSignedOut">
-                <button class="btn btn-primary" onclick="showSignInModal()">✨ Sign Up to Save Your Posts</button>
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div id="authSignedOut" style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="oauthSignIn('google')" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">
+                    <i class="fab fa-google" style="margin-right: 0.5rem;"></i>Google
+                </button>
+                <button class="btn btn-secondary" onclick="oauthSignIn('github')" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">
+                    <i class="fab fa-github" style="margin-right: 0.5rem;"></i>GitHub
+                </button>
+                <button class="btn btn-primary" onclick="showSignInModal()" style="padding: 0.6rem 1.5rem; font-size: 0.95rem; background: #7c3aed;">
+                    <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>Sign in to post
+                </button>
             </div>
-            <div id="authSignedIn" style="display:none; flex-direction: row; justify-content: center; align-items: center; gap:0.75rem;">
-                <button class="btn btn-secondary" onclick="signOut()">Sign out</button>
+            <div id="authSignedIn" style="display:none; justify-content: center; align-items:center; gap:0.75rem;">
+                <span id="authUserEmail" style="color: #a8e6a1; font-weight: 600;"></span>
+                <button class="btn btn-secondary" onclick="signOut()" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">Sign out</button>
             </div>
         </div>
         
@@ -47,21 +56,23 @@
                 <div class="post-form">
                     <h3>Share with the Community</h3>
                     <textarea id="bulletinText" placeholder="What's happening in robotics?"></textarea>
-                    <div class="media-controls">
-                        <button onclick="document.getElementById('imageUpload').click()" class="media-btn">
+                    <div class="media-controls" style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0;">
+                        <button onclick="document.getElementById('imageUpload').click()" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             📷 Add Image
                         </button>
-                        <button onclick="document.getElementById('videoUpload').click()" class="media-btn">
+                        <button onclick="document.getElementById('videoUpload').click()" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             🎥 Add Video
                         </button>
-                        <button onclick="addLink()" class="media-btn">
+                        <button onclick="addLink()" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             🔗 Add Link
                         </button>
                     </div>
                     <input type="file" id="imageUpload" class="media-input" accept="image/*" onchange="handleImageUpload(event)">
                     <input type="file" id="videoUpload" class="media-input" accept="video/*" onchange="handleVideoUpload(event)">
                     <div id="mediaPreview"></div>
-                    <button onclick="addPost()" class="btn btn-primary">Post</button>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button onclick="addPost()" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem;">Post</button>
+                    </div>
                 </div>
                 
                 <div class="gallery-section">
@@ -126,15 +137,12 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <p>&copy; 2024 LV Robotics. All rights reserved.</p>
-                    <a href="admin.html" style="font-size: 0.95em; text-decoration: none; color: #a8e6a1; cursor: pointer; transition: all 0.2s; font-weight: 500; padding: 0.4rem 0.8rem; border: 1px solid rgba(168, 230, 161, 0.3); border-radius: 4px;" onmouseover="this.style.background='rgba(168, 230, 161, 0.1)'; this.style.borderColor='#a8e6a1'" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(168, 230, 161, 0.3)'">🔐 Admin Dashboard</a>
-                </div>
+                <p>&copy; 2024 LV Robotics. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="js/main.js?v=16" defer></script>
+    <script src="js/main.js?v=12" defer></script>
 </body>
 </html>
