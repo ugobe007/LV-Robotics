@@ -240,7 +240,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                const navbarHeight = document.querySelector('.navbar').offsetHeight;
+                const navbar = document.querySelector('.navbar');
+                const navbarHeight = navbar ? navbar.offsetHeight : 0;
                 const targetPosition = target.offsetTop - navbarHeight;
                 
                 window.scrollTo({
@@ -1518,11 +1519,12 @@ async function loadGalleryFromSupabase() {
     try {
         debugLog('Fetching gallery images from Supabase...');
         
-        // Fetch image posts, sorted by newest first, limit to 50
+        // Fetch from gallery table (only active items), sorted by display order then newest first
         const { data, error } = await sbClient
-            .from('posts')
-            .select('id, media_url, media_type, text, created_at')
-            .eq('media_type', 'image')
+            .from('gallery')
+            .select('id, media_url, media_type, title, description, created_at, display_order')
+            .eq('active', true)
+            .order('display_order', { ascending: true })
             .order('created_at', { ascending: false })
             .limit(50);
         
@@ -1535,15 +1537,7 @@ async function loadGalleryFromSupabase() {
         debugLog('Gallery query result:', { data, error });
         
         if (!data || data.length === 0) {
-            debugLog('⚠️ No image posts found in Supabase, showing fallback');
-            // Debug: fetch all posts to see what media_types exist
-            const { data: allPosts } = await sbClient
-                .from('posts')
-                .select('id, media_url, media_type, text, created_at')
-                .order('created_at', { ascending: false })
-                .limit(10);
-            debugLog('📊 All recent posts for debugging:', allPosts);
-            debugLog('📊 Media types found:', allPosts?.map(p => p.media_type));
+            debugLog('⚠️ No images found in gallery, showing fallback');
             loadFallbackGallery();
             return;
         }
@@ -1587,7 +1581,7 @@ async function loadGalleryFromSupabase() {
                 // If it starts with / or http, use as-is
             }
             img.src = imageUrl;
-            img.alt = `Community Highlight ${index + 1}`;
+            img.alt = post.title || post.description || `Community Highlight ${index + 1}`;
             img.className = 'gallery-image';
             img.style.cssText = 'display: block; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;';
             
