@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semi-Annual Hack-a-thon - LV Robotics</title>
+    <meta name="description" content="Join LV Robotics' semi-annual hack-a-thon - connecting students, engineers, and entrepreneurs to solve real-world robotics challenges">
+    <link rel="stylesheet" href="css/styles.css?v=28">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-menu" id="hamburgerMenu" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Slide-out Menu -->
+    <nav class="slide-menu" id="slideMenu">
+        <div class="slide-menu-header">
+            <h3>Menu</h3>
+            <button class="close-menu" id="closeMenu">&times;</button>
+        </div>
+        <ul class="slide-menu-items">
+            <li><a href="index.html#home" class="menu-link">Home</a></li>
+            <li><a href="index.html#events" class="menu-link">View Events</a></li>
+            <li><a href="index.html#hackathon" class="menu-link">Hack-a-thon</a></li>
+            <li><a href="index.html#fellowship" class="menu-link">Fellowship Program</a></li>
+            <li><a href="index.html#workshops" class="menu-link">Workshops</a></li>
+            <li><a href="index.html#competitions" class="menu-link">Competitions</a></li>
+            <li><a href="index.html#founders" class="menu-link">Founders</a></li>
+            <li><a href="index.html#sponsors" class="menu-link">Sponsors</a></li>
+            <li><a href="community.html" class="menu-link">Community</a></li>
+            <li><a href="sponsorship.html" class="menu-link">Sponsorship</a></li>
+            <li><a href="contact.html" class="menu-link">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Hero Section -->
+    <section class="sponsorship-hero" style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);">
+        <div class="container">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <img src="images/LVRobot_Green_new_Logo.png" alt="LV Robotics Logo" style="width: 120px; height: 120px; object-fit: contain;">
+                <h1 class="page-title" style="margin: 0; color: white;">LV Robotics <span class="highlight">Hack-a-thon</span></h1>
+            </div>
+            <p class="page-subtitle" style="color: #e2e8f0; font-size: 1.3rem;">Innovate. Collaborate. Build the Future of Robotics in Las Vegas</p>
+            <div style="text-align: center; margin-top: 2rem;">
+                <div style="display: inline-block; background: rgba(168, 230, 161, 0.2); border: 2px solid #a8e6a1; border-radius: 12px; padding: 1rem 2rem;">
+                    <p style="color: #a8e6a1; font-size: 1.2rem; font-weight: 700; margin: 0;">Next Event: Spring 2026</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is Hack-a-thon Section -->
+    <section style="padding: 5rem 0; background: #f8fafc;">
+        <div class="container">
+            <h2 class="section-title">What is Our <span class="highlight">Hack-a-thon?</span></h2>
+            <div style="max-width: 900px; margin: 0 auto 4rem;">
+                <p style="font-size: 1.2rem; color: #1e293b; line-height: 1.8; text-align: center;">
+                    The LV Robotics Hack-a-thon is a <strong>semi-annual innovation event</strong> where high school students, college students, local entrepreneurs, and professional engineers come together to solve real-world robotics challenges presented by local businesses. It's not just about competition—it's about learning, collaboration, and building a stronger robotics community in Las Vegas.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem;">
+                <div style="background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 2.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; text-align: center;">🎓</div>
+                    <h3 style="color: #5b21b6; text-align: center; margin-bottom: 1rem; font-size: 1.6rem;">Learn New Skills</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">
+                        Master cutting-edge robotics technologies, AI, programming languages, and hardware integration through hands-on challenges. Work alongside experienced engineers and get real-time mentorship.
+                    </p>
+                </div>
+
+                <div style="background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 2.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; text-align: center;">💡</div>
+                    <h3 style="color: #5b21b6; text-align: center; margin-bottom: 1rem; font-size: 1.6rem;">Solve Real Problems</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">
+                        Tackle challenges that matter to the Las Vegas business community. Your solutions could have real-world impact and help local companies innovate in robotics and automation.
+                    </p>
+                </div>
+
+                <div style="background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 2.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; text-align: center;">🤝</div>
+                    <h3 style="color: #5b21b6; text-align: center; margin-bottom: 1rem; font-size: 1.6rem;">Build Community</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">
+                        Connect with like-minded innovators, build lasting relationships, and help raise awareness and support for robotics in Las Vegas. Build connections that bring talent back to Vegas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Can Participate -->
+    <section style="padding: 5rem 0; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Who Can <span class="highlight">Participate?</span></h2>
+            <p style="text-align: center; color: #e2e8f0; font-size: 1.2rem; margin-bottom: 4rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Our hack-a-thon is open to all skill levels and backgrounds. Whether you're just starting out or an experienced professional, there's a place for you!
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem;">
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2.5rem; text-align: center;">
+                    <i class="fas fa-user-graduate" style="font-size: 4rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem; font-size: 1.5rem;">High School Students</h3>
+                    <p style="color: #e2e8f0; line-height: 1.7; margin-bottom: 1rem;">
+                        Including robotics team members. Perfect opportunity to apply what you've learned and gain real-world experience.
+                    </p>
+                    <p style="color: #a8e6a1; font-size: 0.9rem; font-style: italic;">
+                        No prior hack-a-thon experience needed!
+                    </p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2.5rem; text-align: center;">
+                    <i class="fas fa-graduation-cap" style="font-size: 4rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem; font-size: 1.5rem;">College Students</h3>
+                    <p style="color: #e2e8f0; line-height: 1.7; margin-bottom: 1rem;">
+                        From all majors—engineering, computer science, business, design. Bring your unique perspective to the challenge.
+                    </p>
+                    <p style="color: #a8e6a1; font-size: 0.9rem; font-style: italic;">
+                        Great for building your portfolio!
+                    </p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2.5rem; text-align: center;">
+                    <i class="fas fa-lightbulb" style="font-size: 4rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem; font-size: 1.5rem;">Entrepreneurs</h3>
+                    <p style="color: #e2e8f0; line-height: 1.7; margin-bottom: 1rem;">
+                        Explore new business opportunities, validate ideas, and connect with potential collaborators and talent.
+                    </p>
+                    <p style="color: #a8e6a1; font-size: 0.9rem; font-style: italic;">
+                        Network with industry leaders!
+                    </p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2.5rem; text-align: center;">
+                    <i class="fas fa-cogs" style="font-size: 4rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem; font-size: 1.5rem;">Professional Engineers</h3>
+                    <p style="color: #e2e8f0; line-height: 1.7; margin-bottom: 1rem;">
+                        Share your expertise as a mentor, judge, or participant. Give back to the community while staying sharp.
+                    </p>
+                    <p style="color: #a8e6a1; font-size: 0.9rem; font-style: italic;">
+                        Make a lasting impact!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Format -->
+    <section style="padding: 5rem 0; background: white;">
+        <div class="container">
+            <h2 class="section-title">Event <span class="highlight">Format</span></h2>
+            
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-left: 5px solid #5b21b6; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem;"><i class="fas fa-calendar-alt" style="margin-right: 0.75rem;"></i>Schedule Overview</h3>
+                    <div style="display: grid; gap: 1.5rem; margin-top: 1.5rem;">
+                        <div style="display: flex; gap: 1.5rem;">
+                            <div style="background: #5b21b6; color: white; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 700; min-width: 180px; text-align: center;">
+                                Friday Evening
+                            </div>
+                            <div style="flex: 1;">
+                                <strong style="color: #5b21b6;">Kickoff & Challenge Presentation</strong>
+                                <p style="color: #1e293b; margin-top: 0.5rem;">Meet your team, hear from corporate sponsors, understand the challenge.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1.5rem;">
+                            <div style="background: #7c3aed; color: white; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 700; min-width: 180px; text-align: center;">
+                                Saturday Full Day
+                            </div>
+                            <div style="flex: 1;">
+                                <strong style="color: #5b21b6;">Build & Code Sprint</strong>
+                                <p style="color: #1e293b; margin-top: 0.5rem;">Work with mentors, access equipment, build your solution. Food provided!</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1.5rem;">
+                            <div style="background: #a8e6a1; color: #1e293b; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 700; min-width: 180px; text-align: center;">
+                                Sunday Morning
+                            </div>
+                            <div style="flex: 1;">
+                                <strong style="color: #5b21b6;">Final Presentations & Awards</strong>
+                                <p style="color: #1e293b; margin-top: 0.5rem;">Present to judges, win prizes, celebrate achievements!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem;">
+                        <h4 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.3rem;"><i class="fas fa-users" style="margin-right: 0.5rem;"></i>Team Formation</h4>
+                        <p style="color: #1e293b; line-height: 1.7;">Form teams of 3-5 people or join as an individual and we'll match you with a team. Mix of skill levels encouraged!</p>
+                    </div>
+
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem;">
+                        <h4 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.3rem;"><i class="fas fa-tools" style="margin-right: 0.5rem;"></i>Resources Provided</h4>
+                        <p style="color: #1e293b; line-height: 1.7;">Access to robotics kits, 3D printers, electronics, software licenses, and workspace. Plus meals and snacks!</p>
+                    </div>
+
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem;">
+                        <h4 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.3rem;"><i class="fas fa-chalkboard-teacher" style="margin-right: 0.5rem;"></i>Expert Mentors</h4>
+                        <p style="color: #1e293b; line-height: 1.7;">Industry professionals and experienced engineers available throughout the event to guide and support your team.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prizes & Awards -->
+    <section style="padding: 5rem 0; background: #f8fafc;">
+        <div class="container">
+            <h2 class="section-title">Prizes & <span class="highlight">Recognition</span></h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #64748b; margin-bottom: 3rem;">
+                Compete for cash prizes, equipment, and recognition from top Las Vegas companies
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border-radius: 15px; padding: 2.5rem; text-align: center; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);">
+                    <i class="fas fa-trophy" style="font-size: 4rem; color: white; margin-bottom: 1rem;"></i>
+                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">1st Place</h3>
+                    <p style="color: white; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">$5,000</p>
+                    <p style="color: rgba(255,255,255,0.9);">+ Company site visits + Internship interviews</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); border-radius: 15px; padding: 2.5rem; text-align: center; box-shadow: 0 10px 30px rgba(148, 163, 184, 0.3);">
+                    <i class="fas fa-medal" style="font-size: 4rem; color: white; margin-bottom: 1rem;"></i>
+                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">2nd Place</h3>
+                    <p style="color: white; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">$2,500</p>
+                    <p style="color: rgba(255,255,255,0.9);">+ Robotics equipment + Mentorship opportunities</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fb923c 0%, #f97316 100%); border-radius: 15px; padding: 2.5rem; text-align: center; box-shadow: 0 10px 30px rgba(251, 146, 60, 0.3);">
+                    <i class="fas fa-award" style="font-size: 4rem; color: white; margin-bottom: 1rem;"></i>
+                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">3rd Place</h3>
+                    <p style="color: white; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">$1,000</p>
+                    <p style="color: rgba(255,255,255,0.9);">+ LV Robotics swag + Recognition on website</p>
+                </div>
+            </div>
+
+            <div style="background: white; border: 2px solid #a8e6a1; border-radius: 15px; padding: 2rem; margin-top: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h4 style="color: #5b21b6; text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem;">
+                    <i class="fas fa-star" style="color: #a8e6a1; margin-right: 0.5rem;"></i>
+                    Additional Special Awards
+                </h4>
+                <ul style="color: #1e293b; font-size: 1.1rem; line-height: 2;">
+                    <li><strong>Best Innovation:</strong> Most creative and original solution</li>
+                    <li><strong>Community Impact:</strong> Solution with highest potential local impact</li>
+                    <li><strong>People's Choice:</strong> Voted by event attendees</li>
+                    <li><strong>Best Student Team:</strong> For high school/college teams</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Past Hack-a-thon Topics -->
+    <section style="padding: 5rem 0; background: white;">
+        <div class="container">
+            <h2 class="section-title">Challenge <span class="highlight">Topics</span></h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #64748b; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Each hack-a-thon focuses on a different theme relevant to Las Vegas businesses and community needs
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem; transition: transform 0.3s;">
+                    <div style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="fas fa-hotel" style="font-size: 1.8rem; color: white;"></i>
+                    </div>
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.4rem;">Hospitality Automation</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Design robotic solutions for hotels and casinos—automated cleaning, guest services, or delivery systems.</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem; transition: transform 0.3s;">
+                    <div style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="fas fa-warehouse" style="font-size: 1.8rem; color: white;"></i>
+                    </div>
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.4rem;">Warehouse & Logistics</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Create autonomous systems for inventory management, sorting, and last-mile delivery optimization.</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem; transition: transform 0.3s;">
+                    <div style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="fas fa-sun" style="font-size: 1.8rem; color: white;"></i>
+                    </div>
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.4rem;">Desert Sustainability</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Develop robots for solar panel maintenance, water conservation monitoring, or desert agriculture.</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem; transition: transform 0.3s;">
+                    <div style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="fas fa-building" style="font-size: 1.8rem; color: white;"></i>
+                    </div>
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.4rem;">Smart Infrastructure</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Build solutions for construction automation, building inspection, or infrastructure maintenance in extreme heat.</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem; transition: transform 0.3s;">
+                    <div style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="fas fa-heartbeat" style="font-size: 1.8rem; color: white;"></i>
+                    </div>
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.4rem;">Healthcare Robotics</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Innovate in medical delivery, patient monitoring, or assistive devices for aging populations.</p>
+                </div>
+
+                <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 2rem; transition: transform 0.3s;">
+                    <div style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="fas fa-shopping-cart" style="font-size: 1.8rem; color: white;"></i>
+                    </div>
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem; font-size: 1.4rem;">Retail Innovation</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Design automated checkout systems, inventory robots, or customer service bots for retail environments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsor Benefits -->
+    <section style="padding: 5rem 0; background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Corporate <span class="highlight">Sponsorship</span></h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #e2e8f0; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Present your challenges to talented innovators and discover solutions while building your brand
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2rem; text-align: center;">
+                    <i class="fas fa-users" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem;">Access to Talent</h3>
+                    <p style="color: #e2e8f0;">Direct connection to motivated students, engineers, and entrepreneurs before they hit the job market.</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2rem; text-align: center;">
+                    <i class="fas fa-lightbulb" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem;">Innovation Pipeline</h3>
+                    <p style="color: #e2e8f0;">Present real business challenges and get creative solutions from diverse perspectives.</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2rem; text-align: center;">
+                    <i class="fas fa-bullhorn" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem;">Brand Visibility</h3>
+                    <p style="color: #e2e8f0;">Showcase your company to the Las Vegas tech community and build your reputation as an innovator.</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2rem; text-align: center;">
+                    <i class="fas fa-heart" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #a8e6a1; margin-bottom: 1rem;">Community Impact</h3>
+                    <p style="color: #e2e8f0;">Support STEM education and workforce development in Las Vegas while retaining local talent.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="sponsorship.html#hackathon-sponsorship" class="btn btn-primary" style="background: #a8e6a1; color: #1e293b; font-size: 1.2rem; padding: 1rem 2.5rem;">View Sponsorship Packages</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section style="padding: 5rem 0; background: white;">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked <span class="highlight">Questions</span></h2>
+            
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="background: #f8fafc; border-left: 4px solid #5b21b6; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem;">Do I need prior robotics experience?</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">No! We welcome all skill levels. Teams are encouraged to have a mix of experience levels, and mentors will be available throughout the event.</p>
+                </div>
+
+                <div style="background: #f8fafc; border-left: 4px solid #5b21b6; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem;">How much does it cost to participate?</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Participation is FREE! All equipment, materials, meals, and snacks are provided by our generous sponsors.</p>
+                </div>
+
+                <div style="background: #f8fafc; border-left: 4px solid #5b21b6; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem;">Can I join solo or do I need a team?</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Both! You can register as a solo participant and we'll match you with a team, or you can register as a pre-formed team of 3-5 people.</p>
+                </div>
+
+                <div style="background: #f8fafc; border-left: 4px solid #5b21b6; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem;">What should I bring?</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Bring your laptop, charger, and enthusiasm! We provide all robotics hardware, equipment, and materials. Dress comfortably for a hands-on working environment.</p>
+                </div>
+
+                <div style="background: #f8fafc; border-left: 4px solid #5b21b6; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem;">When is the next hack-a-thon?</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">Our next event is planned for Spring 2026. Sign up for our newsletter or follow us on social media to get notified when registration opens!</p>
+                </div>
+
+                <div style="background: #f8fafc; border-left: 4px solid #5b21b6; border-radius: 8px; padding: 2rem;">
+                    <h3 style="color: #5b21b6; margin-bottom: 1rem;">How are high school students supervised?</h3>
+                    <p style="color: #1e293b; line-height: 1.7;">High school participants must have parental consent. The event is fully supervised with multiple adult mentors, organizers, and volunteers present at all times during the event.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="padding: 5rem 0; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem;">Ready to <span class="highlight">Innovate?</span></h2>
+            <p style="color: #e2e8f0; font-size: 1.3rem; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Stay tuned for registration details for our Spring 2026 hack-a-thon. Be the first to know when spots open up!
+            </p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem;">
+                <a href="membership.html" class="btn btn-primary" style="background: #a8e6a1; color: #1e293b; font-size: 1.2rem; padding: 1.25rem 3rem;">Join LV Robotics</a>
+                <a href="contact.html" class="btn btn-secondary" style="background: transparent; border: 2px solid #a8e6a1; color: #a8e6a1; font-size: 1.2rem; padding: 1.25rem 3rem;">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>LV Robotics</h3>
+                    <p>Building the future of robotics in Las Vegas</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#events">Events</a></li>
+                        <li><a href="community.html">Community</a></li>
+                        <li><a href="sponsorship.html">Become a Sponsor</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 LV Robotics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js?v=7" defer></script>
+</body>
+</html>
