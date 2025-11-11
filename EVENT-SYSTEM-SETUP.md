@@ -38,7 +38,7 @@ The file `js/admin-events.js` contains all the event management functions and ha
 
 ### Step 4: Create Your First Event
 Fill in the form:
-- **Title**: e.g., "FIRST Robotics Kickoff Meetup"
+- **Title**: e.g., "LV Robotics Community Kickoff Meetup"
 - **Category**: Choose from workshop, meetup, competition, etc.
 - **Short Description**: 1-2 sentences for social media
 - **Full Description**: Detailed event information

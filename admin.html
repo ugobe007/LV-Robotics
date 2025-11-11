@@ -649,8 +649,68 @@
                 <section class="admin-section" id="users">
                     <div class="section-header">
                         <h2>User Management</h2>
-                        <button class="btn-submit"><i class="fas fa-plus"></i> Add User</button>
+                        <button class="btn-submit" id="addUserBtn"><i class="fas fa-plus"></i> Add User</button>
                     </div>
+                    
+                    <!-- Add User Form -->
+                    <div class="admin-form" id="addUserForm" style="display: none;">
+                        <h3 style="color: var(--admin-primary); margin-bottom: 0.5rem;">Add New User</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Create a new member account</p>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><span style="color: #ef4444; font-weight: bold;">*</span> First Name</label>
+                                <input type="text" id="newUserFirstName" placeholder="John" required style="border-left: 3px solid #ef4444;">
+                            </div>
+                            <div class="form-group">
+                                <label><span style="color: #ef4444; font-weight: bold;">*</span> Last Name</label>
+                                <input type="text" id="newUserLastName" placeholder="Doe" required style="border-left: 3px solid #ef4444;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><span style="color: #ef4444; font-weight: bold;">*</span> Email</label>
+                                <input type="email" id="newUserEmail" placeholder="john@example.com" required style="border-left: 3px solid #ef4444;">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" id="newUserPhone" placeholder="(702) 555-1234">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Organization / School</label>
+                            <input type="text" id="newUserOrg" placeholder="e.g., Tech Company Inc., Local School">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><span style="color: #ef4444; font-weight: bold;">*</span> Membership Type</label>
+                            <select id="newUserMembershipType" required style="border-left: 3px solid #ef4444;">
+                                <option value="">Select type...</option>
+                                <option value="student">Student</option>
+                                <option value="individual">Individual</option>
+                                <option value="family">Family</option>
+                                <option value="corporate">Corporate</option>
+                                <option value="lifetime">Lifetime</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" id="newUserActive" checked style="width: auto;">
+                                    Active Member
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid rgba(168, 230, 161, 0.2);">
+                            <button type="button" class="btn-submit" onclick="saveNewUser()"><i class="fas fa-save"></i> Add User</button>
+                            <button type="button" class="btn-submit" style="background: #64748b;" onclick="cancelAddUser()"><i class="fas fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                    
                     <div id="usersContent">
                         <p style="color: #a8e6a1;">Loading users...</p>
                     </div>
@@ -693,7 +753,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label><span style="color: #ef4444; font-weight: bold;">*</span> Event Title</label>
-                                    <input type="text" id="eventTitle" placeholder="e.g., FIRST Robotics Meetup" required style="border-left: 3px solid #ef4444;">
+                                    <input type="text" id="eventTitle" placeholder="e.g., Community Robotics Meetup" required style="border-left: 3px solid #ef4444;">
                                 </div>
                                 <div class="form-group">
                                     <label><span style="color: #ef4444; font-weight: bold;">*</span> Category</label>
@@ -754,7 +814,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label><span style="color: #ef4444; font-weight: bold;">*</span> Venue Name</label>
-                                    <input type="text" id="eventLocationName" placeholder="e.g., UNLV Engineering Building" required style="border-left: 3px solid #ef4444;">
+                                    <input type="text" id="eventLocationName" placeholder="e.g., Tech Center Downtown" required style="border-left: 3px solid #ef4444;">
                                 </div>
                             </div>
 
@@ -882,7 +942,7 @@
 
                             <div class="form-group">
                                 <label>Partner Organizations</label>
-                                <input type="text" id="eventPartners" placeholder="e.g., UNLV, Tech Company Inc.">
+                                <input type="text" id="eventPartners" placeholder="e.g., Tech Company Inc., Local Organizations">
                                 <small style="color: #8cd682;">Co-hosting organizations or sponsors</small>
                             </div>
 
@@ -1184,6 +1244,9 @@
             document.getElementById('saveEventBtn').addEventListener('click', saveEvent);
             document.getElementById('saveModeratorBtn').addEventListener('click', saveModeratorProfile);
 
+            // Add User button
+            document.getElementById('addUserBtn').addEventListener('click', showAddUserForm);
+
             // Moderation filter - DISABLED
             // document.getElementById('moderationFilter').addEventListener('change', loadModerationQueue);
         }
@@ -1316,6 +1379,169 @@
             } catch (err) {
                 console.error('Error loading users:', err);
                 document.getElementById('usersContent').innerHTML = `<div class="alert alert-error">Error loading members: ${err.message}</div>`;
+            }
+        }
+
+        // Show Add User Form
+        function showAddUserForm() {
+            const form = document.getElementById('addUserForm');
+            const btn = document.getElementById('addUserBtn');
+            
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-times"></i> Cancel';
+                form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                cancelAddUser();
+            }
+        }
+
+        // Cancel Add User
+        function cancelAddUser() {
+            const form = document.getElementById('addUserForm');
+            const btn = document.getElementById('addUserBtn');
+            
+            form.style.display = 'none';
+            btn.innerHTML = '<i class="fas fa-plus"></i> Add User';
+            
+            // Clear form
+            document.getElementById('newUserFirstName').value = '';
+            document.getElementById('newUserLastName').value = '';
+            document.getElementById('newUserEmail').value = '';
+            document.getElementById('newUserPhone').value = '';
+            document.getElementById('newUserOrg').value = '';
+            document.getElementById('newUserMembershipType').value = '';
+            document.getElementById('newUserActive').checked = true;
+        }
+
+        // Save New User
+        async function saveNewUser() {
+            try {
+                // Get form values
+                const firstName = document.getElementById('newUserFirstName').value.trim();
+                const lastName = document.getElementById('newUserLastName').value.trim();
+                const email = document.getElementById('newUserEmail').value.trim();
+                const phone = document.getElementById('newUserPhone').value.trim();
+                const org = document.getElementById('newUserOrg').value.trim();
+                const membershipType = document.getElementById('newUserMembershipType').value;
+                const active = document.getElementById('newUserActive').checked;
+
+                // Validation
+                const missing = [];
+                if (!firstName) missing.push('First Name');
+                if (!lastName) missing.push('Last Name');
+                if (!email) missing.push('Email');
+                if (!membershipType) missing.push('Membership Type');
+
+                if (missing.length > 0) {
+                    alert(`Please fill in the following required fields:\n\n${missing.join('\n')}`);
+                    return;
+                }
+
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+
+                // Check for duplicate email
+                const { data: existing, error: checkError } = await sbClient
+                    .from('members')
+                    .select('id')
+                    .eq('email', email)
+                    .single();
+
+                if (existing) {
+                    alert('A member with this email already exists.');
+                    return;
+                }
+
+                // Insert new member
+                const newMember = {
+                    first_name: firstName,
+                    last_name: lastName,
+                    email: email,
+                    phone: phone || null,
+                    organization: org || null,
+                    membership_type: membershipType,
+                    active: active,
+                    created_at: new Date().toISOString()
+                };
+
+                const { data, error } = await sbClient
+                    .from('members')
+                    .insert([newMember])
+                    .select();
+
+                if (error) throw error;
+
+                // Success
+                alert(`✓ User added successfully!\n\nName: ${firstName} ${lastName}\nEmail: ${email}`);
+                
+                // Close form and reload users
+                cancelAddUser();
+                loadUsers();
+
+            } catch (err) {
+                console.error('Error adding user:', err);
+                alert(`Error adding user: ${err.message}`);
+            }
+        }
+
+        // View Member Profile
+        async function viewMemberProfile(memberId) {
+            try {
+                const { data, error } = await sbClient
+                    .from('members')
+                    .select('*')
+                    .eq('id', memberId)
+                    .single();
+
+                if (error) throw error;
+
+                // Create a simple profile view
+                const profileHtml = `
+                    <strong>Name:</strong> ${data.first_name || ''} ${data.last_name || ''}<br>
+                    <strong>Email:</strong> ${data.email}<br>
+                    <strong>Phone:</strong> ${data.phone || 'Not provided'}<br>
+                    <strong>Organization:</strong> ${data.organization || 'Not provided'}<br>
+                    <strong>Location:</strong> ${data.location || 'Not provided'}<br>
+                    <strong>Membership Type:</strong> ${data.membership_type || 'Not specified'}<br>
+                    <strong>Active:</strong> ${data.active ? 'Yes' : 'No'}<br>
+                    <strong>Skills:</strong> ${data.skills || 'Not provided'}<br>
+                    <strong>Interests:</strong> ${data.interests || 'Not provided'}<br>
+                    <strong>Joined:</strong> ${new Date(data.created_at).toLocaleDateString()}
+                `;
+
+                alert(profileHtml.replace(/<br>/g, '\n').replace(/<\/?strong>/g, ''));
+
+            } catch (err) {
+                console.error('Error loading member profile:', err);
+                alert(`Error loading profile: ${err.message}`);
+            }
+        }
+
+        // Remove Member
+        async function removeMember(memberId, email) {
+            if (!confirm(`Are you sure you want to remove this member?\n\nEmail: ${email}\n\nThis action cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                const { error } = await sbClient
+                    .from('members')
+                    .delete()
+                    .eq('id', memberId);
+
+                if (error) throw error;
+
+                alert('✓ Member removed successfully.');
+                loadUsers();
+
+            } catch (err) {
+                console.error('Error removing member:', err);
+                alert(`Error removing member: ${err.message}`);
             }
         }
 
@@ -1457,36 +1683,63 @@
 
         // Load Gallery Curation
         async function loadGalleryCuration() {
+            const content = document.getElementById('galleryCurationContent');
+            
             try {
+                // Load from gallery table (not posts table)
                 const { data: allImages, error } = await sbClient
-                    .from('posts')
-                    .select('id, text, media_url, created_at, user_id')
-                    .eq('media_type', 'image')
-                    .order('created_at', { ascending: false })
-                    .limit(50);
+                    .from('gallery')
+                    .select('id, title, description, media_url, media_type, display_order, active, created_at')
+                    .order('display_order', { ascending: true })
+                    .order('created_at', { ascending: false });
                 
-                if (error) throw error;
+                if (error) {
+                    console.error('Gallery load error:', error);
+                    content.innerHTML = `
+                        <div class="alert alert-error">
+                            <strong>Error loading gallery:</strong> ${error.message}<br><br>
+                            <strong>Possible causes:</strong><br>
+                            • Gallery table doesn't exist yet - run the SQL migration<br>
+                            • RLS policies need to be configured<br>
+                            • Database connection issue<br><br>
+                            <small><strong>Error details:</strong> ${JSON.stringify(error, null, 2)}</small>
+                        </div>
+                    `;
+                    throw error;
+                }
 
-                const content = document.getElementById('galleryCurationContent');
+                console.log('Loaded gallery images:', allImages?.length || 0);
+
                 if (!allImages || allImages.length === 0) {
-                    content.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No images available</p></div>';
+                    content.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No images in gallery yet. Upload photos or videos to get started!</p></div>';
                     return;
                 }
 
                 let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">';
 
                 allImages.forEach(img => {
+                    // Add cache-busting parameter to image URL
+                    const imageUrl = img.media_url + (img.media_url.includes('?') ? '&' : '?') + 't=' + Date.now();
+                    const isActive = img.active !== false; // Default to true if undefined
+                    
                     html += `
-                        <div style="background: var(--admin-card); border: 2px solid var(--admin-border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;" 
+                        <div style="background: var(--admin-card); border: 2px solid ${isActive ? 'var(--admin-border)' : '#ef4444'}; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; cursor: pointer; opacity: ${isActive ? '1' : '0.6'};" 
                              onmouseover="this.style.borderColor = 'var(--admin-primary)'" 
-                             onmouseout="this.style.borderColor = 'var(--admin-border)'">
-                            <img src="${img.media_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22%3E%3Crect fill=%22%231e293b%22 width=%22200%22 height=%22150%22/%3E%3C/svg%3E'">
+                             onmouseout="this.style.borderColor = '${isActive ? 'var(--admin-border)' : '#ef4444'}'"
+                             data-gallery-id="${img.id}">
+                            <img src="${imageUrl}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22%3E%3Crect fill=%22%231e293b%22 width=%22200%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23666%22%3EDeleted%3C/text%3E%3C/svg%3E'">
                             <div style="padding: 1rem;">
-                                <p style="font-size: 0.85rem; color: #a8e6a1; margin-bottom: 0.5rem;">${img.text?.substring(0, 30) || 'No description'}</p>
+                                <p style="font-size: 0.85rem; color: #a8e6a1; margin-bottom: 0.5rem; font-weight: 600;">${img.title || img.description?.substring(0, 30) || 'Untitled'}</p>
                                 <p style="font-size: 0.75rem; color: #8cd682; margin-bottom: 0.5rem;">${new Date(img.created_at).toLocaleDateString()}</p>
+                                <p style="font-size: 0.7rem; color: ${isActive ? '#8cd682' : '#ef4444'}; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-circle" style="font-size: 0.5rem;"></i> ${isActive ? 'Active' : 'Hidden'}
+                                </p>
                                 <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-icon" style="flex: 1; background: ${isActive ? '#64748b' : 'var(--admin-primary)'};" title="${isActive ? 'Hide' : 'Show'} image" onclick="toggleGalleryImage('${img.id}', ${!isActive})">
+                                        <i class="fas fa-eye${isActive ? '-slash' : ''}"></i>
+                                    </button>
                                     <button class="btn-icon btn-delete" style="flex: 1;" title="Delete image" onclick="deleteImageFromGallery('${img.id}', '${img.media_url}')">
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </div>
@@ -1499,36 +1752,95 @@
 
             } catch (err) {
                 console.error('Error loading gallery curation:', err);
-                document.getElementById('galleryCurationContent').innerHTML = `<div class="alert alert-error">Error loading images: ${err.message}</div>`;
+                document.getElementById('galleryCurationContent').innerHTML = `<div class="alert alert-error">Error loading gallery: ${err.message}<br><small>Make sure you've run the gallery table migration SQL.</small></div>`;
+            }
+        }
+
+        // Toggle gallery image visibility
+        async function toggleGalleryImage(galleryId, newActiveState) {
+            try {
+                console.log('Toggling gallery image:', galleryId, 'to', newActiveState);
+                
+                const { error } = await sbClient
+                    .from('gallery')
+                    .update({ active: newActiveState })
+                    .eq('id', galleryId);
+                
+                if (error) throw error;
+                
+                console.log('Successfully toggled image visibility');
+                loadGalleryCuration();
+                
+            } catch (err) {
+                console.error('Error toggling image:', err);
+                alert('Error updating image visibility: ' + err.message);
             }
         }
 
         // Delete image from gallery
-        async function deleteImageFromGallery(postId, mediaUrl) {
-            if (!confirm('Delete this image? This will remove it from both the gallery and community posts.')) return;
+        async function deleteImageFromGallery(galleryId, mediaUrl) {
+            if (!confirm('Delete this image permanently? This cannot be undone.')) return;
+
+            // Show loading state
+            const imageCard = document.querySelector(`[data-gallery-id="${galleryId}"]`);
+            if (imageCard) {
+                imageCard.style.opacity = '0.5';
+                imageCard.style.pointerEvents = 'none';
+                imageCard.innerHTML = '<div style="padding: 2rem; text-align: center;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--admin-primary);"></i><p style="color: #8cd682; margin-top: 1rem;">Deleting...</p></div>';
+            }
 
             try {
-                // Delete the post
-                const { error } = await sbClient.from('posts').delete().eq('id', postId);
-                if (error) throw error;
+                console.log('Deleting gallery item:', galleryId, 'URL:', mediaUrl);
 
-                // Optionally delete from storage
+                // First, delete from storage
+                let storageDeleted = false;
                 if (mediaUrl && mediaUrl.includes('/storage/v1/object/public/community-media/')) {
                     try {
-                        const key = mediaUrl.split('/community-media/')[1];
+                        const key = mediaUrl.split('/community-media/')[1].split('?')[0]; // Remove query params
                         if (key) {
-                            await sbClient.storage.from('community-media').remove([key]);
+                            console.log('Attempting to delete from storage:', key);
+                            const { error: storageError } = await sbClient.storage.from('community-media').remove([key]);
+                            if (storageError) {
+                                console.error('Storage deletion error:', storageError);
+                                // Don't throw - continue to delete from database even if storage fails
+                                console.warn('Continuing with database deletion despite storage error');
+                            } else {
+                                storageDeleted = true;
+                                console.log('Successfully deleted from storage:', key);
+                            }
                         }
                     } catch (storageErr) {
                         console.error('Error deleting from storage:', storageErr);
+                        // Continue anyway
                     }
                 }
 
-                alert('Image deleted successfully');
-                loadGalleryCuration();
+                // Delete from gallery table
+                console.log('Attempting to delete from gallery table:', galleryId);
+                const { error } = await sbClient.from('gallery').delete().eq('id', galleryId);
+                if (error) {
+                    console.error('Gallery deletion error:', error);
+                    throw new Error(`Failed to delete from gallery: ${error.message}`);
+                }
+                console.log('Successfully deleted from gallery table');
+
+                alert(`✓ Image deleted successfully\n\nStorage file: ${storageDeleted ? 'Deleted' : 'Skipped or not found'}\nGallery entry: Deleted`);
+                
+                // Wait a moment before reloading
+                setTimeout(() => {
+                    loadGalleryCuration();
+                }, 300);
 
             } catch (err) {
-                alert('Error deleting image: ' + err.message);
+                console.error('Delete error:', err);
+                alert('❌ Error deleting image: ' + err.message);
+                
+                // Restore the card on error
+                if (imageCard) {
+                    imageCard.style.opacity = '1';
+                    imageCard.style.pointerEvents = 'auto';
+                }
+                loadGalleryCuration(); // Reload to restore UI
             }
         }
 
@@ -1570,17 +1882,21 @@
                             .from('community-media')
                             .getPublicUrl(filePath);
 
-                        // Create post entry (optional - only if you have posts table)
-                        try {
-                            await sbClient.from('posts').insert([{
-                                user_id: currentUser.id,
-                                text: `Admin uploaded ${mediaType}`,
-                                media_url: urlData.publicUrl,
-                                media_type: mediaType,
-                                created_at: new Date().toISOString()
-                            }]);
-                        } catch (postErr) {
-                            console.log('Post entry skipped (table may not exist):', postErr);
+                        // Insert into gallery table
+                        const { error: galleryError } = await sbClient.from('gallery').insert([{
+                            title: file.name.replace(/\.[^/.]+$/, ''), // Filename without extension
+                            description: `Uploaded ${mediaType} - ${new Date().toLocaleDateString()}`,
+                            media_url: urlData.publicUrl,
+                            media_type: mediaType,
+                            active: true,
+                            display_order: 0,
+                            uploaded_by: currentUser.id,
+                            created_at: new Date().toISOString()
+                        }]);
+
+                        if (galleryError) {
+                            console.error('Gallery insert error:', galleryError);
+                            throw new Error(`Failed to add to gallery: ${galleryError.message}`);
                         }
 
                         successCount++;
@@ -2040,6 +2356,6 @@
     </script>
     
     <!-- Event Management Functions -->
-    <script src="js/admin-events.js?v=11" defer></script>
+    <script src="js/admin-events.js?v=12" defer></script>
 </body>
 </html>
