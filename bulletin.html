@@ -8,24 +8,33 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html#home" class="nav-link">Home</a></li>
-                <li><a href="index.html#about" class="nav-link">About</a></li>
-                <li><a href="index.html#events" class="nav-link">Events</a></li>
-                <li><a href="community.html" class="nav-link active">Community</a></li>
-                <li><a href="membership.html" class="nav-link">Join Us</a></li>
-                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
-            </ul>
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-menu" id="hamburgerMenu" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Slide-out Menu -->
+    <nav class="slide-menu" id="slideMenu">
+        <div class="slide-menu-header">
+            <h3>Menu</h3>
+            <button class="close-menu" id="closeMenu">&times;</button>
         </div>
+        <ul class="slide-menu-items">
+            <li><a href="index.html#home" class="menu-link">Home</a></li>
+            <li><a href="index.html#events" class="menu-link">View Events</a></li>
+            <li><a href="hackathon.html" class="menu-link">Hack-a-thon</a></li>
+            <li><a href="index.html#workshops" class="menu-link">Workshops</a></li>
+            <li><a href="index.html#competitions" class="menu-link">Competitions</a></li>
+            <li><a href="index.html#founders" class="menu-link">Founders</a></li>
+            <li><a href="index.html#sponsors" class="menu-link">Sponsors</a></li>
+            <li><a href="community.html" class="menu-link">Community</a></li>
+            <li><a href="sponsorship.html" class="menu-link">Sponsorship</a></li>
+            <li><a href="contact.html" class="menu-link">Contact</a></li>
+        </ul>
     </nav>
+    <div class="menu-overlay" id="menuOverlay"></div>
 
     <!-- Community Bulletin Board Section -->
     <section class="bulletin-page">
