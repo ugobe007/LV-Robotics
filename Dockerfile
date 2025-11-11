@@ -10,6 +10,7 @@ COPY community.html /usr/share/nginx/html/
 COPY bulletin.html /usr/share/nginx/html/
 COPY contact.html /usr/share/nginx/html/
 COPY sponsorship.html /usr/share/nginx/html/
+COPY hackathon.html /usr/share/nginx/html/
 COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/
 COPY images/ /usr/share/nginx/html/images/
