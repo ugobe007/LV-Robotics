@@ -33,6 +33,12 @@ build/
 .env.*.local
 .env*.example
 
+# Centralized credentials folder (config/) — keep README + template,
+# but NEVER commit the file holding real secret values.
+config/secrets.env
+config/*.secret.env
+config/*.local.env
+
 # Sensitive configuration files
 *.key
 *.pem
