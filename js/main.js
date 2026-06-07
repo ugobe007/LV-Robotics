@@ -115,10 +115,22 @@ function initHeroCarousel() {
 
     const slidesData = [
         { src: 'images/hero/robot-vegas.jpg', caption: 'Built in Las Vegas' },
+        { src: 'images/hero/optimus-ballet.png', caption: 'Humanoids find their balance' },
+        { src: 'images/hero/gxo-apollo-hero.png', caption: 'Apollo on the warehouse floor' },
         { src: 'images/hero/figure01.jpg', caption: 'The age of humanoids' },
+        { src: 'images/hero/humanoid-fleet.png', caption: 'Fleets at scale' },
+        { src: 'images/hero/gxo-warehouse-box.png', caption: 'Robots at work' },
         { src: 'images/hero/unitree-running.jpg', caption: 'Machines in motion' },
+        { src: 'images/hero/apptronik-sorting.png', caption: 'Dexterity, sorted' },
+        { src: 'images/hero/humanoid-dance.png', caption: 'Machines that move with us' },
         { src: 'images/hero/humanoid-bending.jpg', caption: 'Engineering intelligence' },
+        { src: 'images/hero/robot-stacking-blocks.png', caption: 'Precision, block by block' },
+        { src: 'images/hero/expo-manipulation.png', caption: 'Hands-on automation' },
+        { src: 'images/hero/optimus-dancing.png', caption: 'A new kind of teammate' },
+        { src: 'images/hero/robot-high-kick.png', caption: 'Agility in motion' },
         { src: 'images/hero/community.jpg', caption: 'A community of builders' },
+        { src: 'images/hero/lunar-space-elevator.png', caption: 'Reaching beyond Earth' },
+        { src: 'images/hero/orbital-interior.png', caption: 'Designing tomorrow' },
         { src: 'images/hero/humanoid.jpg', caption: 'Designing the future' },
     ];
 
