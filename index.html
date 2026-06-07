@@ -7,7 +7,8 @@
     <link rel="icon" type="image/png" href="images/lv-robotics-icon-2026.png">
     <link rel="apple-touch-icon" href="images/lv-robotics-icon-2026.png">
     <meta name="theme-color" content="#050807">
-    <link rel="stylesheet" href="css/styles.css?v=33">
+    <link rel="preload" as="image" href="images/hero/robot-vegas.jpg">
+    <link rel="stylesheet" href="css/styles.css?v=34">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -41,6 +42,9 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <div class="hero-bg-carousel" id="heroCarousel"></div>
+        <div class="hero-bg-caption" id="heroCaption"></div>
+        <a href="#events" class="hero-scroll-cue" aria-label="Scroll to events"><i class="fas fa-chevron-down"></i></a>
         <div class="bulletin-cta">
             <a href="community.html" class="btn-bulletin">📋 Community Bulletin Board</a>
         </div>
@@ -61,6 +65,30 @@
             </div>
         </div>
         <div class="particles" id="particles"></div>
+    </section>
+
+    <!-- Stats Band -->
+    <section class="stats-band">
+        <div class="container">
+            <div class="stats-band-grid">
+                <div class="stat">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Community Members</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Events Hosted</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">20+</span>
+                    <span class="stat-label">Workshops</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Annual Competitions</span>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Robot Banner -->
@@ -472,7 +500,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
-    <script src="js/main.js?v=16" defer></script>
+    <script src="js/main.js?v=17" defer></script>
     <script>
         // Diagnostic logging
         console.log('='.repeat(60));

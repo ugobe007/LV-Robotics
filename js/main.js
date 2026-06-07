@@ -108,6 +108,57 @@ function createParticles() {
     }
 }
 
+// Hero background photo carousel (depth + meaning)
+function initHeroCarousel() {
+    const carousels = document.querySelectorAll('.hero-bg-carousel');
+    if (!carousels.length) return;
+
+    const slidesData = [
+        { src: 'images/hero/robot-vegas.jpg', caption: 'Built in Las Vegas' },
+        { src: 'images/hero/figure01.jpg', caption: 'The age of humanoids' },
+        { src: 'images/hero/unitree-running.jpg', caption: 'Machines in motion' },
+        { src: 'images/hero/humanoid-bending.jpg', caption: 'Engineering intelligence' },
+        { src: 'images/hero/community.jpg', caption: 'A community of builders' },
+        { src: 'images/hero/humanoid.jpg', caption: 'Designing the future' },
+    ];
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    carousels.forEach(carousel => {
+        // Caption is an adjacent .hero-bg-caption within the same hero section
+        const captionEl = (carousel.parentElement || document).querySelector('.hero-bg-caption');
+
+        const slides = slidesData.map((d, i) => {
+            const el = document.createElement('div');
+            el.className = 'hero-bg-slide';
+            el.style.backgroundImage = `url('${d.src}')`;
+            if (i === 0) el.classList.add('active');
+            carousel.appendChild(el);
+            const pre = new Image();
+            pre.src = d.src;
+            return el;
+        });
+
+        if (captionEl) captionEl.textContent = slidesData[0].caption;
+
+        if (slides.length <= 1 || prefersReduced) return;
+
+        let idx = 0;
+        setInterval(() => {
+            slides[idx].classList.remove('active');
+            idx = (idx + 1) % slides.length;
+            slides[idx].classList.add('active');
+            if (captionEl) {
+                captionEl.style.opacity = '0';
+                setTimeout(() => {
+                    captionEl.textContent = slidesData[idx].caption;
+                    captionEl.style.opacity = '1';
+                }, 400);
+            }
+        }, 6000);
+    });
+}
+
 // Add CSS animation for particles
 const style = document.createElement('style');
 style.textContent = `
@@ -190,8 +241,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.warn('⚠ Supabase not available, some features may not work');
     }
     
-    // Initialize particles
+    // Initialize particles + hero background carousel
     createParticles();
+    initHeroCarousel();
     
     // Mobile Menu Toggle
     const hamburger = document.getElementById('hamburger');
@@ -1315,7 +1367,7 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Observe all cards and sections
-document.querySelectorAll('.photo-card, .event-card, .workshop-card, .competition-item, .founder-card').forEach(el => {
+document.querySelectorAll('.photo-card, .event-card, .workshop-card, .competition-item, .founder-card, .future-image, .future-text').forEach(el => {
     el.style.opacity = '0';
     observer.observe(el);
 });
