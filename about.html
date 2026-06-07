@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="images/lv-robotics-icon-2026.png">
     <link rel="apple-touch-icon" href="images/lv-robotics-icon-2026.png">
     <meta name="theme-color" content="#050807">
-    <link rel="stylesheet" href="css/styles.css?v=42">
+    <link rel="stylesheet" href="css/styles.css?v=43">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -42,136 +42,185 @@
     </nav>
     <div class="menu-overlay" id="menuOverlay"></div>
 
-    <!-- About Section -->
-    <section class="about-page">
+    <!-- Hero -->
+    <section class="vv-hero about-hero">
+        <div class="vv-hero-inner">
+            <span class="vv-eyebrow">Who We Are</span>
+            <h1>About <span class="highlight">LV Robotics</span></h1>
+            <p class="vv-hero-tagline">Building the future of robotics in Las Vegas — one innovator at a time.</p>
+            <div class="vv-hero-buttons">
+                <a href="membership.html" class="btn btn-primary">Become a Member</a>
+                <a href="#what" class="btn btn-secondary">What We Do</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats band -->
+    <section class="vv-section">
         <div class="container">
-            <h1 class="page-title" style="color: white; font-size: 3.5rem; margin-bottom: 1.5rem; text-align: center;">
-                About <span class="highlight" style="color: #a8e6a1;">LV Robotics</span>
-            </h1>
-            <p class="page-subtitle" style="color: #e2e8f0; font-size: 1.3rem; margin-bottom: 3rem; text-align: center;">
-                Building the future of robotics, one innovator at a time
-            </p>
-
-            <!-- Mission Section -->
-            <div class="about-section" style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 3rem; margin-bottom: 3rem;">
-                <h2 style="color: #a8e6a1; font-size: 2.5rem; margin-bottom: 1.5rem; text-align: center;">
-                    <i class="fas fa-rocket"></i> Our Mission
-                </h2>
-                <p style="color: #e2e8f0; font-size: 1.2rem; line-height: 1.8; text-align: center; max-width: 800px; margin: 0 auto;">
-                    LV Robotics is dedicated to fostering innovation, education, and collaboration in the Las Vegas robotics community. 
-                    We bring together students, professionals, educators, and enthusiasts to explore, learn, and create the future of robotics and automation.
-                </p>
-            </div>
-
-            <!-- What We Do -->
-            <div class="about-section" style="margin-bottom: 3rem;">
-                <h2 style="color: #a8e6a1; font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">
-                    What We Do
-                </h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                    <!-- Card 1 -->
-                    <div style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 2rem; text-align: center;">
-                        <i class="fas fa-chalkboard-teacher" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
-                        <h3 style="color: #a8e6a1; font-size: 1.5rem; margin-bottom: 1rem;">Workshops & Training</h3>
-                        <p style="color: #cbd5e1; line-height: 1.6;">
-                            Hands-on workshops covering robotics fundamentals, programming, electronics, and advanced topics for all skill levels.
-                        </p>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 2rem; text-align: center;">
-                        <i class="fas fa-trophy" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
-                        <h3 style="color: #a8e6a1; font-size: 1.5rem; margin-bottom: 1rem;">Competitions</h3>
-                        <p style="color: #cbd5e1; line-height: 1.6;">
-                            Exciting robotics challenges and competitions that push creativity, problem-solving, and technical skills to new heights.
-                        </p>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 2rem; text-align: center;">
-                        <i class="fas fa-users" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
-                        <h3 style="color: #a8e6a1; font-size: 1.5rem; margin-bottom: 1rem;">Community Events</h3>
-                        <p style="color: #cbd5e1; line-height: 1.6;">
-                            Regular meetups, demo days, and networking events connecting robotics enthusiasts across Las Vegas.
-                        </p>
-                    </div>
-
-                    <!-- Card 4 -->
-                    <div style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 2rem; text-align: center;">
-                        <i class="fas fa-graduation-cap" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
-                        <h3 style="color: #a8e6a1; font-size: 1.5rem; margin-bottom: 1rem;">Fellowship Program</h3>
-                        <p style="color: #cbd5e1; line-height: 1.6;">
-                            Mentorship and guidance for aspiring roboticists, providing pathways to careers in robotics and automation.
-                        </p>
-                    </div>
-
-                    <!-- Card 5 -->
-                    <div style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 2rem; text-align: center;">
-                        <i class="fas fa-handshake" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
-                        <h3 style="color: #a8e6a1; font-size: 1.5rem; margin-bottom: 1rem;">Partnerships</h3>
-                        <p style="color: #cbd5e1; line-height: 1.6;">
-                            Collaborations with schools, universities, and companies to advance robotics education and innovation.
-                        </p>
-                    </div>
-
-                    <!-- Card 6 -->
-                    <div style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 2rem; text-align: center;">
-                        <i class="fas fa-project-diagram" style="font-size: 3rem; color: #a8e6a1; margin-bottom: 1rem;"></i>
-                        <h3 style="color: #a8e6a1; font-size: 1.5rem; margin-bottom: 1rem;">Projects & Labs</h3>
-                        <p style="color: #cbd5e1; line-height: 1.6;">
-                            Access to maker spaces and resources for building, testing, and showcasing robotics projects.
-                        </p>
-                    </div>
+            <div class="vv-stats">
+                <div class="vv-stat">
+                    <span class="num">14+</span>
+                    <span class="label">Meetups &amp; Demos</span>
+                    <span class="sub">Community gatherings, talks, and hands-on robot demos across the valley.</span>
                 </div>
-            </div>
-
-            <!-- Values Section -->
-            <div class="about-section" style="background: rgba(168, 230, 161, 0.05); border: 2px solid rgba(168, 230, 161, 0.2); border-radius: 12px; padding: 3rem; margin-bottom: 3rem;">
-                <h2 style="color: #a8e6a1; font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">
-                    Our Values
-                </h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto;">
-                    <div style="text-align: center;">
-                        <h3 style="color: #a8e6a1; font-size: 1.3rem; margin-bottom: 0.5rem;">Innovation</h3>
-                        <p style="color: #cbd5e1;">Pushing boundaries and exploring new possibilities in robotics technology</p>
-                    </div>
-                    <div style="text-align: center;">
-                        <h3 style="color: #a8e6a1; font-size: 1.3rem; margin-bottom: 0.5rem;">Education</h3>
-                        <p style="color: #cbd5e1;">Making robotics accessible and understandable for everyone</p>
-                    </div>
-                    <div style="text-align: center;">
-                        <h3 style="color: #a8e6a1; font-size: 1.3rem; margin-bottom: 0.5rem;">Community</h3>
-                        <p style="color: #cbd5e1;">Building a supportive network of robotics enthusiasts</p>
-                    </div>
-                    <div style="text-align: center;">
-                        <h3 style="color: #a8e6a1; font-size: 1.3rem; margin-bottom: 0.5rem;">Collaboration</h3>
-                        <p style="color: #cbd5e1;">Working together to achieve greater innovations</p>
-                    </div>
+                <div class="vv-stat">
+                    <span class="num">6</span>
+                    <span class="label">Community Programs</span>
+                    <span class="sub">Workshops, competitions, fellowship, partnerships, events, and labs.</span>
                 </div>
-            </div>
-
-            <!-- Join Us CTA -->
-            <div style="text-align: center; padding: 3rem 0;">
-                <h2 style="color: #a8e6a1; font-size: 2.5rem; margin-bottom: 1.5rem;">
-                    Join Our Community
-                </h2>
-                <p style="color: #e2e8f0; font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
-                    Whether you're a beginner or expert, student or professional, there's a place for you in LV Robotics.
-                </p>
-                <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-                    <a href="membership.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                        <i class="fas fa-user-plus"></i> Become a Member
-                    </a>
-                    <a href="index.html#events" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                        <i class="fas fa-calendar"></i> View Upcoming Events
-                    </a>
-                    <a href="contact.html" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem; background: rgba(168, 230, 161, 0.1); border: 2px solid #a8e6a1; color: #a8e6a1;">
-                        <i class="fas fa-envelope"></i> Contact Us
-                    </a>
+                <div class="vv-stat">
+                    <span class="num">2040</span>
+                    <span class="label">Our Horizon</span>
+                    <span class="sub">A long-term plan to make Las Vegas the robot capital of the world.</span>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Mission -->
+    <section class="vv-section" id="mission">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Mission</h2>
+            </div>
+            <div class="about-mission">
+                <p>
+                    LV Robotics is dedicated to fostering innovation, education, and collaboration in the Las Vegas
+                    robotics community. We bring together students, professionals, educators, and enthusiasts to
+                    explore, learn, and create the future of robotics and automation.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Do -->
+    <section class="vv-section" id="what" style="background: var(--light-bg);">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What We Do</h2>
+                <p class="section-subtitle">Six ways we help people build, learn, and connect around robotics.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>Workshops &amp; Training</h3>
+                    <p>Hands-on workshops covering robotics fundamentals, programming, electronics, and advanced topics for all skill levels.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Competitions</h3>
+                    <p>Robotics challenges and competitions that push creativity, problem-solving, and technical skills to new heights.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Community Events</h3>
+                    <p>Regular meetups, demo days, and networking events connecting robotics enthusiasts across Las Vegas.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Fellowship Program</h3>
+                    <p>Mentorship and guidance for aspiring roboticists, providing pathways to careers in robotics and automation.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Partnerships</h3>
+                    <p>Collaborations with schools, universities, and companies to advance robotics education and innovation.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>Projects &amp; Labs</h3>
+                    <p>Access to maker spaces and resources for building, testing, and showcasing robotics projects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values -->
+    <section class="vv-section" id="values">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Values</h2>
+            </div>
+            <div class="about-values">
+                <div class="about-value">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Innovation</h3>
+                    <p>Pushing boundaries and exploring new possibilities in robotics technology.</p>
+                </div>
+                <div class="about-value">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Education</h3>
+                    <p>Making robotics accessible and understandable for everyone.</p>
+                </div>
+                <div class="about-value">
+                    <i class="fas fa-people-group"></i>
+                    <h3>Community</h3>
+                    <p>Building a supportive network of robotics enthusiasts.</p>
+                </div>
+                <div class="about-value">
+                    <i class="fas fa-handshake-angle"></i>
+                    <h3>Collaboration</h3>
+                    <p>Working together to achieve greater innovations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Us CTA -->
+    <section class="vv-section" style="background: var(--light-bg);">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Join Our Community</h2>
+            </div>
+            <div class="about-cta">
+                <p>Whether you're a beginner or expert, student or professional, there's a place for you in LV Robotics.</p>
+                <div class="about-cta-buttons">
+                    <a href="membership.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> Become a Member</a>
+                    <a href="index.html#events" class="btn btn-secondary"><i class="fas fa-calendar"></i> View Events</a>
+                    <a href="contact.html" class="btn btn-secondary"><i class="fas fa-envelope"></i> Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>LV Robotics</h3>
+                    <p>Building the future of robotics in Las Vegas</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="vision.html">Vision Vegas 2040</a></li>
+                        <li><a href="robots.html">Robot Intelligence</a></li>
+                        <li><a href="index.html#events">Events</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@lvrobotics.org</li>
+                        <li><i class="fas fa-phone"></i> (702) 555-0123</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Las Vegas, NV</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 LV Robotics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="js/main.js?v=23" defer></script>
 </body>
