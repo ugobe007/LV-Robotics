@@ -299,9 +299,10 @@ body {
     padding: 2.75rem 2.5rem;
     animation: fadeInUp 1s ease-out;
     margin: 0 auto;
-    background: rgba(3, 8, 6, 0.42);
-    backdrop-filter: blur(7px);
-    border: 1px solid rgba(46, 204, 113, 0.18);
+    background: rgba(3, 8, 6, 0.52);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(46, 204, 113, 0.22);
     border-radius: 28px;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 }
@@ -456,15 +457,20 @@ body {
     to   { transform: scale(1.18); }
 }
 
-/* Dark green wash over photos to keep hero text legible */
+/* Light top/bottom scrim — keeps nav + text legible while letting the
+   carousel photos show through clearly (text has its own frosted card). */
 .hero-bg-carousel::after {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-        linear-gradient(180deg, rgba(3, 5, 4, 0.72) 0%, rgba(5, 16, 9, 0.55) 45%, rgba(3, 5, 4, 0.9) 100%),
-        radial-gradient(circle at 50% 38%, rgba(46, 204, 113, 0.2) 0%, transparent 62%);
-    z-index: 2;
+    background: linear-gradient(
+        180deg,
+        rgba(3, 6, 4, 0.60) 0%,
+        rgba(4, 10, 7, 0.22) 32%,
+        rgba(4, 10, 7, 0.22) 60%,
+        rgba(3, 6, 4, 0.82) 100%
+    );
+    z-index: 1;
     pointer-events: none;
 }
 
