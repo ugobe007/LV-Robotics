@@ -1928,7 +1928,7 @@ function injectNavbar() {
     nav.innerHTML = `
         <div class="site-nav-inner">
             <a class="site-nav-brand" href="index.html#home">
-                <img src="images/LVRobot_Green_new_Logo.png" alt="LV Robotics">
+                <img src="images/lv-robotics-mark-2026.png" alt="LV Robotics">
                 <span>LV Robotics</span>
             </a>
             <nav class="site-nav-links">${linksHtml}</nav>

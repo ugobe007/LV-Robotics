@@ -3880,7 +3880,7 @@ section[id] {
     text-decoration: none;
     margin-right: auto;
 }
-.site-nav-brand img { height: 40px; width: auto; display: block; }
+.site-nav-brand img { height: 40px; width: auto; display: block; mix-blend-mode: screen; }
 .site-nav-brand span {
     color: #fff;
     font-weight: 800;
