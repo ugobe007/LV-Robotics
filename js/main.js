@@ -1912,6 +1912,7 @@ function injectNavbar() {
     const links = [
         { label: 'Home', href: 'index.html#home', match: ['index.html', ''] },
         { label: 'Vision 2040', href: 'vision.html', match: ['vision.html'] },
+        { label: 'Robot Intel', href: 'robots.html', match: ['robots.html'] },
         { label: 'Events', href: 'index.html#events', match: ['event.html'] },
         { label: 'Community', href: 'community.html', match: ['community.html', 'bulletin.html'] },
         { label: 'About', href: 'about.html', match: ['about.html'] },
@@ -2109,6 +2110,147 @@ async function loadPastEvents() {
         if (section) section.style.display = 'none';
     }
 }
+
+// ============================================
+// ReadyForRobots intelligence (robots.html)
+// Data is proxied same-origin via nginx /rfr-api/ to avoid CORS.
+// ============================================
+const RFR_API_BASE = '/rfr-api';
+
+function rfrEscape(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function rfrStatusClass(status) {
+    const s = (status || '').toLowerCase();
+    if (s.includes('deploy') || s.includes('available') || s.includes('production')) return 'is-deployed';
+    if (s.includes('pilot') || s.includes('trial')) return 'is-pilot';
+    return 'is-research';
+}
+
+function rfrStatusLabel(status) {
+    const s = (status || '').toLowerCase();
+    if (s.includes('deploy') || s.includes('production')) return 'Deployed';
+    if (s.includes('available')) return 'Available';
+    if (s.includes('pilot') || s.includes('trial')) return 'Pilot';
+    if (s.includes('research')) return 'Research';
+    return status ? status.charAt(0).toUpperCase() + status.slice(1) : 'Unknown';
+}
+
+async function loadHumanoidBenchmark() {
+    const board = document.getElementById('benchmarkBoard');
+    if (!board) return; // Not on robots.html
+
+    try {
+        const res = await fetch(`${RFR_API_BASE}/humanoid/robots`, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        let robots = (data && data.robots) || [];
+
+        robots = robots
+            .filter(r => r && (r.score_total != null) && r.name)
+            .sort((a, b) => (b.score_total || 0) - (a.score_total || 0))
+            .slice(0, 10);
+
+        if (robots.length === 0) {
+            board.innerHTML = '<div class="ri-empty">Benchmark data is being refreshed — check back soon.</div>';
+            return;
+        }
+
+        const rows = robots.map((r, i) => {
+            const score = Math.round(r.score_total || 0);
+            const heir = (r.heif_total != null) ? Number(r.heif_total).toFixed(2) : '—';
+            const statusClass = rfrStatusClass(r.status);
+            const statusLabel = rfrStatusLabel(r.status);
+            const url = r.product_url ? rfrEscape(r.product_url) : '';
+            const nameCell = url
+                ? `<a href="${url}" target="_blank" rel="noopener">${rfrEscape(r.name)}</a>`
+                : rfrEscape(r.name);
+            return `
+                <div class="ri-row">
+                    <div class="ri-rank">${i + 1}</div>
+                    <div class="ri-robot">
+                        <span class="ri-robot-name">${nameCell}</span>
+                        <span class="ri-robot-vendor">${rfrEscape(r.vendor || '')}</span>
+                    </div>
+                    <div class="ri-status"><span class="ri-badge ${statusClass}">${statusLabel}</span></div>
+                    <div class="ri-score">
+                        <div class="ri-score-num">${score}</div>
+                        <div class="ri-score-bar"><span style="width:${Math.min(100, score)}%"></span></div>
+                        <div class="ri-heir">HEIR ${heir}/5</div>
+                    </div>
+                </div>`;
+        }).join('');
+
+        board.innerHTML = `
+            <div class="ri-row ri-head">
+                <div class="ri-rank">#</div>
+                <div class="ri-robot">Robot</div>
+                <div class="ri-status">Status</div>
+                <div class="ri-score">HEIR Score</div>
+            </div>
+            ${rows}`;
+        console.log(`✓ Loaded ${robots.length} humanoid benchmarks from ReadyForRobots`);
+    } catch (err) {
+        console.error('Error loading humanoid benchmark:', err);
+        board.innerHTML = '<div class="ri-empty">Couldn\u2019t reach the live benchmark right now. <a href="https://readyforrobots.com/robots" target="_blank" rel="noopener">View it on ReadyForRobots →</a></div>';
+    }
+}
+
+async function loadRobotBrief() {
+    const grid = document.getElementById('briefGrid');
+    if (!grid) return; // Not on robots.html
+
+    try {
+        const res = await fetch(`${RFR_API_BASE}/newsletter/edition`, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const stories = (data && data.topStories) || [];
+        const top = stories.filter(s => s && s.company).slice(0, 6);
+
+        if (top.length === 0) {
+            grid.innerHTML = '<div class="ri-empty">Today\u2019s brief is being assembled — check back soon.</div>';
+            return;
+        }
+
+        grid.innerHTML = top.map(s => {
+            const company = rfrEscape(s.company);
+            const category = rfrEscape(s.category || 'Signal');
+            const impact = rfrEscape(s.impact || '');
+            const text = rfrEscape(s.snippet || s.summary || '');
+            return `
+                <article class="ri-brief-card">
+                    <div class="ri-brief-top">
+                        <span class="ri-brief-tag">${category}</span>
+                        ${impact ? `<span class="ri-brief-impact">${impact}</span>` : ''}
+                    </div>
+                    <h3>${company}</h3>
+                    <p>${text}</p>
+                </article>`;
+        }).join('');
+
+        const genAt = data && data.summary && data.summary.generated_at;
+        if (genAt) {
+            const stamp = new Date(genAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const sec = document.querySelector('.ri-brief-section .section-subtitle');
+            if (sec) sec.insertAdjacentHTML('beforeend', ` <span class="ri-stamp">Updated ${stamp}</span>`);
+        }
+        console.log(`✓ Loaded ${top.length} brief stories from ReadyForRobots`);
+    } catch (err) {
+        console.error('Error loading robot brief:', err);
+        grid.innerHTML = '<div class="ri-empty">Couldn\u2019t reach today\u2019s brief right now. <a href="https://readyforrobots.com" target="_blank" rel="noopener">Read it on ReadyForRobots →</a></div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadHumanoidBenchmark();
+    loadRobotBrief();
+});
 
 debugLog('🤖 LV Robotics website loaded successfully!');
 debugLog('💡 Tip: Try the Konami code for a surprise!');

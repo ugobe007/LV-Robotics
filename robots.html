@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Intelligence - LV Robotics</title>
+    <meta name="description" content="Live robot intelligence for Las Vegas: the Humanoid Robot Benchmark (HEIR) leaderboard and the Daily Robot Intelligence Brief, powered by ReadyForRobots.">
+    <link rel="icon" type="image/png" href="images/lv-robotics-icon-2026.png">
+    <link rel="apple-touch-icon" href="images/lv-robotics-icon-2026.png">
+    <meta name="theme-color" content="#050807">
+    <link rel="stylesheet" href="css/styles.css?v=42">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-menu" id="hamburgerMenu" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Slide-out Menu -->
+    <nav class="slide-menu" id="slideMenu">
+        <div class="slide-menu-header">
+            <h3>Menu</h3>
+            <button class="close-menu" id="closeMenu">&times;</button>
+        </div>
+        <ul class="slide-menu-items">
+            <li><a href="index.html#home" class="menu-link">Home</a></li>
+            <li><a href="vision.html" class="menu-link">Vision Vegas 2040</a></li>
+            <li><a href="robots.html" class="menu-link active">Robot Intelligence</a></li>
+            <li><a href="index.html#events" class="menu-link">View Events</a></li>
+            <li><a href="index.html#hackathon" class="menu-link">Hack-a-thon</a></li>
+            <li><a href="index.html#workshops" class="menu-link">Workshops</a></li>
+            <li><a href="index.html#competitions" class="menu-link">Competitions</a></li>
+            <li><a href="index.html#founders" class="menu-link">Founders</a></li>
+            <li><a href="community.html" class="menu-link">Community</a></li>
+            <li><a href="about.html" class="menu-link">About Us</a></li>
+            <li><a href="sponsorship.html" class="menu-link">Sponsorship</a></li>
+            <li><a href="contact.html" class="menu-link">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Hero -->
+    <section class="vv-hero ri-hero">
+        <div class="vv-hero-inner">
+            <span class="vv-eyebrow">Powered by ReadyForRobots</span>
+            <h1>Robot <span class="highlight">Intelligence</span></h1>
+            <p class="vv-hero-tagline">Live humanoid benchmarks and daily automation-demand signals — so our community builds with the real state of the industry.</p>
+            <div class="vv-hero-buttons">
+                <a href="#benchmark" class="btn btn-primary">View the Benchmark</a>
+                <a href="#brief" class="btn btn-secondary">Today's Brief</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Humanoid Benchmark -->
+    <section class="vv-section" id="benchmark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Humanoid Robot Benchmark</h2>
+                <p class="section-subtitle">The HEIR index scores every major humanoid on mobility, manipulation, cognition, safety, data pipeline, and production readiness. Updated weekly.</p>
+            </div>
+            <div id="benchmarkBoard" class="ri-board">
+                <div class="ri-loading"><i class="fas fa-spinner fa-spin"></i> Loading live benchmark…</div>
+            </div>
+            <p class="ri-source">Source: <a href="https://readyforrobots.com/robots" target="_blank" rel="noopener">ReadyForRobots HEIR Index</a></p>
+        </div>
+    </section>
+
+    <!-- Daily Brief -->
+    <section class="vv-section ri-brief-section" id="brief">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Daily Robot Intelligence Brief</h2>
+                <p class="section-subtitle">Where automation demand is forming right now — labor gaps, expansions, and CapEx signals across industry, refreshed every morning.</p>
+            </div>
+            <div id="briefGrid" class="ri-brief-grid">
+                <div class="ri-loading"><i class="fas fa-spinner fa-spin"></i> Loading today's brief…</div>
+            </div>
+            <div class="ri-brief-cta">
+                <a href="https://readyforrobots.com" target="_blank" rel="noopener" class="btn btn-primary">Subscribe to the full brief</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>LV Robotics</h3>
+                    <p>Building the future of robotics in Las Vegas</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="vision.html">Vision Vegas 2040</a></li>
+                        <li><a href="robots.html">Robot Intelligence</a></li>
+                        <li><a href="index.html#events">Events</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@lvrobotics.org</li>
+                        <li><i class="fas fa-phone"></i> (702) 555-0123</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Las Vegas, NV</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 LV Robotics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js?v=23" defer></script>
+</body>
+</html>
