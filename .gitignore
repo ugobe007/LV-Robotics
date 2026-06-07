@@ -87,3 +87,19 @@ coverage/
 node_modules/
 .node_modules/
 *.pid
+
+# Internal / confidential documents (never publish)
+*.pages
+*.pptx
+*.pptx.pdf
+Hyundai*.pdf
+*top_investor_matches*
+*Investors Watchlist*.pdf
+ADD-USER-FEATURE.md
+GALLERY-FIX-INSTRUCTIONS.md
+find-gallery-table.sql
+migrate-posts-to-gallery.sql
+reload-schema-cache.sql
+supabase-gallery-table-migration.sql
+test-gallery-api-access.sql
+verify-gallery-table.sql
