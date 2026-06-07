@@ -1,230 +1,135 @@
--- LV Robotics Events Table with Multi-Platform Publishing
--- Run this in Supabase SQL Editor: https://supabase.com/dashboard/project/tzitghqmrmsxddysxhvc/editor
+-- ==============================================================
+-- LV Robotics — Events Table
+-- Run this in the Supabase SQL Editor for the project used by the
+-- site (see SUPABASE_URL in js/main.js: tzitghqmrmsxddysxhvc).
+-- Safe to run multiple times (idempotent).
+-- ==============================================================
 
--- Create events table
 CREATE TABLE IF NOT EXISTS events (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    
-    -- Basic Event Info
+    slug VARCHAR(255) NOT NULL UNIQUE,
     title VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) UNIQUE, -- URL-friendly version for event pages
+    short_description TEXT,
     description TEXT,
-    short_description VARCHAR(500), -- For social media/cards
-    
-    -- Date & Time
+    image_url TEXT,
+    category VARCHAR(100),
+    is_featured BOOLEAN DEFAULT false,
+    status VARCHAR(20) NOT NULL DEFAULT 'draft',  -- 'draft' | 'published' | 'archived'
+
     start_date TIMESTAMP WITH TIME ZONE NOT NULL,
     end_date TIMESTAMP WITH TIME ZONE,
-    timezone VARCHAR(50) DEFAULT 'America/Los_Angeles',
-    
-    -- Location
+
+    location_type VARCHAR(20) DEFAULT 'in_person', -- 'in_person' | 'virtual' | 'hybrid'
     location_name VARCHAR(255),
     location_address TEXT,
-    location_type VARCHAR(50), -- 'in-person', 'virtual', 'hybrid'
-    virtual_link TEXT,
-    
-    -- Registration
+
+    organizer_name VARCHAR(255),
+    requirements TEXT,
+    gallery_media JSONB DEFAULT '[]'::jsonb,
+
     registration_required BOOLEAN DEFAULT false,
     registration_url TEXT,
     max_attendees INTEGER,
     current_attendees INTEGER DEFAULT 0,
-    
-    -- Media
-    image_url TEXT,
-    banner_url TEXT,
-    
-    -- Categorization
-    category VARCHAR(100), -- 'workshop', 'competition', 'meetup', 'social', 'conference'
-    tags TEXT[], -- Array of tags for filtering
-    
-    -- Publishing
-    status VARCHAR(50) DEFAULT 'draft', -- 'draft', 'published', 'cancelled', 'completed'
-    is_featured BOOLEAN DEFAULT false,
-    publish_date TIMESTAMP WITH TIME ZONE,
-    
-    -- Multi-Platform Publishing Tracking
-    platforms JSONB DEFAULT '{}', -- Stores publishing status for each platform
-    -- Example: {"splashthat": {"published": true, "url": "..."}, "meetup": {"published": false}}
-    
-    -- SEO & Social
-    meta_title VARCHAR(255),
-    meta_description TEXT,
-    og_image TEXT, -- Open Graph image for social sharing
-    
-    -- Organizer
-    organizer_name VARCHAR(255),
-    organizer_email VARCHAR(255),
-    contact_email VARCHAR(255),
-    
-    -- Additional Info
-    requirements TEXT, -- Prerequisites or what to bring
-    agenda JSONB, -- Structured schedule
-    sponsors TEXT[], -- List of sponsor names/logos
-    
-    -- Analytics
+
     view_count INTEGER DEFAULT 0,
-    click_count INTEGER DEFAULT 0
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create indexes for performance
-CREATE INDEX IF NOT EXISTS idx_events_start_date ON events(start_date DESC);
+-- Indexes for the homepage query (status + upcoming start_date) and detail lookups
 CREATE INDEX IF NOT EXISTS idx_events_status ON events(status);
+CREATE INDEX IF NOT EXISTS idx_events_start_date ON events(start_date);
 CREATE INDEX IF NOT EXISTS idx_events_slug ON events(slug);
-CREATE INDEX IF NOT EXISTS idx_events_category ON events(category);
-CREATE INDEX IF NOT EXISTS idx_events_featured ON events(is_featured) WHERE is_featured = true;
 
--- Create full-text search index
-CREATE INDEX IF NOT EXISTS idx_events_search ON events USING gin(to_tsvector('english', title || ' ' || COALESCE(description, '')));
+-- Keep updated_at fresh
+CREATE OR REPLACE FUNCTION set_events_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
--- Enable RLS
+DROP TRIGGER IF EXISTS trg_events_updated_at ON events;
+CREATE TRIGGER trg_events_updated_at
+BEFORE UPDATE ON events
+FOR EACH ROW EXECUTE FUNCTION set_events_updated_at();
+
+-- ----------------------------------------------------------------
+-- Row Level Security
+-- ----------------------------------------------------------------
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 
--- Policy: Anyone can view published events
+-- Anyone can read PUBLISHED events
 DROP POLICY IF EXISTS "Public can view published events" ON events;
 CREATE POLICY "Public can view published events"
 ON events FOR SELECT
-TO public, anon, authenticated
-USING (status = 'published' OR status = 'completed');
+TO anon, authenticated
+USING (status = 'published');
 
--- Policy: Authenticated users can insert events (will be auto-approved by admins)
-DROP POLICY IF EXISTS "Authenticated can create events" ON events;
-CREATE POLICY "Authenticated can create events"
+-- Authenticated users (admins/organizers) can manage events
+DROP POLICY IF EXISTS "Authenticated can insert events" ON events;
+CREATE POLICY "Authenticated can insert events"
 ON events FOR INSERT
 TO authenticated
 WITH CHECK (true);
 
--- Policy: Authenticated users can update their events (or admins can update any)
-DROP POLICY IF EXISTS "Users can update events" ON events;
-CREATE POLICY "Users can update events"
+DROP POLICY IF EXISTS "Authenticated can update events" ON events;
+CREATE POLICY "Authenticated can update events"
 ON events FOR UPDATE
 TO authenticated
-USING (true) -- Admin check will be done in application layer
+USING (true)
 WITH CHECK (true);
 
--- Policy: Authenticated users can delete events
-DROP POLICY IF EXISTS "Users can delete events" ON events;
-CREATE POLICY "Users can delete events"
+DROP POLICY IF EXISTS "Authenticated can delete events" ON events;
+CREATE POLICY "Authenticated can delete events"
 ON events FOR DELETE
 TO authenticated
-USING (true); -- Admin check will be done in application layer
+USING (true);
 
--- Create storage bucket for event images
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('event-images', 'event-images', true)
-ON CONFLICT (id) DO NOTHING;
+-- Optional: safely increment view_count for anonymous visitors without
+-- granting broad UPDATE rights. event.html can call this via rpc('increment_event_view').
+CREATE OR REPLACE FUNCTION increment_event_view(event_id UUID)
+RETURNS void AS $$
+    UPDATE events SET view_count = COALESCE(view_count, 0) + 1 WHERE id = event_id;
+$$ LANGUAGE sql SECURITY DEFINER;
 
--- Storage policies for event images
-DROP POLICY IF EXISTS "Authenticated can upload event images" ON storage.objects;
-CREATE POLICY "Authenticated can upload event images"
-ON storage.objects FOR INSERT
-TO authenticated
-WITH CHECK (bucket_id = 'event-images');
-
-DROP POLICY IF EXISTS "Event images are publicly accessible" ON storage.objects;
-CREATE POLICY "Event images are publicly accessible"
-ON storage.objects FOR SELECT
-USING (bucket_id = 'event-images');
-
-DROP POLICY IF EXISTS "Authenticated can delete event images" ON storage.objects;
-CREATE POLICY "Authenticated can delete event images"
-ON storage.objects FOR DELETE
-TO authenticated
-USING (bucket_id = 'event-images');
-
--- Function to generate slug from title
-CREATE OR REPLACE FUNCTION generate_slug(title TEXT)
-RETURNS TEXT AS $$
-BEGIN
-  RETURN lower(
-    regexp_replace(
-      regexp_replace(title, '[^a-zA-Z0-9\s-]', '', 'g'),
-      '\s+', '-', 'g'
-    )
-  );
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
--- Trigger to auto-generate slug on insert/update
-CREATE OR REPLACE FUNCTION auto_generate_slug()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF NEW.slug IS NULL OR NEW.slug = '' THEN
-    NEW.slug := generate_slug(NEW.title);
-    -- Ensure uniqueness by appending a number if needed
-    WHILE EXISTS (SELECT 1 FROM events WHERE slug = NEW.slug AND id != NEW.id) LOOP
-      NEW.slug := NEW.slug || '-' || floor(random() * 1000)::TEXT;
-    END LOOP;
-  END IF;
-  NEW.updated_at := NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS trigger_auto_slug ON events;
-CREATE TRIGGER trigger_auto_slug
-BEFORE INSERT OR UPDATE ON events
-FOR EACH ROW
-EXECUTE FUNCTION auto_generate_slug();
-
--- Create a view for upcoming events
-CREATE OR REPLACE VIEW upcoming_events AS
-SELECT *
-FROM events
-WHERE status = 'published'
-  AND start_date > NOW()
-ORDER BY start_date ASC;
-
--- Create a view for past events
-CREATE OR REPLACE VIEW past_events AS
-SELECT *
-FROM events
-WHERE status IN ('published', 'completed')
-  AND start_date <= NOW()
-ORDER BY start_date DESC;
-
--- Create event attendees table (optional, for tracking registrations)
-CREATE TABLE IF NOT EXISTS event_attendees (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    email VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    status VARCHAR(50) DEFAULT 'registered', -- 'registered', 'checked-in', 'cancelled', 'waitlist'
-    registered_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    checked_in_at TIMESTAMP WITH TIME ZONE,
-    notes TEXT,
-    UNIQUE(event_id, email)
-);
-
-CREATE INDEX IF NOT EXISTS idx_attendees_event ON event_attendees(event_id);
-CREATE INDEX IF NOT EXISTS idx_attendees_user ON event_attendees(user_id);
-
--- Enable RLS for attendees
-ALTER TABLE event_attendees ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can view their own registrations
-DROP POLICY IF EXISTS "Users view own registrations" ON event_attendees;
-CREATE POLICY "Users view own registrations"
-ON event_attendees FOR SELECT
-TO authenticated
-USING (auth.uid() = user_id OR user_id IS NULL);
-
--- Policy: Users can register for events
-DROP POLICY IF EXISTS "Users can register for events" ON event_attendees;
-CREATE POLICY "Users can register for events"
-ON event_attendees FOR INSERT
-TO authenticated, anon
-WITH CHECK (true);
-
--- Policy: Users can cancel their own registrations
-DROP POLICY IF EXISTS "Users can cancel registrations" ON event_attendees;
-CREATE POLICY "Users can cancel registrations"
-ON event_attendees FOR DELETE
-TO authenticated
-USING (auth.uid() = user_id);
-
-COMMENT ON TABLE events IS 'Stores all LV Robotics events with multi-platform publishing support';
-COMMENT ON COLUMN events.platforms IS 'JSONB object tracking publishing status across platforms (SplashThat, Meetup, LinkedIn, X, Facebook)';
-COMMENT ON COLUMN events.slug IS 'URL-friendly identifier auto-generated from title';
+-- ----------------------------------------------------------------
+-- Seed: real upcoming events (edit freely in Supabase afterwards)
+-- ----------------------------------------------------------------
+INSERT INTO events (slug, title, short_description, description, category, is_featured, status,
+                    start_date, end_date, location_type, location_name, location_address,
+                    organizer_name, registration_required, registration_url)
+VALUES
+(
+    'intro-to-robotics-workshop-2026',
+    'Intro to Robotics Workshop',
+    'A hands-on introduction to building and programming your first robot.',
+    E'Join LV Robotics for a beginner-friendly, hands-on workshop covering the fundamentals of robotics: mechanical design, electronics, and programming.\n\nNo experience required — all materials provided. Walk away having built and programmed a working robot.',
+    'Workshop', true, 'published',
+    '2026-07-18 14:00:00-07', '2026-07-18 17:00:00-07',
+    'in_person', 'Tech Center Downtown', '300 S 4th St, Las Vegas, NV 89101',
+    'LV Robotics', true, 'membership.html'
+),
+(
+    'community-robotics-meetup-2026',
+    'Community Robotics Meetup',
+    'Network with Las Vegas makers, founders, and engineers building the future.',
+    E'Our monthly community meetup brings together robotics enthusiasts of every level. Share projects, swap ideas, and connect with the people building the robot economy in Las Vegas.\n\nLightning demos welcome — bring what you are working on!',
+    'Meetup', false, 'published',
+    '2026-08-08 18:00:00-07', '2026-08-08 20:00:00-07',
+    'in_person', 'Tech Center Downtown', '300 S 4th St, Las Vegas, NV 89101',
+    'LV Robotics', false, NULL
+),
+(
+    'fall-robot-showcase-competition-2026',
+    'Fall Robot Showcase & Competition',
+    'A full day of demos, competitions, and prizes for builders across the valley.',
+    E'Cap off the season with our Fall Robot Showcase & Competition. Watch live demos, cheer on combat and autonomy challenges, and celebrate the best builds from the LV Robotics community.\n\nOpen to spectators and competitors alike.',
+    'Competition', true, 'published',
+    '2026-09-12 13:00:00-07', '2026-09-12 18:00:00-07',
+    'in_person', 'Las Vegas Community Center', '3130 McLeod Dr, Las Vegas, NV 89121',
+    'LV Robotics', true, 'membership.html'
+)
+ON CONFLICT (slug) DO NOTHING;

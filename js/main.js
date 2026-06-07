@@ -244,6 +244,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize particles + hero background carousel
     createParticles();
     initHeroCarousel();
+
+    // Site-wide sticky navbar + floating Community Bulletin button
+    injectNavbar();
+    injectBulletinFab();
+
+    // Animate stat numbers when they scroll into view
+    initCountUp();
     
     // Mobile Menu Toggle
     const hamburger = document.getElementById('hamburger');
@@ -292,9 +299,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                const navbar = document.querySelector('.navbar');
+                const navbar = document.querySelector('.site-nav');
                 const navbarHeight = navbar ? navbar.offsetHeight : 0;
-                const targetPosition = target.offsetTop - navbarHeight;
+                const targetPosition = target.offsetTop - navbarHeight - 12;
                 
                 window.scrollTo({
                     top: targetPosition,
@@ -1841,10 +1848,121 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initializeGallery();
         loadUpcomingEvents();
+        loadPastEvents();
     });
 } else {
     initializeGallery();
     loadUpcomingEvents();
+    loadPastEvents();
+}
+
+// ============================================
+// Count-up animation for stat numbers
+// ============================================
+function initCountUp() {
+    const els = document.querySelectorAll('.stats-band .stat-number, .vv-stat .num, .vision-teaser-stats .num');
+    if (!els.length) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const parse = (txt) => {
+        const m = txt.trim().match(/^([^\d]*)([\d.,]+)(.*)$/);
+        if (!m) return null;
+        return { prefix: m[1], num: parseFloat(m[2].replace(/,/g, '')), suffix: m[3] };
+    };
+    const fmt = (n) => Math.round(n).toLocaleString('en-US');
+
+    const animate = (el, target, prefix, suffix) => {
+        const dur = 1400;
+        const start = performance.now();
+        const tick = (now) => {
+            const p = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = prefix + fmt(target * eased) + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+            else el.textContent = prefix + fmt(target) + suffix;
+        };
+        requestAnimationFrame(tick);
+    };
+
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.counted) {
+                const parsed = parse(entry.target.textContent);
+                if (parsed) {
+                    entry.target.dataset.counted = '1';
+                    entry.target.textContent = parsed.prefix + '0' + parsed.suffix;
+                    animate(entry.target, parsed.num, parsed.prefix, parsed.suffix);
+                }
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.4 });
+
+    els.forEach(el => obs.observe(el));
+}
+
+// ============================================
+// Site-wide sticky navbar
+// ============================================
+function injectNavbar() {
+    if (document.querySelector('.site-nav')) return;
+    const path = window.location.pathname.toLowerCase();
+    const page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+
+    const links = [
+        { label: 'Home', href: 'index.html#home', match: ['index.html', ''] },
+        { label: 'Vision 2040', href: 'vision.html', match: ['vision.html'] },
+        { label: 'Events', href: 'index.html#events', match: ['event.html'] },
+        { label: 'Community', href: 'community.html', match: ['community.html', 'bulletin.html'] },
+        { label: 'About', href: 'about.html', match: ['about.html'] },
+        { label: 'Sponsorship', href: 'sponsorship.html', match: ['sponsorship.html'] },
+        { label: 'Contact', href: 'contact.html', match: ['contact.html'] }
+    ];
+    const linksHtml = links.map(l => {
+        const active = l.match.includes(page) ? ' active' : '';
+        return `<a class="site-nav-link${active}" href="${l.href}">${l.label}</a>`;
+    }).join('');
+
+    const nav = document.createElement('header');
+    nav.className = 'site-nav';
+    nav.innerHTML = `
+        <div class="site-nav-inner">
+            <a class="site-nav-brand" href="index.html#home">
+                <img src="images/lv-robotics-icon-2026.png" alt="LV Robotics">
+                <span>LV Robotics</span>
+            </a>
+            <nav class="site-nav-links">${linksHtml}</nav>
+            <div class="site-nav-actions">
+                <a class="site-nav-join" href="membership.html">Join</a>
+                <button class="site-nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+            </div>
+        </div>`;
+    document.body.insertBefore(nav, document.body.firstChild);
+    document.body.classList.add('has-site-nav');
+
+    // Mobile toggle reuses the existing slide-out menu logic
+    nav.querySelector('.site-nav-toggle').addEventListener('click', () => {
+        document.getElementById('hamburgerMenu')?.click();
+    });
+
+    // Solidify navbar after scrolling
+    const onScroll = () => nav.classList.toggle('scrolled', window.pageYOffset > 30);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+// ============================================
+// Site-wide Community Bulletin floating button
+// ============================================
+function injectBulletinFab() {
+    const path = window.location.pathname.toLowerCase();
+    // Don't show on the destination page itself, or on admin
+    if (path.endsWith('community.html') || path.endsWith('admin.html')) return;
+    if (document.querySelector('.bulletin-cta')) return; // avoid duplicates
+    const cta = document.createElement('div');
+    cta.className = 'bulletin-cta';
+    cta.innerHTML = '<a href="community.html" class="btn-bulletin" aria-label="Community Bulletin Board">📋 Community Bulletin</a>';
+    document.body.appendChild(cta);
 }
 
 // ============================================
@@ -1872,7 +1990,13 @@ async function loadUpcomingEvents() {
         if (error) throw error;
         
         if (!events || events.length === 0) {
-            // Keep default static events if no database events
+            eventsSection.innerHTML = `
+                <div class="events-empty">
+                    <i class="far fa-calendar-plus"></i>
+                    <h3>New events coming soon</h3>
+                    <p>We're lining up our next workshops, meetups, and competitions. Become a member to be the first to know.</p>
+                    <a href="membership.html" class="btn btn-primary">Become a Member</a>
+                </div>`;
             return;
         }
         
@@ -1911,7 +2035,78 @@ async function loadUpcomingEvents() {
         
     } catch (err) {
         console.error('Error loading events:', err);
-        // Keep static events on error
+        eventsSection.innerHTML = `
+            <div class="events-empty">
+                <i class="far fa-calendar"></i>
+                <h3>Events are on the way</h3>
+                <p>Check back soon for upcoming workshops, meetups, and competitions.</p>
+                <a href="membership.html" class="btn btn-primary">Become a Member</a>
+            </div>`;
+    }
+}
+
+// ============================================
+// Past Events / Meetups Loading
+// ============================================
+async function loadPastEvents() {
+    const section = document.getElementById('past-events');
+    const grid = section ? section.querySelector('.past-events-grid') : null;
+    if (!grid) return; // Not on homepage
+
+    try {
+        if (!sbClient) {
+            setTimeout(loadPastEvents, 500);
+            return;
+        }
+
+        const { data: events, error } = await sbClient
+            .from('events')
+            .select('*')
+            .eq('status', 'published')
+            .lt('start_date', new Date().toISOString())
+            .order('start_date', { ascending: false })
+            .limit(24);
+
+        if (error) throw error;
+
+        if (!events || events.length === 0) {
+            section.style.display = 'none'; // Nothing to show
+            return;
+        }
+
+        grid.innerHTML = '';
+
+        events.forEach(event => {
+            const d = new Date(event.start_date);
+            const month = d.toLocaleString('en-US', { month: 'short' });
+            const year = d.getFullYear();
+            const venue = event.location_name || 'Las Vegas, NV';
+            const attendees = event.current_attendees
+                ? `<span class="past-event-attendees"><i class="fas fa-users"></i> ${event.current_attendees}</span>`
+                : '';
+
+            const card = document.createElement('a');
+            card.className = 'past-event-card';
+            card.href = `event.html?slug=${event.slug}`;
+            card.innerHTML = `
+                <div class="past-event-date">
+                    <span class="m">${month}</span>
+                    <span class="y">${year}</span>
+                </div>
+                <div class="past-event-body">
+                    <h3>${event.title}</h3>
+                    <p class="past-event-meta"><i class="fas fa-map-marker-alt"></i> ${venue}</p>
+                </div>
+                ${attendees}
+            `;
+            grid.appendChild(card);
+        });
+
+        console.log(`✓ Loaded ${events.length} past events from database`);
+
+    } catch (err) {
+        console.error('Error loading past events:', err);
+        if (section) section.style.display = 'none';
     }
 }
 
