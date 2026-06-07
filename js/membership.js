@@ -1,6 +1,6 @@
 // Supabase configuration
-const SUPABASE_URL = 'https://tzitghqmrmsxddysxhvc.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ2V2dnV2bGV1d2pqbWVmanphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjQwMjksImV4cCI6MjA3NzM0MDAyOX0.sEED3-kLSZE74bHsrJvVhyaH_GEXEVECeZNWpCnFK84';
+const SUPABASE_URL = 'https://ubanpswucfkdvixityoe.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InViYW5wc3d1Y2ZrZHZpeGl0eW9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDk2MjgsImV4cCI6MjA5NjQyNTYyOH0.KogBL-y8tq5VkAucR6WABmr6D3yLXlx1vNvRJu7FpPY';
 
 // Initialize Supabase client (will be loaded from CDN)
 let supabase;

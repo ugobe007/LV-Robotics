@@ -191,8 +191,8 @@ const debugError = (...args) => { if (DEBUG) console.error(...args); };
 // Bulletin Board Functionality
 // Bulletin Board functionality
 // Supabase client setup
-const SUPABASE_URL = 'https://tzitghqmrmsxddysxhvc.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6aXRnaHFtcm1zeGRkeXN4aHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDAzMjMsImV4cCI6MjA3NzUxNjMyM30.f5rZPAdCOHe6ZXr_TYgmhUkZkcWsSYX_qMLXUgg9dZ8';
+const SUPABASE_URL = 'https://ubanpswucfkdvixityoe.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InViYW5wc3d1Y2ZrZHZpeGl0eW9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDk2MjgsImV4cCI6MjA5NjQyNTYyOH0.KogBL-y8tq5VkAucR6WABmr6D3yLXlx1vNvRJu7FpPY';
 let sbClient = null;
 
 // Initialize Supabase with error handling - with retries
