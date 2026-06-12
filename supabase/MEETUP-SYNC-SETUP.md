@@ -21,7 +21,8 @@ Meetup GraphQL  ──(refresh token)──>  Edge Function "meetup-sync"  ─�
 
 ### 1. Create a Meetup OAuth client
 - Go to https://www.meetup.com/api/oauth/list/ → **Create new client**.
-- Set **Redirect URI** to exactly: `http://localhost:8910/callback`
+- Set **Redirect URI** to exactly: `http://127.0.0.1:8910/callback`
+  (Meetup's form rejects bare `localhost`; use the loopback IP instead.)
 - Copy the **Client ID** and **Client Secret** into `config/secrets.env`:
   ```
   MEETUP_CLIENT_ID=...

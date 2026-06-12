@@ -4,7 +4,8 @@
 //
 // Prereqs:
 //   1. Create an OAuth client at https://www.meetup.com/api/oauth/list/
-//   2. Set its "Redirect URI" to EXACTLY:  http://localhost:8910/callback
+//   2. Set its "Redirect URI" to EXACTLY:  http://127.0.0.1:8910/callback
+//      (Meetup rejects bare "localhost"; the loopback IP works.)
 //   3. Put MEETUP_CLIENT_ID and MEETUP_CLIENT_SECRET in config/secrets.env
 //      (or export them as env vars).
 //
@@ -15,7 +16,7 @@ import http from "node:http";
 import { readFileSync } from "node:fs";
 import { spawn } from "node:child_process";
 
-const REDIRECT_URI = process.env.MEETUP_REDIRECT_URI || "http://localhost:8910/callback";
+const REDIRECT_URI = process.env.MEETUP_REDIRECT_URI || "http://127.0.0.1:8910/callback";
 const PORT = 8910;
 
 function loadSecrets() {
