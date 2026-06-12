@@ -2899,7 +2899,7 @@ section {
 
 /* Sponsorship Hero */
 .sponsorship-hero {
-    background: linear-gradient(135deg, #030504 0%, #0a1410 50%, #0a5c36 100%);
+    background: linear-gradient(135deg, #030504 0%, #0a1410 55%, #0d2018 100%);
     padding: 120px 2rem 4rem;
     text-align: center;
     color: white;
@@ -2979,12 +2979,12 @@ section {
 }
 
 .benefit-card {
-    background: linear-gradient(135deg, #0f8a4f 0%, #0a5c36 100%);
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 18px;
     padding: 2.5rem;
-    box-shadow: 0 10px 30px rgba(91, 33, 182, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 2px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
     overflow: hidden;
 }
@@ -2995,8 +2995,8 @@ section {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #a8e6a1 0%, #0f8a4f 100%);
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-green) 0%, var(--secondary-color) 100%);
     transform: scaleX(0);
     transition: transform 0.4s ease;
 }
@@ -3014,9 +3014,9 @@ section {
 }
 
 .benefit-card:hover {
-    transform: translateY(-15px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(91, 33, 182, 0.25);
-    border-color: rgba(168, 230, 161, 0.5);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    border-color: rgba(63, 209, 127, 0.35);
 }
 
 .benefit-card:hover::before {
@@ -3024,16 +3024,15 @@ section {
 }
 
 .benefit-card h3 {
-    color: #a8e6a1 !important;
-    margin-bottom: 1rem;
-    font-size: 1.6rem;
-    font-weight: 800;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #ffffff !important;
+    margin-bottom: 0.85rem;
+    font-size: 1.45rem;
+    font-weight: 700;
 }
 
 .benefit-card p {
-    color: #e2e8f0 !important;
-    line-height: 1.6;
+    color: #b8c7c0 !important;
+    line-height: 1.65;
     font-size: 1rem;
 }
 
@@ -3068,11 +3067,11 @@ section {
 
 .tier-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(168, 230, 161, 0.3);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
 }
 
 .tier-card.platinum {
-    border: 3px solid #a8e6a1;
+    border: 2px solid var(--brand-green);
     transform: scale(1.05);
 }
 
@@ -3081,17 +3080,19 @@ section {
     top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, #a8e6a1, #0f8a4f);
-    color: white;
-    padding: 0.5rem 1.5rem;
+    background: linear-gradient(135deg, #0f8a4f, #0a5c36);
+    color: #ffffff;
+    padding: 0.45rem 1.4rem;
     border-radius: 20px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .tier-name {
     font-size: 1.8rem;
-    color: var(--primary-color);
+    color: #0f8a4f;
     margin-bottom: 0.5rem;
     margin-top: 1rem;
 }
@@ -3211,7 +3212,7 @@ section {
 }
 
 .impact-item h4 {
-    color: var(--primary-color);
+    color: #0f8a4f;
     font-size: 1.3rem;
     margin-bottom: 1rem;
 }
@@ -3294,7 +3295,7 @@ section {
 }
 
 .contact-info h3 {
-    color: var(--primary-color);
+    color: #0f8a4f;
     font-size: 1.8rem;
     margin-bottom: 2rem;
 }
@@ -3314,7 +3315,7 @@ section {
 
 .contact-item strong {
     display: block;
-    color: var(--primary-color);
+    color: #1e293b;
     margin-bottom: 0.25rem;
     font-size: 1.1rem;
 }
@@ -3325,7 +3326,8 @@ section {
 }
 
 .download-kit {
-    background: linear-gradient(135deg, #0f8a4f, #0a5c36);
+    background: linear-gradient(135deg, #0f172a 0%, #0a1410 100%);
+    border: 1px solid rgba(63, 209, 127, 0.35);
     border-radius: 15px;
     padding: 2rem;
     margin-top: 2rem;
@@ -3390,7 +3392,7 @@ section {
 /* Partners Section */
 .partners-section {
     padding: 5rem 2rem;
-    background: linear-gradient(135deg, #0f8a4f 0%, #0a5c36 100%);
+    background: linear-gradient(135deg, #0a1410 0%, #030504 100%);
 }
 
 /* Dark background sections - improve text contrast */
