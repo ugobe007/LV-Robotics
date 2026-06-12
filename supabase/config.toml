@@ -1,0 +1,4 @@
+project_id = "ubanpswucfkdvixityoe"
+
+[functions.meetup-sync]
+verify_jwt = true
