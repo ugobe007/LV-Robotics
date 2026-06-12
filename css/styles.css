@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 /* Reset and Base Styles - Dark Theme Updated */
 * {
     margin: 0;
@@ -6,6 +8,11 @@
 }
 
 :root {
+    /* Typography */
+    --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Space Grotesk', 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-family: var(--font-body);
+
     --primary-color: #2ecc71;
     --secondary-color: #10b981;
     --accent-color: #34d17a;
@@ -28,11 +35,28 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
+    font-family: var(--font-body);
+    line-height: 1.65;
+    letter-spacing: -0.011em;
     color: var(--text-dark);
     background-color: var(--dark-bg);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Display typeface + tighter tracking for headings */
+h1, h2, h3, h4, h5, h6,
+.hero-title, .section-title, .stat-number,
+.btn, .btn-primary, .btn-secondary, .btn-bulletin {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+}
+
+h1, h2, h3,
+.hero-title, .section-title {
+    line-height: 1.12;
 }
 
 .container {
