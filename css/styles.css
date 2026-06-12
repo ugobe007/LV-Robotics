@@ -398,6 +398,46 @@ body {
     color: #e0f2e0;
 }
 
+/* Tagline rendered as a pill button linking to Vision Vegas 2040 */
+.hero-tagline-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #e8f7e6;
+    text-decoration: none;
+    padding: 0.7rem 1.6rem;
+    margin-bottom: 0.95rem;
+    border: 1.5px solid rgba(168, 230, 161, 0.5);
+    border-radius: 50px;
+    background: rgba(168, 230, 161, 0.10);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-tagline-btn:hover {
+    background: rgba(168, 230, 161, 0.2);
+    border-color: #a8e6a1;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 18px rgba(168, 230, 161, 0.25);
+}
+
+.hero-tagline-btn i {
+    font-size: 0.85em;
+    transition: transform 0.3s ease;
+}
+
+.hero-tagline-btn:hover i {
+    transform: translateX(4px);
+}
+
+@media (max-width: 480px) {
+    .hero-tagline-btn { font-size: 1rem; padding: 0.6rem 1.2rem; }
+}
+
 .hero-description {
     font-size: 1.05rem;
     margin-bottom: 0;
