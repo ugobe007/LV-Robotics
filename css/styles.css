@@ -295,16 +295,30 @@ body {
     color: white;
     z-index: 2;
     position: relative;
-    max-width: 640px;
-    padding: 1.9rem 2.1rem;
+    max-width: 720px;
+    padding: 1.5rem;
     animation: fadeInUp 1s ease-out;
     margin: 0 auto;
-    background: rgba(3, 8, 6, 0.42);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(46, 204, 113, 0.20);
-    border-radius: 22px;
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Soft feathered halo behind the text — keeps it legible over bright
+   photos without looking like a card (no hard edges). */
+.hero-content::before {
+    content: '';
+    position: absolute;
+    inset: -10% -6%;
+    z-index: -1;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(3, 6, 4, 0.58) 0%,
+        rgba(3, 6, 4, 0.34) 44%,
+        rgba(3, 6, 4, 0) 72%
+    );
+    pointer-events: none;
 }
 
 .hero-title-container {
@@ -319,22 +333,19 @@ body {
 
 .hero-logo-section {
     flex: 0 0 auto;
-    border: 3px solid #a8e6a1 !important;
-    border-radius: 14px;
-    padding: 0.75rem;
-    background: rgba(168, 230, 161, 0.08);
-    box-shadow:
-        0 0 24px rgba(168, 230, 161, 0.35),
-        0 8px 20px rgba(0, 0, 0, 0.3),
-        inset 0 0 16px rgba(168, 230, 161, 0.1);
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
     min-width: fit-content;
 }
 
 .hero-logo {
-    height: 84px;
+    height: 92px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.65));
     display: block;
 }
 
@@ -364,11 +375,11 @@ body {
 }
 
 .hero-title {
-    font-size: 4rem;
+    font-size: 4.25rem;
     font-weight: 900;
     margin-bottom: 0;
     line-height: 1.05;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7), 0 8px 32px rgba(0, 0, 0, 0.55);
     letter-spacing: -1px;
     color: #ffffff;
 }
@@ -383,7 +394,7 @@ body {
     margin-bottom: 0.85rem;
     opacity: 1;
     font-weight: 500;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.8);
     color: #e0f2e0;
 }
 
@@ -395,8 +406,8 @@ body {
     max-width: 520px;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    color: #d0e8ff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85);
+    color: #e8f4ff;
 }
 
 .hero-buttons {
