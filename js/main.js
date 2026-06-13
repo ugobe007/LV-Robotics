@@ -916,7 +916,7 @@ function updatePostCounter() {
     const totalPosts = postsContainer.querySelectorAll('.bulletin-post:not(.empty-post)').length;
     const galleryTitle = document.querySelector('.gallery-title');
     if (galleryTitle) {
-        galleryTitle.textContent = `📸 Latest Community Posts (${totalPosts}/50)`;
+        galleryTitle.textContent = `Latest Community Posts (${totalPosts}/50)`;
     }
 }
 

@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="images/lv-robotics-icon-2026.png">
     <link rel="apple-touch-icon" href="images/lv-robotics-icon-2026.png">
     <meta name="theme-color" content="#050807">
-    <link rel="stylesheet" href="css/styles.css?v=51">
+    <link rel="stylesheet" href="css/styles.css?v=52">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -42,11 +42,12 @@
 
     <!-- Community Bulletin Board Section -->
     <section class="bulletin-page">
-        <h1 class="page-title" style="display: block; color: white; font-size: 3.5rem; margin-bottom: 1.5rem; text-align: center; padding-top: 0;">Community <span class="highlight" style="color: #a8e6a1;">Bulletin Board</span></h1>
-        <p class="page-subtitle" style="display: block; color: #e2e8f0; font-size: 1.3rem; margin-bottom: 1.5rem; text-align: center;">Share your robotics projects, ask questions, and connect with the community</p>
+        <span class="community-eyebrow"><i class="fas fa-users"></i> LV Robotics Community</span>
+        <h1 class="page-title">Community <span class="highlight">Bulletin Board</span></h1>
+        <p class="page-subtitle">Share your robotics projects, ask questions, and connect with builders across Las Vegas.</p>
         
         <!-- Auth Controls - Centered -->
-        <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="bulletin-auth">
             <div id="authSignedOut">
                 <button class="btn btn-primary" onclick="showSignInModal()">Sign in to post</button>
             </div>
@@ -78,32 +79,13 @@
                 </div>
                 
                 <div class="gallery-section">
-                    <h2 class="gallery-title">📸 Latest Community Posts (0/50)</h2>
+                    <h2 class="gallery-title">Latest Community Posts (0/50)</h2>
                     <div class="bulletin-posts" id="bulletinPosts">
-                        <!-- Empty placeholders -->
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">📷<br>Share your<br>project!</div>
-                        </div>
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">🤖<br>Upload<br>your robot</div>
-                        </div>
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">💡<br>Share<br>ideas</div>
-                        </div>
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">🎥<br>Post<br>videos</div>
-                        </div>
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">📸<br>Add<br>photos</div>
-                        </div>
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">✨<br>Join the<br>community</div>
-                        </div>
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">🚀<br>Show your<br>work</div>
-                        </div>
-                        <div class="bulletin-post empty-post">
-                            <div class="post-text-preview">🔧<br>Share<br>tips</div>
+                        <div class="bulletin-post empty-post empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-camera-retro"></i></div>
+                            <h3>Be the first to post</h3>
+                            <p>Share a project, ask a question, drop a demo video or a link. Your post shows up right here for the whole community.</p>
+                            <button class="btn btn-primary" onclick="showSignInModal()">Sign in to post</button>
                         </div>
                     </div>
                 </div>
@@ -119,20 +101,25 @@
 
             <div class="partner-grid">
                 <div class="partner-card">
-                    <div class="partner-emoji">🏢</div>
+                    <div class="partner-icon"><i class="fas fa-building"></i></div>
                     <h3>For Companies</h3>
                     <p>Sponsor events, offer internships, and connect with top emerging talent in robotics and engineering.</p>
                 </div>
                 <div class="partner-card">
-                    <div class="partner-emoji">🎓</div>
+                    <div class="partner-icon"><i class="fas fa-graduation-cap"></i></div>
                     <h3>For Educators</h3>
                     <p>Collaborate on curriculum, host workshops, and join our mentorship network to inspire students.</p>
                 </div>
                 <div class="partner-card">
-                    <div class="partner-emoji">🤝</div>
+                    <div class="partner-icon"><i class="fas fa-hands-helping"></i></div>
                     <h3>For Community</h3>
                     <p>Volunteer your time, donate equipment, or help spread the word about STEM education.</p>
                 </div>
+            </div>
+
+            <div class="partner-cta">
+                <a href="sponsorship.html" class="btn btn-primary">Become a Partner</a>
+                <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
             </div>
         </div>
     </section>
@@ -171,6 +158,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/main.js?v=25" defer></script>
+    <script src="js/main.js?v=26" defer></script>
 </body>
 </html>
