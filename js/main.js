@@ -1446,38 +1446,10 @@ window.addEventListener('load', () => {
 });
 
 // Counter animation for stats
-function animateCounter(element, target, duration = 2000) {
-    const start = 0;
-    const increment = target / (duration / 16);
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        element.textContent = Math.floor(current) + '+';
-    }, 16);
-}
-
-// Animate stats when they come into view
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const statNumber = entry.target.querySelector('.stat-number');
-            if (statNumber && !statNumber.classList.contains('animated')) {
-                statNumber.classList.add('animated');
-                const target = parseInt(statNumber.textContent);
-                animateCounter(statNumber, target);
-            }
-        }
-    });
-}, { threshold: 0.5 });
-
-document.querySelectorAll('.stat').forEach(stat => {
-    statsObserver.observe(stat);
-});
+// NOTE: Stat count-up is handled exclusively by initCountUp() (see below).
+// The previous statsObserver/animateCounter system was removed because it
+// competed with initCountUp() over the same .stat-number elements, which
+// left the numbers frozen at partial values (e.g. 32+ instead of 500+).
 
 // Add dynamic year to footer
 const currentYear = new Date().getFullYear();
