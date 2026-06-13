@@ -33,5 +33,29 @@ SELECT cron.schedule(
   $$
 );
 
--- Inspect scheduled jobs:
+-- ==============================================================
+-- Verify
+-- ==============================================================
+
+-- Inspect the scheduled job:
 SELECT jobid, jobname, schedule, active FROM cron.job WHERE jobname = 'meetup-sync';
+
+-- Confirm the stored command has a REAL key (Bearer eyJ...), not the placeholder:
+SELECT command FROM cron.job WHERE jobname = 'meetup-sync';
+
+-- Trigger one run immediately (replace the key), then re-check run details below:
+-- SELECT net.http_post(
+--   url     := 'https://ubanpswucfkdvixityoe.supabase.co/functions/v1/meetup-sync',
+--   headers := jsonb_build_object(
+--     'Content-Type', 'application/json',
+--     'Authorization', 'Bearer <SERVICE_ROLE_KEY>'
+--   ),
+--   body := '{}'::jsonb
+-- );
+
+-- Check the most recent runs ('succeeded' = healthy):
+SELECT status, return_message, start_time
+FROM cron.job_run_details
+WHERE jobid = (SELECT jobid FROM cron.job WHERE jobname = 'meetup-sync')
+ORDER BY start_time DESC
+LIMIT 5;
