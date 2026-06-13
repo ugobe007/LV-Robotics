@@ -1,35 +1,24 @@
 // LV Robotics — Meetup -> Supabase calendar sync (Supabase Edge Function, Deno)
 //
-// Flow:
-//   1. Exchange the long-lived Meetup refresh token for a short-lived access token.
-//   2. Query the Meetup GraphQL API (Pro proNetwork.eventsSearch) for events.
-//   3. Map each Meetup event to the site's `events` table shape.
-//   4. Upsert into Supabase via the service-role key (PostgREST, on_conflict=meetup_event_id).
+// Uses Meetup's PUBLIC iCal feed — no OAuth, no API key, no Meetup app approval.
+//   https://www.meetup.com/<group-urlname>/events/ical/
 //
-// Secrets (set with: supabase secrets set KEY=value):
-//   MEETUP_CLIENT_ID, MEETUP_CLIENT_SECRET, MEETUP_REFRESH_TOKEN
-//   MEETUP_PRONETWORK_URLNAME   (your Meetup Pro network urlname)
-//   MEETUP_GROUP_URLNAME        (e.g. las-vegas-robotics-meetup — filters to one group)
-//   SYNC_PAST                   ("true" to also sync past events; default upcoming only)
-//   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY  (auto-injected by Supabase)
+// Flow:
+//   1. Fetch the group's public .ics feed.
+//   2. Parse VEVENT blocks (handles line folding, TZID, escaped text).
+//   3. Map each event to the site's `events` table shape.
+//   4. Upsert into Supabase via the service-role key (on_conflict=meetup_event_id).
+//
+// Config (optional secrets; sensible defaults built in):
+//   MEETUP_GROUP_URLNAME   default "las-vegas-robotics-meetup"
+//   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY   (auto-injected by Supabase)
+//
+// Note: Meetup's iCal feed only lists UPCOMING events. Past events stay in the
+// table untouched (we only upsert, never delete), so history is preserved.
 //
 // Test (no DB writes): GET/POST  <function-url>?test=1
 
-const MEETUP_TOKEN_URL = "https://secure.meetup.com/oauth2/access";
-const MEETUP_GQL_URL = "https://api.meetup.com/gql-ext";
-
-interface MeetupEventNode {
-  id: string;
-  title: string;
-  eventUrl?: string;
-  description?: string;
-  dateTime?: string;
-  duration?: string;
-  eventType?: string;
-  group?: { urlname?: string; name?: string };
-  venue?: { name?: string; address?: string; city?: string; state?: string };
-  featuredEventPhoto?: { id?: string; baseUrl?: string };
-}
+const DEFAULT_GROUP = "las-vegas-robotics-meetup";
 
 function env(key: string, required = true): string {
   const v = Deno.env.get(key) ?? "";
@@ -37,129 +26,162 @@ function env(key: string, required = true): string {
   return v;
 }
 
-async function getAccessToken(): Promise<string> {
-  const body = new URLSearchParams({
-    client_id: env("MEETUP_CLIENT_ID"),
-    client_secret: env("MEETUP_CLIENT_SECRET"),
-    grant_type: "refresh_token",
-    refresh_token: env("MEETUP_REFRESH_TOKEN"),
-  });
-  const res = await fetch(MEETUP_TOKEN_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: body.toString(),
-  });
-  const json = await res.json().catch(() => ({}));
-  if (!res.ok || !json.access_token) {
-    throw new Error(`Meetup token exchange failed (${res.status}): ${JSON.stringify(json)}`);
-  }
-  return json.access_token as string;
+interface IcsEvent {
+  uid: string;
+  summary?: string;
+  description?: string;
+  location?: string;
+  url?: string;
+  start?: Date | null;
+  end?: Date | null;
 }
 
-async function gql(token: string, query: string, variables: Record<string, unknown>) {
-  const res = await fetch(MEETUP_GQL_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-  const json = await res.json().catch(() => ({}));
-  if (!res.ok || json.errors) {
-    throw new Error(`Meetup GraphQL error (${res.status}): ${JSON.stringify(json.errors ?? json)}`);
-  }
-  return json.data;
+// ---- iCal parsing ----------------------------------------------------------
+
+// Unfold RFC 5545 folded lines (CRLF/LF followed by a space or tab).
+function unfold(ics: string): string {
+  return ics.replace(/\r?\n[ \t]/g, "");
 }
 
-const EVENTS_QUERY = `
-query ($urlname: ID!, $first: Int!, $status: String!) {
-  proNetwork(urlname: $urlname) {
-    eventsSearch(input: { first: $first, filter: { status: $status } }) {
-      totalCount
-      edges {
-        node {
-          id
-          title
-          eventUrl
-          description
-          dateTime
-          duration
-          eventType
-          group { urlname name }
-          venue { name address city state }
-          featuredEventPhoto { id baseUrl }
-        }
-      }
+function unescapeText(v: string): string {
+  return v
+    .replace(/\\n/gi, "\n")
+    .replace(/\\,/g, ",")
+    .replace(/\\;/g, ";")
+    .replace(/\\\\/g, "\\");
+}
+
+// Offset (ms) between a named time zone and UTC at the given instant.
+function tzOffsetMs(timeZone: string, date: Date): number {
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const parts: Record<string, string> = {};
+  for (const p of dtf.formatToParts(date)) {
+    if (p.type !== "literal") parts[p.type] = p.value;
+  }
+  const asUTC = Date.UTC(
+    +parts.year,
+    +parts.month - 1,
+    +parts.day,
+    +parts.hour,
+    +parts.minute,
+    +(parts.second ?? "0"),
+  );
+  return asUTC - date.getTime();
+}
+
+function zonedToUTC(
+  y: number, mo: number, d: number, h: number, mi: number, s: number, tz: string,
+): Date {
+  const utcGuess = Date.UTC(y, mo - 1, d, h, mi, s);
+  const offset = tzOffsetMs(tz, new Date(utcGuess));
+  return new Date(utcGuess - offset);
+}
+
+function parseIcsDate(value: string, params: Record<string, string>): Date | null {
+  const m = value.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?$/);
+  if (!m) return null;
+  const [, y, mo, d, h = "00", mi = "00", s = "00", z] = m;
+  if (z === "Z") return new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi, +s));
+  if (params.TZID) return zonedToUTC(+y, +mo, +d, +h, +mi, +s, params.TZID);
+  return new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi, +s));
+}
+
+function parseIcs(ics: string): IcsEvent[] {
+  const lines = unfold(ics).split(/\r?\n/);
+  const events: IcsEvent[] = [];
+  let cur: IcsEvent | null = null;
+
+  for (const line of lines) {
+    if (line === "BEGIN:VEVENT") {
+      cur = { uid: "" };
+      continue;
+    }
+    if (line === "END:VEVENT") {
+      if (cur && cur.uid) events.push(cur);
+      cur = null;
+      continue;
+    }
+    if (!cur) continue;
+
+    const idx = line.indexOf(":");
+    if (idx === -1) continue;
+    const left = line.slice(0, idx);
+    const rawValue = line.slice(idx + 1);
+    const [name, ...paramParts] = left.split(";");
+    const params: Record<string, string> = {};
+    for (const p of paramParts) {
+      const eq = p.indexOf("=");
+      if (eq !== -1) params[p.slice(0, eq).toUpperCase()] = p.slice(eq + 1);
+    }
+
+    switch (name.toUpperCase()) {
+      case "UID": cur.uid = rawValue.trim(); break;
+      case "SUMMARY": cur.summary = unescapeText(rawValue); break;
+      case "DESCRIPTION": cur.description = unescapeText(rawValue); break;
+      case "LOCATION": cur.location = unescapeText(rawValue); break;
+      case "URL": cur.url = rawValue.trim(); break;
+      case "DTSTART": cur.start = parseIcsDate(rawValue.trim(), params); break;
+      case "DTEND": cur.end = parseIcsDate(rawValue.trim(), params); break;
     }
   }
-}`;
-
-async function fetchEvents(token: string, status: string): Promise<MeetupEventNode[]> {
-  const data = await gql(token, EVENTS_QUERY, {
-    urlname: env("MEETUP_PRONETWORK_URLNAME"),
-    first: 50,
-    status,
-  });
-  const edges = data?.proNetwork?.eventsSearch?.edges ?? [];
-  return edges.map((e: { node: MeetupEventNode }) => e.node);
+  return events;
 }
 
-// Parse ISO-8601 duration (e.g. PT2H30M) into milliseconds.
-function durationMs(iso?: string): number {
-  if (!iso) return 0;
-  const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  if (!m) return 0;
-  const [, h, min, s] = m;
-  return ((+h || 0) * 3600 + (+min || 0) * 60 + (+s || 0)) * 1000;
-}
+// ---- Mapping ---------------------------------------------------------------
 
-function locationType(eventType?: string): string {
-  const t = (eventType || "").toUpperCase();
-  if (t.includes("ONLINE")) return "online";
-  if (t.includes("HYBRID")) return "hybrid";
-  return "in_person";
-}
-
-function photoUrl(p?: { id?: string; baseUrl?: string }): string | null {
-  if (!p?.baseUrl || !p?.id) return null;
-  return `${p.baseUrl}${p.id}/676x380.webp`;
+function eventIdFromUid(uid: string): string {
+  // Meetup UIDs look like "event_xxxxxxx@meetup.com" or "xxxxxxx@meetup.com".
+  const local = uid.split("@")[0];
+  return local.replace(/^event[_-]?/i, "") || uid;
 }
 
 function shortDesc(desc?: string): string | null {
   if (!desc) return null;
   const clean = desc.replace(/\s+/g, " ").trim();
+  if (!clean) return null;
   return clean.length > 200 ? clean.slice(0, 197) + "..." : clean;
 }
 
-function mapEvent(n: MeetupEventNode) {
-  const start = n.dateTime ? new Date(n.dateTime) : null;
-  const end = start && n.duration
-    ? new Date(start.getTime() + durationMs(n.duration))
-    : null;
-  const addr = [n.venue?.address, n.venue?.city, n.venue?.state]
-    .filter(Boolean).join(", ") || null;
+function locationType(loc?: string): string {
+  const t = (loc || "").toLowerCase();
+  if (t.includes("online") || t.includes("link visible")) return "online";
+  return "in_person";
+}
+
+function mapEvent(e: IcsEvent) {
+  const id = eventIdFromUid(e.uid);
   return {
-    meetup_event_id: n.id,
+    meetup_event_id: id,
     source: "meetup",
-    slug: `meetup-${n.id}`,
-    title: n.title,
-    short_description: shortDesc(n.description),
-    description: n.description ?? null,
-    image_url: photoUrl(n.featuredEventPhoto),
+    slug: `meetup-${id}`,
+    title: e.summary ?? "Untitled Meetup Event",
+    short_description: shortDesc(e.description),
+    description: e.description ?? null,
+    image_url: null,
     category: "Meetup",
     status: "published",
-    start_date: start ? start.toISOString() : null,
-    end_date: end ? end.toISOString() : null,
-    location_type: locationType(n.eventType),
-    location_name: n.venue?.name ?? null,
-    location_address: addr,
-    organizer_name: n.group?.name ?? "LV Robotics",
+    start_date: e.start ? e.start.toISOString() : null,
+    end_date: e.end ? e.end.toISOString() : null,
+    location_type: locationType(e.location),
+    location_name: e.location ?? null,
+    location_address: e.location ?? null,
+    organizer_name: "Las Vegas Robotics Meetup",
     registration_required: true,
-    registration_url: n.eventUrl ?? null,
+    registration_url: e.url ?? null,
     synced_at: new Date().toISOString(),
   };
 }
+
+// ---- Supabase upsert -------------------------------------------------------
 
 async function upsert(rows: Record<string, unknown>[]) {
   if (!rows.length) return { upserted: 0 };
@@ -181,6 +203,8 @@ async function upsert(rows: Record<string, unknown>[]) {
   return { upserted: rows.length };
 }
 
+// ---- Handler ---------------------------------------------------------------
+
 Deno.serve(async (req) => {
   const cors = {
     "Access-Control-Allow-Origin": "*",
@@ -189,35 +213,37 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
   try {
-    const isTest = new URL(req.url).searchParams.get("test") === "1";
-    const groupFilter = Deno.env.get("MEETUP_GROUP_URLNAME") || "";
-    const syncPast = (Deno.env.get("SYNC_PAST") || "").toLowerCase() === "true";
+    const params = new URL(req.url).searchParams;
+    const isTest = params.get("test") === "1";
+    // ?group= override is honored only in test mode (parser validation).
+    const group = (isTest && params.get("group")) ||
+      Deno.env.get("MEETUP_GROUP_URLNAME") || DEFAULT_GROUP;
+    const icalUrl = `https://www.meetup.com/${group}/events/ical/`;
 
-    const token = await getAccessToken();
-
-    const statuses = syncPast ? ["UPCOMING", "PAST"] : ["UPCOMING"];
-    let nodes: MeetupEventNode[] = [];
-    for (const s of statuses) {
-      nodes = nodes.concat(await fetchEvents(token, s));
+    const res = await fetch(icalUrl, {
+      headers: { "User-Agent": "LV-Robotics-Sync/1.0 (+https://lv-robotics.fly.dev)" },
+    });
+    if (!res.ok) {
+      throw new Error(`Meetup iCal fetch failed (${res.status}) for ${icalUrl}`);
     }
-
-    // If filtering to one group within the Pro network.
-    if (groupFilter) {
-      nodes = nodes.filter((n) => n.group?.urlname === groupFilter);
-    }
-
-    const rows = nodes.map(mapEvent).filter((r) => r.start_date);
+    const ics = await res.text();
+    const parsed = parseIcs(ics);
+    const rows = parsed.map(mapEvent).filter((r) => r.start_date);
 
     if (isTest) {
       return new Response(
-        JSON.stringify({ test: true, fetched: nodes.length, mappedSample: rows.slice(0, 3) }, null, 2),
+        JSON.stringify(
+          { test: true, group, fetched: parsed.length, mappable: rows.length, sample: rows.slice(0, 3) },
+          null,
+          2,
+        ),
         { headers: { ...cors, "Content-Type": "application/json" } },
       );
     }
 
     const result = await upsert(rows);
     return new Response(
-      JSON.stringify({ ok: true, fetched: nodes.length, ...result, at: new Date().toISOString() }),
+      JSON.stringify({ ok: true, group, fetched: parsed.length, ...result, at: new Date().toISOString() }),
       { headers: { ...cors, "Content-Type": "application/json" } },
     );
   } catch (err) {
