@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="images/lv-robotics-icon-2026.png">
     <link rel="apple-touch-icon" href="images/lv-robotics-icon-2026.png">
     <meta name="theme-color" content="#050807">
-    <link rel="stylesheet" href="css/styles.css?v=53">
+    <link rel="stylesheet" href="css/styles.css?v=54">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -129,51 +129,53 @@
                 Connect with high school students, college talent, entrepreneurs, and engineers twice a year at our signature robotics hack-a-thon events.
             </p>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2rem; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
-                    <h3 style="color: #ffffff; margin-bottom: 1rem; font-size: 1.3rem;">Challenge Sponsor</h3>
-                    <div style="font-size: 2rem; color: white; font-weight: 700; margin-bottom: 1rem;">$5,000+</div>
-                    <ul style="text-align: left; color: #e2e8f0; list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Present a real-world problem challenge</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Logo on event materials & signage</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Speaking opportunity at kickoff</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Judge final presentations</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Award prizes to winning team</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Direct access to participants</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Social media promotion</li>
+            <div class="hack-tiers">
+                <div class="hack-tier">
+                    <div class="hack-tier-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <div class="hack-tier-name">Supporting Sponsor</div>
+                    <div class="hack-tier-price">$2,500</div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Logo on event website &amp; materials</li>
+                        <li><i class="fas fa-check"></i> Social media recognition</li>
+                        <li><i class="fas fa-check"></i> Complimentary event tickets (4)</li>
+                        <li><i class="fas fa-check"></i> Access to participant resumes</li>
+                        <li><i class="fas fa-check"></i> Recognition at awards ceremony</li>
+                        <li><i class="fas fa-check"></i> Post-event impact report</li>
                     </ul>
+                    <a href="#contact" class="btn btn-secondary" onclick="document.getElementById('sponsorshipType').value='hack-2500';">Sponsor at $2,500</a>
                 </div>
 
-                <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 3px solid #a8e6a1; border-radius: 15px; padding: 2rem; text-align: center; position: relative;">
-                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #a8e6a1; color: #1e293b; padding: 0.5rem 1.5rem; border-radius: 20px; font-weight: 700; font-size: 0.9rem;">MOST IMPACT</div>
-                    <div style="font-size: 3rem; margin-bottom: 1rem; margin-top: 1rem;">🏆</div>
-                    <h3 style="color: #ffffff; margin-bottom: 1rem; font-size: 1.3rem;">Presenting Sponsor</h3>
-                    <div style="font-size: 2rem; color: white; font-weight: 700; margin-bottom: 1rem;">$15,000+</div>
-                    <ul style="text-align: left; color: #e2e8f0; list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> <strong>Everything in Challenge Sponsor</strong></li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Event naming rights</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Prominent logo placement everywhere</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Dedicated booth/recruiting space</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Opening & closing remarks</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Host mentors during event</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Exclusive first interviews with winners</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Co-branded event t-shirts</li>
+                <div class="hack-tier featured">
+                    <span class="hack-tier-badge">Most Popular</span>
+                    <div class="hack-tier-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="hack-tier-name">Challenge Sponsor</div>
+                    <div class="hack-tier-price">$5,000</div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Everything in Supporting Sponsor</li>
+                        <li><i class="fas fa-check"></i> Present a real-world problem challenge</li>
+                        <li><i class="fas fa-check"></i> Logo on event signage</li>
+                        <li><i class="fas fa-check"></i> Speaking opportunity at kickoff</li>
+                        <li><i class="fas fa-check"></i> Judge final presentations</li>
+                        <li><i class="fas fa-check"></i> Award prizes to the winning team</li>
+                        <li><i class="fas fa-check"></i> Direct access to participants</li>
                     </ul>
+                    <a href="#contact" class="btn btn-primary" onclick="document.getElementById('sponsorshipType').value='hack-5000';">Sponsor at $5,000</a>
                 </div>
 
-                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(168, 230, 161, 0.3); border-radius: 15px; padding: 2rem; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
-                    <h3 style="color: #ffffff; margin-bottom: 1rem; font-size: 1.3rem;">Supporting Sponsor</h3>
-                    <div style="font-size: 2rem; color: white; font-weight: 700; margin-bottom: 1rem;">$2,500+</div>
-                    <ul style="text-align: left; color: #e2e8f0; list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Logo on event website & materials</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Social media recognition</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Complimentary event tickets (4)</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Access to participant resumes</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Recognition at awards ceremony</li>
-                        <li style="margin-bottom: 0.75rem;"><i class="fas fa-check" style="color: #a8e6a1; margin-right: 0.5rem;"></i> Post-event impact report</li>
+                <div class="hack-tier">
+                    <div class="hack-tier-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="hack-tier-name">Presenting Sponsor</div>
+                    <div class="hack-tier-price">$10,000</div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Everything in Challenge Sponsor</li>
+                        <li><i class="fas fa-check"></i> Event naming rights</li>
+                        <li><i class="fas fa-check"></i> Prominent logo placement everywhere</li>
+                        <li><i class="fas fa-check"></i> Dedicated booth / recruiting space</li>
+                        <li><i class="fas fa-check"></i> Opening &amp; closing remarks</li>
+                        <li><i class="fas fa-check"></i> Exclusive first interviews with winners</li>
+                        <li><i class="fas fa-check"></i> Co-branded event t-shirts</li>
                     </ul>
+                    <a href="#contact" class="btn btn-secondary" onclick="document.getElementById('sponsorshipType').value='hack-10000';">Sponsor at $10,000</a>
                 </div>
             </div>
 
@@ -199,10 +201,12 @@
                 </div>
             </div>
 
-            <div style="text-align: center;">
-                <p style="color: #e2e8f0; font-size: 1.2rem; margin-bottom: 1.5rem; font-weight: 600;">Next Hack-a-thon: Spring 2026</p>
-                <a href="#contact" class="btn btn-primary" style="background: #a8e6a1; color: #1e293b; font-size: 1.2rem; padding: 1rem 2.5rem; margin-right: 1rem;">Become a Sponsor</a>
-                <a href="index.html#hackathon" class="btn btn-secondary" style="background: white; color: #0f8a4f; font-size: 1.2rem; padding: 1rem 2.5rem;">Learn More About Hack-a-thon</a>
+            <div class="hack-cta">
+                <p class="hack-cta-note">Next Hack-a-thon: Spring 2026</p>
+                <div class="hack-cta-buttons">
+                    <a href="#contact" class="btn btn-primary" onclick="document.getElementById('sponsorshipType').value='hack-5000';">Sponsor a Hack-a-thon</a>
+                    <a href="hackathon.html" class="btn btn-secondary">Learn More About Hack-a-thon</a>
+                </div>
             </div>
         </div>
     </section>
@@ -340,13 +344,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Sponsorship Interest</label>
-                        <select>
-                            <option value="">Select an option</option>
-                            <option value="presenting">Presenting Sponsor ($15,000+)</option>
-                            <option value="challenge">Challenge Sponsor ($5,000+)</option>
-                            <option value="supporting">Supporting Sponsor ($2,500+)</option>
-                            <option value="custom">Custom Sponsorship</option>
+                        <label>Sponsorship Type</label>
+                        <select id="sponsorshipType">
+                            <option value="">Select sponsorship type</option>
+                            <optgroup label="Hack-a-thon Sponsorship">
+                                <option value="hack-2500">Hack-a-thon — $2,500 (Supporting)</option>
+                                <option value="hack-5000">Hack-a-thon — $5,000 (Challenge)</option>
+                                <option value="hack-10000">Hack-a-thon — $10,000 (Presenting)</option>
+                            </optgroup>
+                            <optgroup label="LV Robotics Sponsorship">
+                                <option value="lv-annual">LV Robotics — Annual Partnership</option>
+                                <option value="lv-custom">LV Robotics — Custom</option>
+                            </optgroup>
                         </select>
                     </div>
 

@@ -3270,6 +3270,132 @@ section {
     color: #a8e6a1;
 }
 
+/* Hack-a-thon Sponsorship Tiers */
+.hack-tiers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 1.75rem;
+    margin-bottom: 3rem;
+    align-items: stretch;
+}
+
+.hack-tier {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 2.25rem 2rem;
+    text-align: left;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.hack-tier:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    border-color: rgba(63, 209, 127, 0.35);
+}
+
+.hack-tier.featured {
+    border-color: rgba(63, 209, 127, 0.5);
+    background: linear-gradient(160deg, rgba(63, 209, 127, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+.hack-tier-badge {
+    position: absolute;
+    top: -12px;
+    left: 2rem;
+    background: linear-gradient(135deg, #0f8a4f, #0a5c36);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.hack-tier-icon {
+    width: 54px;
+    height: 54px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    font-size: 1.4rem;
+    color: var(--brand-green-bright);
+    background: linear-gradient(135deg, rgba(63, 209, 127, 0.18), rgba(16, 185, 129, 0.06));
+    border: 1px solid rgba(63, 209, 127, 0.25);
+    margin-bottom: 1.1rem;
+}
+
+.hack-tier-name {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+}
+
+.hack-tier-price {
+    color: #ffffff;
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+}
+
+.hack-tier ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    flex-grow: 1;
+}
+
+.hack-tier li {
+    color: #cdd9d2;
+    font-size: 0.92rem;
+    padding: 0.4rem 0;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+}
+
+.hack-tier li i {
+    color: var(--brand-green);
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.hack-tier .btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.hack-cta {
+    text-align: center;
+}
+
+.hack-cta-note {
+    color: var(--brand-green-bright);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+}
+
+.hack-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 /* Impact Section */
 .impact-section {
     padding: 6rem 2rem;
@@ -3585,6 +3711,12 @@ section {
 .sponsorship-form select option {
     background: #0a1410;
     color: #e8f5ee;
+}
+
+.sponsorship-form select optgroup {
+    background: #0a1410;
+    color: var(--brand-green-bright);
+    font-weight: 700;
 }
 
 /* Responsive Design for Sponsorship */
