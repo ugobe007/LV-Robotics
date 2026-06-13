@@ -3188,8 +3188,8 @@ section {
 
 /* Impact Section */
 .impact-section {
-    padding: 5rem 2rem;
-    background: var(--light-bg);
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #050807 0%, #0a1410 50%, #050807 100%);
 }
 
 .impact-grid {
@@ -3200,31 +3200,67 @@ section {
 }
 
 .impact-item {
-    background: white;
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.impact-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-green), var(--accent-amber));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.impact-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    border-color: rgba(63, 209, 127, 0.35);
+}
+
+.impact-item:hover::before {
+    opacity: 1;
 }
 
 .impact-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    width: 68px;
+    height: 68px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.9rem;
+    color: var(--brand-green-bright);
+    margin-bottom: 1.4rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(63, 209, 127, 0.18), rgba(16, 185, 129, 0.06));
+    border: 1px solid rgba(63, 209, 127, 0.25);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .impact-item h4 {
-    color: #0f8a4f;
+    color: #ffffff;
     font-size: 1.3rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .impact-item p {
-    color: #64748b;
-    line-height: 1.6;
+    color: #b8c7c0;
+    line-height: 1.7;
 }
 
 /* Testimonials Section */
 .testimonials-section {
-    padding: 5rem 2rem;
+    padding: 6rem 2rem;
     background: linear-gradient(135deg, #0a1410 0%, #030504 100%);
 }
 
@@ -3236,47 +3272,83 @@ section {
 }
 
 .testimonial-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    padding: 2.5rem;
-    border: 1px solid rgba(168, 230, 161, 0.2);
+    padding: 2.75rem 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
-.quote-icon {
-    font-size: 4rem;
-    color: #a8e6a1;
+.testimonial-card::before {
+    content: '\201C';
+    position: absolute;
+    top: -1.2rem;
+    right: 1.25rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 7rem;
     line-height: 1;
-    margin-bottom: 1rem;
+    color: rgba(63, 209, 127, 0.12);
+    pointer-events: none;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    border-color: rgba(63, 209, 127, 0.3);
 }
 
 .testimonial-text {
-    color: #e2e8f0;
-    font-size: 1.1rem;
+    color: #d7e3dd;
+    font-size: 1.08rem;
     line-height: 1.8;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+    z-index: 1;
 }
 
 .testimonial-author {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.testimonial-avatar {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    color: var(--brand-green-bright);
+    background: linear-gradient(135deg, rgba(63, 209, 127, 0.22), rgba(16, 185, 129, 0.08));
+    border: 1px solid rgba(63, 209, 127, 0.3);
 }
 
 .testimonial-author strong {
-    color: white;
-    font-size: 1.1rem;
+    display: block;
+    color: #ffffff;
+    font-size: 1.05rem;
 }
 
-.testimonial-author span {
-    color: #a8e6a1;
-    font-size: 0.9rem;
+.testimonial-role {
+    color: var(--brand-green-bright);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 /* Sponsorship Contact Section */
 .sponsorship-contact-section {
-    padding: 5rem 2rem;
-    background: var(--light-bg);
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #050807 0%, #0a1410 100%);
 }
 
 .contact-content {
@@ -3287,41 +3359,63 @@ section {
 }
 
 .contact-info {
-    background: white;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 2.5rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     height: fit-content;
 }
 
 .contact-info h3 {
-    color: #0f8a4f;
-    font-size: 1.8rem;
+    color: #ffffff;
+    font-size: 1.6rem;
     margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 0.85rem;
+}
+
+.contact-info h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 48px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--brand-green), var(--accent-amber));
 }
 
 .contact-item {
     display: flex;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    align-items: start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
 }
 
 .contact-item i {
-    font-size: 1.5rem;
-    color: #a8e6a1;
-    margin-top: 0.25rem;
+    font-size: 1.1rem;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: var(--brand-green-bright);
+    background: linear-gradient(135deg, rgba(63, 209, 127, 0.18), rgba(16, 185, 129, 0.06));
+    border: 1px solid rgba(63, 209, 127, 0.25);
 }
 
 .contact-item strong {
     display: block;
-    color: #1e293b;
-    margin-bottom: 0.25rem;
-    font-size: 1.1rem;
+    color: #ffffff;
+    margin-bottom: 0.2rem;
+    font-size: 1.05rem;
 }
 
 .contact-item p {
-    color: #64748b;
+    color: #b8c7c0;
     margin: 0;
 }
 
@@ -3347,16 +3441,66 @@ section {
 }
 
 .sponsorship-form {
-    background: white;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 2.5rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+}
+
+.sponsorship-form .form-group {
+    margin-bottom: 1.3rem;
+}
+
+.sponsorship-form label {
+    display: block;
+    color: #cdebd9;
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 0.5rem;
+}
+
+.sponsorship-form input,
+.sponsorship-form select,
+.sponsorship-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: #e8f5ee;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sponsorship-form textarea {
+    resize: vertical;
+}
+
+.sponsorship-form input::placeholder,
+.sponsorship-form textarea::placeholder {
+    color: #6f8579;
+}
+
+.sponsorship-form input:focus,
+.sponsorship-form select:focus,
+.sponsorship-form textarea:focus {
+    outline: none;
+    border-color: var(--brand-green);
+    background: rgba(63, 209, 127, 0.06);
+    box-shadow: 0 0 0 3px rgba(63, 209, 127, 0.15);
+}
+
+.sponsorship-form select option {
+    background: #0a1410;
+    color: #e8f5ee;
 }
 
 /* Responsive Design for Sponsorship */
