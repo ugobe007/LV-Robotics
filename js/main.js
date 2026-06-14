@@ -83,31 +83,6 @@ async function deletePostSupabase(postId, mediaUrl) {
     }
 }
 
-// Particle animation for hero section
-function createParticles() {
-    const particlesContainer = document.getElementById('particles');
-    if (!particlesContainer) return; // Exit if element doesn't exist
-    
-    const particleCount = 50;
-    
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.cssText = `
-            position: absolute;
-            width: ${Math.random() * 5 + 2}px;
-            height: ${Math.random() * 5 + 2}px;
-            background: rgba(255, 255, 255, ${Math.random() * 0.5 + 0.2});
-            border-radius: 50%;
-            left: ${Math.random() * 100}%;
-            top: ${Math.random() * 100}%;
-            animation: float-particle ${Math.random() * 10 + 10}s infinite ease-in-out;
-            animation-delay: ${Math.random() * 5}s;
-        `;
-        particlesContainer.appendChild(particle);
-    }
-}
-
 // Hero background photo carousel (depth + meaning)
 function initHeroCarousel() {
     const carousels = document.querySelectorAll('.hero-bg-carousel');
@@ -171,30 +146,6 @@ function initHeroCarousel() {
     });
 }
 
-// Add CSS animation for particles
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes float-particle {
-        0%, 100% {
-            transform: translate(0, 0) scale(1);
-            opacity: 0.3;
-        }
-        25% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1.2);
-            opacity: 0.6;
-        }
-        50% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0.8);
-            opacity: 0.4;
-        }
-        75% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1.1);
-            opacity: 0.7;
-        }
-    }
-`;
-document.head.appendChild(style);
-
 // Debug mode - disable in production
 const DEBUG = true; // Set to true only during development
 const debugLog = (...args) => { if (DEBUG) console.log(...args); };
@@ -253,8 +204,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.warn('⚠ Supabase not available, some features may not work');
     }
     
-    // Initialize particles + hero background carousel
-    createParticles();
+    // Initialize hero background carousel
     initHeroCarousel();
 
     // Site-wide sticky navbar + floating Community Bulletin button
