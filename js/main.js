@@ -1896,7 +1896,7 @@ function injectBulletinFab() {
     if (document.querySelector('.bulletin-cta')) return; // avoid duplicates
     const cta = document.createElement('div');
     cta.className = 'bulletin-cta';
-    cta.innerHTML = '<a href="community.html" class="btn-bulletin" aria-label="Community Bulletin Board">📋 Community Bulletin</a>';
+    cta.innerHTML = '<a href="community.html" class="btn-bulletin" aria-label="Community Bulletin Board">Community Bulletin</a>';
     document.body.appendChild(cta);
 }
 
