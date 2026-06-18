@@ -258,25 +258,26 @@ h1, h2, h3,
 
 .btn-bulletin {
     padding: 0.85rem 1.5rem;
-    background: transparent;
+    background: rgba(240, 240, 242, 0.95);
     color: #c2410c;
     text-decoration: none;
     border-radius: 50px;
     font-weight: 800;
     font-size: 0.9rem;
-    box-shadow: none;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     transition: all 0.3s ease;
     border: 2px solid #c2410c;
     white-space: nowrap;
+    backdrop-filter: blur(8px);
 }
 
 .btn-bulletin:hover {
     transform: translateY(-4px) scale(1.03);
     box-shadow: 0 8px 24px rgba(194, 65, 12, 0.25);
-    background: rgba(194, 65, 12, 0.08);
+    background: rgba(248, 248, 250, 0.98);
     border-color: #e65100;
     color: #e65100;
 }
