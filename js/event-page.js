@@ -14,14 +14,14 @@ const FALLBACK_EVENTS = {
         start_date: '2026-09-17T17:30:00-07:00',
         end_date: '2026-09-17T19:30:00-07:00',
         location_type: 'in_person',
-        location_name: 'Desert Research Institute',
-        location_address: '755 East Flamingo Rd, Las Vegas, NV',
+        location_name: 'Pololu Robotics and Electronics',
+        location_address: '920 Pilot Rd, Las Vegas, NV 89119',
         organizer_name: 'Las Vegas Robotics Meetup',
         registration_required: true,
         registration_url: 'https://www.meetup.com/las-vegas-robotics-meetup/events/316423143/',
         category: 'Meetup',
         status: 'published',
-        image_url: 'images/marcus_sophia.jpg'
+        image_url: 'https://secure.meetupstatic.com/photos/event/1/f/0/a/highres_535987946.jpeg'
     },
     'emotional-ai-loops-do-you-get-me': {
         slug: 'emotional-ai-loops-do-you-get-me',
