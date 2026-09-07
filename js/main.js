@@ -2211,6 +2211,29 @@ async function loadUpcomingEvents() {
         renderEventCards(mergedEvents);
         
         debugLog(`✓ Loaded ${mergedEvents.length} upcoming events from database`);
+
+        // Trigger background Meetup sync check to keep site calendar up-to-date with Meetup page
+        if (SUPABASE_ANON_KEY) {
+            fetch('https://ubanpswucfkdvixityoe.supabase.co/functions/v1/meetup-sync', {
+                headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+            }).then(r => r.json()).then(data => {
+                if (data && data.ok && data.fetched > 0) {
+                    sbClient.from('events').select('*').eq('status', 'published')
+                        .gte('start_date', new Date().toISOString())
+                        .order('start_date', { ascending: true })
+                        .limit(3)
+                        .then(({ data: updatedEvents }) => {
+                            if (updatedEvents && updatedEvents.length > 0) {
+                                const refreshedMerged = [
+                                    ...fallbackEvents.filter(f => !(updatedEvents.some(e => e.slug === f.slug))),
+                                    ...updatedEvents.filter(e => !fallbackEvents.some(f => f.slug === e.slug))
+                                ].sort((a, b) => new Date(a.start_date) - new Date(b.start_date)).slice(0, 3);
+                                renderEventCards(refreshedMerged);
+                            }
+                        }).catch(() => {});
+                }
+            }).catch(syncErr => console.warn('Background Meetup sync check skipped:', syncErr));
+        }
         
     } catch (err) {
         console.error('Error loading events:', err);

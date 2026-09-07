@@ -680,15 +680,23 @@ async function publishToMeetup() {
 
 // Sync events directly from Meetup into Supabase
 async function syncFromMeetup() {
-    const statusDiv = document.getElementById('publishStatus');
+    const statusDiv = document.getElementById('publishStatus') || document.getElementById('meetupSyncStatus');
     if (statusDiv) statusDiv.innerHTML = '<i class="fas fa-sync fa-spin"></i> Syncing events from Meetup...';
     try {
-        const res = await fetch('https://ubanpswucfkdvixityoe.supabase.co/functions/v1/meetup-sync');
+        const anonKey = typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : (window.SUPABASE_ANON_KEY || '');
+        const res = await fetch('https://ubanpswucfkdvixityoe.supabase.co/functions/v1/meetup-sync', {
+            headers: {
+                'Authorization': `Bearer ${anonKey}`,
+                'Content-Type': 'application/json'
+            }
+        });
         const data = await res.json();
         if (data.ok || data.fetched !== undefined) {
-            if (statusDiv) statusDiv.innerHTML = `✓ Successfully synced ${data.fetched || 0} events from Meetup!`;
-            alert(`Meetup Sync Complete!\n\nFetched and updated ${data.fetched || 0} events on LV Robotics.`);
+            const count = data.fetched || data.upserted || 0;
+            if (statusDiv) statusDiv.innerHTML = `✓ Successfully synced ${count} events from Meetup!`;
+            alert(`Meetup Sync Complete!\n\nFetched and updated ${count} events on LV Robotics.`);
             if (typeof loadEventsTable === 'function') loadEventsTable();
+            if (typeof loadEvents === 'function') loadEvents();
         } else {
             throw new Error(data.error || 'Sync failed');
         }

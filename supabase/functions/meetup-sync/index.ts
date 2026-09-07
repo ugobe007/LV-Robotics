@@ -185,20 +185,38 @@ function mapEvent(e: IcsEvent) {
 
 async function upsert(rows: Record<string, unknown>[]) {
   if (!rows.length) return { upserted: 0 };
-  const url = `${env("SUPABASE_URL")}/rest/v1/events?on_conflict=meetup_event_id`;
-  const res = await fetch(url, {
+  const baseUrl = env("SUPABASE_URL");
+  const serviceKey = env("SUPABASE_SERVICE_ROLE_KEY");
+  const headers = {
+    "apikey": serviceKey,
+    "Authorization": `Bearer ${serviceKey}`,
+    "Content-Type": "application/json",
+    "Prefer": "resolution=merge-duplicates,return=minimal",
+  };
+
+  // Try primary on_conflict=meetup_event_id first
+  let res = await fetch(`${baseUrl}/rest/v1/events?on_conflict=meetup_event_id`, {
     method: "POST",
-    headers: {
-      "apikey": env("SUPABASE_SERVICE_ROLE_KEY"),
-      "Authorization": `Bearer ${env("SUPABASE_SERVICE_ROLE_KEY")}`,
-      "Content-Type": "application/json",
-      "Prefer": "resolution=merge-duplicates,return=minimal",
-    },
+    headers,
     body: JSON.stringify(rows),
   });
+
   if (!res.ok) {
     const txt = await res.text();
-    throw new Error(`Supabase upsert failed (${res.status}): ${txt}`);
+    // If meetup_event_id UNIQUE constraint is missing in DB (42P10), fallback to on_conflict=slug
+    if (txt.includes("42P10") || txt.includes("ON CONFLICT")) {
+      res = await fetch(`${baseUrl}/rest/v1/events?on_conflict=slug`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(rows),
+      });
+      if (!res.ok) {
+        const txt2 = await res.text();
+        throw new Error(`Supabase upsert fallback failed (${res.status}): ${txt2}`);
+      }
+    } else {
+      throw new Error(`Supabase upsert failed (${res.status}): ${txt}`);
+    }
   }
   return { upserted: rows.length };
 }
