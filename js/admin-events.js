@@ -678,6 +678,27 @@ async function publishToMeetup() {
     await updateEventPlatform('meetup', true);
 }
 
+// Sync events directly from Meetup into Supabase
+async function syncFromMeetup() {
+    const statusDiv = document.getElementById('publishStatus');
+    if (statusDiv) statusDiv.innerHTML = '<i class="fas fa-sync fa-spin"></i> Syncing events from Meetup...';
+    try {
+        const res = await fetch('https://ubanpswucfkdvixityoe.supabase.co/functions/v1/meetup-sync');
+        const data = await res.json();
+        if (data.ok || data.fetched !== undefined) {
+            if (statusDiv) statusDiv.innerHTML = `✓ Successfully synced ${data.fetched || 0} events from Meetup!`;
+            alert(`Meetup Sync Complete!\n\nFetched and updated ${data.fetched || 0} events on LV Robotics.`);
+            if (typeof loadEventsTable === 'function') loadEventsTable();
+        } else {
+            throw new Error(data.error || 'Sync failed');
+        }
+    } catch (err) {
+        console.error('Meetup sync error:', err);
+        if (statusDiv) statusDiv.innerHTML = '⚠️ Meetup sync failed: ' + err.message;
+        alert('Could not sync events from Meetup: ' + err.message);
+    }
+}
+
 // Share to LinkedIn
 async function shareToLinkedIn() {
     const event = await getCurrentEventData();

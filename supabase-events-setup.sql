@@ -131,5 +131,15 @@ VALUES
     '2026-09-12 13:00:00-07', '2026-09-12 18:00:00-07',
     'in_person', 'Las Vegas Community Center', '3130 McLeod Dr, Las Vegas, NV 89121',
     'LV Robotics', true, 'membership.html'
+),
+(
+    'foundational-models',
+    'Foundational Models',
+    'LV Robotics: Foundation Models Are Changing How We Build Robots',
+    E'For most of robotics history, intelligent automation was built forward: Task -> Program -> Robot -> Action. Whenever a robot needed to perform a new task, engineers had to write new code, gather fresh demonstrations, retrain architecture, and test.\n\nToday that paradigm is shifting. Robot foundation models, Vision-Language-Action (VLA) models, and world models are decoupling physical intelligence from specific tasks—and even from specific hardware embodiments.\n\nJoin us as we explore DeepMind Gemini Robotics 2, Stanford SimToolReal, PI\'s pi0.7, and OS3 physical intelligence.',
+    'Meetup', true, 'published',
+    '2026-09-17 17:30:00-07', '2026-09-17 19:30:00-07',
+    'in_person', 'Desert Research Institute', '755 East Flamingo Rd, Las Vegas, NV',
+    'Las Vegas Robotics Meetup', true, 'https://www.meetup.com/las-vegas-robotics-meetup/events/316423143/'
 )
 ON CONFLICT (slug) DO NOTHING;

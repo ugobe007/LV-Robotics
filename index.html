@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LV Robotics - Las Vegas Robotics Community</title>
+    <meta name="description" content="LV Robotics connects Las Vegas builders through robotics meetups, workshops, hack-a-thons, and real-world innovation programs.">
+    <meta name="robots" content="index,follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="LV Robotics - Las Vegas Robotics Community">
+    <meta property="og:description" content="Join the Las Vegas robotics community for events, workshops, and hands-on collaboration.">
+    <meta property="og:url" content="https://lv-robotics.fly.dev/">
+    <meta property="og:image" content="https://lv-robotics.fly.dev/images/lv-robotics-logo-glow.png?v=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LV Robotics - Las Vegas Robotics Community">
+    <meta name="twitter:description" content="Join the Las Vegas robotics community for events, workshops, and hands-on collaboration.">
+    <meta name="twitter:image" content="https://lv-robotics.fly.dev/images/lv-robotics-logo-glow.png?v=1">
+    <link rel="canonical" href="https://lv-robotics.fly.dev/">
     <link rel="icon" type="image/png" href="images/lv-robotics-icon-2026.png?v=2">
     <link rel="apple-touch-icon" href="images/lv-robotics-icon-2026.png?v=2">
     <meta name="theme-color" content="#050807">
     <link rel="preload" as="image" href="images/hero/robot-vegas.jpg">
-    <link rel="stylesheet" href="css/styles.css?v=64">
+    <link rel="stylesheet" href="css/styles.css?v=72">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -57,10 +69,18 @@
                     <h1 class="hero-title"><span class="highlight">LV Robotics</span></h1>
                 </div>
             </div>
-            <a href="vision.html" class="hero-tagline-btn">Building the future of robotics in Las Vegas <i class="fas fa-arrow-right"></i></a>
-            <p class="hero-description">A community of 500+ builders, engineers, and innovators shaping the future of robotics in Southern Nevada.</p>
-            <div class="hero-buttons">
-                <a href="membership.html" class="btn btn-primary">Join Us - Become a Member</a>
+            <div class="hero-copy-surface">
+                <a href="vision.html" class="hero-tagline-btn">Building the future of robotics in Las Vegas <i class="fas fa-arrow-right"></i></a>
+                <p class="hero-description">We connect students, founders, engineers, and operators through community, education, and real-world robotics projects across Southern Nevada.</p>
+                <div class="hero-highlights">
+                    <span>Community-first</span>
+                    <span>Hands-on learning</span>
+                    <span>Local impact</span>
+                </div>
+                <div class="hero-buttons">
+                    <a href="membership.html" class="inline-link homepage-link">Join the community <i class="fas fa-arrow-right"></i></a>
+                    <a href="vision.html" class="inline-link homepage-link">Explore Vision 2040 <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </section>
@@ -110,28 +130,7 @@
                 <div><span class="num">$100M</span><span class="label">Alley Fund</span></div>
                 <div><span class="num">600+</span><span class="label">Local Builders</span></div>
             </div>
-            <a href="vision.html" class="btn btn-primary">Explore the Vision</a>
-        </div>
-    </section>
-
-    <!-- Community Highlights - Rotating Gallery -->
-    <section class="highlights-section">
-        <div class="container">
-            <div class="highlights-header">
-                <h2 class="section-title">Community <span class="highlight">Highlights</span></h2>
-                <a href="#events" class="scroll-to-events-btn" title="View upcoming events">
-                    <i class="fas fa-chevron-down"></i>
-                </a>
-            </div>
-            <div class="rotating-gallery" id="galleryContainer">
-                <!-- Gallery slides will be loaded here dynamically from Supabase -->
-                <div style="text-align: center; padding: 2rem; color: #a8e6a1;">
-                    <p>Loading community highlights...</p>
-                </div>
-            </div>
-            <div class="gallery-indicators" id="galleryIndicators">
-                <!-- Indicators will be generated dynamically -->
-            </div>
+            <a href="vision.html" class="inline-link homepage-link">Explore the Vision <i class="fas fa-arrow-right"></i></a>
         </div>
     </section>
 
@@ -139,6 +138,7 @@
     <section id="events" class="events-section">
         <div class="container">
             <h2 class="section-title">Upcoming <span class="highlight">Events</span></h2>
+            <p class="section-intro">Connect with Las Vegas robotics builders at talks, demos, and workshops.</p>
             <div class="events-grid">
                 <div class="events-loading">
                     <i class="fas fa-circle-notch fa-spin"></i>
@@ -160,7 +160,7 @@
                 </div>
             </div>
             <div class="past-events-cta">
-                <a href="https://www.meetup.com/las-vegas-robotics-meetup/" target="_blank" rel="noopener" class="btn btn-secondary"><i class="fab fa-meetup"></i> View All on Meetup</a>
+                <a href="https://www.meetup.com/las-vegas-robotics-meetup/events/" target="_blank" rel="noopener" class="btn btn-secondary"><i class="fab fa-meetup"></i> View All on Meetup</a>
             </div>
         </div>
     </section>
@@ -169,41 +169,73 @@
     <section class="photo-showcase">
         <div class="container">
             <h2 class="section-title">Our <span class="highlight">Community</span></h2>
-            <div class="photo-grid">
-                <div class="photo-card">
-                    <div class="photo-placeholder">
-                        <img src="images/community-1.jpg" alt="Robotics Workshop" class="community-photo">
-                    </div>
-                    <h3>Hands-On Workshops</h3>
-                    <p>Learn by doing in our interactive sessions</p>
-                </div>
-                <div class="photo-card">
-                    <div class="photo-placeholder">
-                        <img src="images/community-2.jpg" alt="Team Collaboration" class="community-photo">
-                    </div>
-                    <h3>Team Collaboration</h3>
-                    <p>Work together on exciting projects</p>
-                </div>
-                <div class="photo-card">
-                    <div class="photo-placeholder">
-                        <img src="images/community-3.jpg" alt="Competitions" class="community-photo">
-                    </div>
-                    <h3>Competitions</h3>
-                    <p>Test your skills in friendly competition</p>
-                </div>
+            <p class="section-intro">A local scene built through repeat gatherings, working sessions, and real conversations between students, founders, and engineers.</p>
+            <div class="editorial-strip">
+                <figure class="editorial-frame editorial-frame-feature">
+                    <img src="images/community-1.jpg" alt="Robotics workshop in Las Vegas" class="community-photo">
+                    <figcaption>
+                        <span class="editorial-kicker">Workshops</span>
+                        <h3>Hands-on sessions with practical momentum</h3>
+                        <p>Small-group builds, demos, and problem-solving sessions that turn interest into skills.</p>
+                    </figcaption>
+                </figure>
+                <figure class="editorial-frame">
+                    <img src="images/community-2.jpg" alt="LV Robotics members collaborating" class="community-photo">
+                    <figcaption>
+                        <span class="editorial-kicker">Collaboration</span>
+                        <h3>Builders meeting builders</h3>
+                        <p>Founders, educators, and operators cross paths often enough to create real follow-through.</p>
+                    </figcaption>
+                </figure>
+                <figure class="editorial-frame">
+                    <img src="images/community-3.jpg" alt="LV Robotics competition and demo energy" class="community-photo">
+                    <figcaption>
+                        <span class="editorial-kicker">Demos</span>
+                        <h3>Public moments that create local gravity</h3>
+                        <p>Show-and-tell nights, challenge formats, and live robotics experiences that make the community visible.</p>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- How We Work -->
+    <section class="approach-section">
+        <div class="container">
+            <div class="approach-header">
+                <span class="vv-eyebrow">How we work</span>
+                <h2>From curiosity to commercialization</h2>
+                <p>Our programs turn local energy into practical momentum through events, mentorship, and a growing robotics ecosystem.</p>
+            </div>
+            <div class="approach-grid">
+                <article class="approach-card">
+                    <div class="approach-icon"><i class="fas fa-users"></i></div>
+                    <h3>Connect</h3>
+                    <p>Meet builders, educators, and founders at monthly gatherings designed to spark real collaboration.</p>
+                </article>
+                <article class="approach-card">
+                    <div class="approach-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Build</h3>
+                    <p>Learn by doing through hands-on workshops, demos, and practical challenge-based projects.</p>
+                </article>
+                <article class="approach-card">
+                    <div class="approach-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Scale</h3>
+                    <p>Support the next wave of founders and startups with the structure and network they need to grow locally.</p>
+                </article>
             </div>
         </div>
     </section>
 
     <!-- Hack-a-thon Section -->
-    <section id="hackathon" class="hackathon-section" style="background: linear-gradient(135deg, #0a1410 0%, #030504 100%); padding: 5rem 0; border-top: 1px solid rgba(63, 209, 127, 0.18); border-bottom: 1px solid rgba(63, 209, 127, 0.18);">
+    <section id="hackathon" class="hackathon-section">
         <div class="container">
-            <h2 class="section-title" style="color: white;">Semi-Annual <span class="highlight">Hack-a-thon</span></h2>
-            <p style="text-align: center; font-size: 1.2rem; color: #b8c7c0; margin-bottom: 3rem; max-width: 860px; margin-left: auto; margin-right: auto; line-height: 1.7;">
+            <h2 class="section-title">Semi-Annual <span class="highlight">Hack-a-thon</span></h2>
+            <p class="section-intro">
                 Join innovators, students, and professionals in tackling real-world challenges twice a year. Build solutions, learn new skills, and connect with Las Vegas's robotics community.
             </p>
 
-            <div class="hack-why" style="margin-bottom: 3rem;">
+            <div class="hack-why">
                 <div class="hack-why-card">
                     <div class="hack-why-icon"><i class="fas fa-brain"></i></div>
                     <h4>Learn New Skills</h4>
@@ -222,7 +254,7 @@
             </div>
 
             <h3 class="hack-why-title">Who Can Participate?</h3>
-            <div class="hack-why" style="margin-bottom: 3rem;">
+            <div class="hack-why hack-why-secondary">
                 <div class="hack-why-card">
                     <div class="hack-why-icon"><i class="fas fa-user-graduate"></i></div>
                     <h4>High School Students</h4>
@@ -248,8 +280,8 @@
             <div class="hack-cta">
                 <p class="hack-cta-note">Partner with us to sponsor our next hack-a-thon</p>
                 <div class="hack-cta-buttons">
-                    <a href="sponsorship.html#hackathon-sponsorship" class="btn btn-primary">Become a Sponsor</a>
-                    <a href="#events" class="btn btn-secondary">View Upcoming Events</a>
+                    <a href="sponsorship.html#hackathon-sponsorship" class="inline-link homepage-link">Become a Sponsor <i class="fas fa-arrow-right"></i></a>
+                    <a href="#events" class="inline-link homepage-link">View Upcoming Events <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -259,6 +291,7 @@
     <section id="workshops" class="workshops-section">
         <div class="container">
             <h2 class="section-title">Our <span class="highlight">Workshops</span></h2>
+            <p class="section-intro">Focused sessions for builders who want practical exposure to robotics systems, software, electronics, and embodied AI.</p>
             <div class="workshops-grid">
                 <div class="workshop-card">
                     <div class="workshop-icon">
@@ -389,33 +422,33 @@
                 <div class="auth-controls">
                     <div id="authSignedOut">
                         <input type="email" id="authEmail" placeholder="Enter email to sign in" style="padding:0.6rem 1rem;border-radius:8px;border:2px solid #e2e8f0;background:white;margin-right:0.5rem;">
-                        <button class="btn btn-primary" onclick="requestMagicLink()">Sign in to post</button>
-                        <button class="btn btn-secondary" onclick="oauthSignIn('google')" style="margin-left:0.5rem;">Google</button>
-                        <button class="btn btn-secondary" onclick="oauthSignIn('github')" style="margin-left:0.5rem;">GitHub</button>
+                        <button class="btn btn-primary" data-action="request-magic-link">Sign up or sign in to post</button>
+                        <button class="btn btn-secondary" data-action="oauth-google" style="margin-left:0.5rem;">Google</button>
+                        <button class="btn btn-secondary" data-action="oauth-github" style="margin-left:0.5rem;">GitHub</button>
                     </div>
                     <div id="authSignedIn" style="display:none; align-items:center; gap:0.75rem;">
                         <span id="authUserEmail" style="color:#e2e8f0;"></span>
-                        <button class="btn btn-secondary" onclick="signOut()">Sign out</button>
+                        <button class="btn btn-secondary" data-action="sign-out">Sign out</button>
                     </div>
                 </div>
                 <div class="post-form">
                     <h3>Share with the Community</h3>
                     <textarea id="bulletinText" placeholder="What's happening in robotics?"></textarea>
                     <div class="media-controls">
-                        <button onclick="document.getElementById('imageUpload').click()" class="media-btn">
+                        <button data-action="select-image" class="media-btn">
                             📷 Add Image
                         </button>
-                        <button onclick="document.getElementById('videoUpload').click()" class="media-btn">
+                        <button data-action="select-video" class="media-btn">
                             🎥 Add Video
                         </button>
-                        <button onclick="addLink()" class="media-btn">
+                        <button data-action="add-link" class="media-btn">
                             🔗 Add Link
                         </button>
                     </div>
-                    <input type="file" id="imageUpload" class="media-input" accept="image/*" onchange="handleImageUpload(event)">
-                    <input type="file" id="videoUpload" class="media-input" accept="video/*" onchange="handleVideoUpload(event)">
+                    <input type="file" id="imageUpload" class="media-input" accept="image/*">
+                    <input type="file" id="videoUpload" class="media-input" accept="video/*">
                     <div id="mediaPreview"></div>
-                    <button onclick="addPost()" class="btn btn-primary">Post</button>
+                    <button data-action="add-post" class="btn btn-primary">Post</button>
                 </div>
                 <div class="bulletin-posts" id="bulletinPosts">
                     <div class="bulletin-post">
@@ -434,7 +467,7 @@
     <section id="partner" class="partner-section">
         <div class="container">
             <h2 class="section-title"><span class="highlight">Partner</span> with Us</h2>
-            <p class="partner-intro">Join leading organizations investing in the next generation of innovators and engineers</p>
+            <p class="section-intro partner-intro">Join leading organizations investing in the next generation of innovators, operators, and robotics founders in Las Vegas.</p>
 
             <div class="partner-grid">
                 <div class="partner-card">
@@ -454,8 +487,8 @@
                 </div>
             </div>
             
-            <div style="text-align: center; margin-top: 3rem;">
-                <a href="sponsorship.html" class="btn btn-primary" style="font-size: 1.2rem; padding: 1.25rem 3rem;">View Sponsorship Opportunities</a>
+            <div class="partner-cta-wrap">
+                <a href="sponsorship.html" class="inline-link homepage-link">View Sponsorship Opportunities <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </section>
@@ -468,10 +501,10 @@
                     <img src="images/lv-robotics-logo-glow.png?v=1" alt="LV Robotics" style="height:64px;width:auto;display:block;margin-bottom:0.75rem;">
                     <p>Building the future of robotics in Las Vegas</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://www.meetup.com/las-vegas-robotics-meetup/events/" target="_blank" rel="noopener noreferrer" aria-label="Meetup"><i class="fab fa-meetup"></i></a>
+                        <a href="https://github.com/ugobe007/LV-Robotics" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="mailto:info@lvrobotics.org" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="sponsorship.html" aria-label="Sponsorship"><i class="fas fa-handshake"></i></a>
                     </div>
                 </div>
                 <div class="footer-section">
@@ -479,7 +512,7 @@
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#events">Events</a></li>
-                        <li><a href="#fellowship">Fellowship</a></li>
+                        <li><a href="robots.html">Robot Intelligence</a></li>
                         <li><a href="#partner">Partner with Us</a></li>
                     </ul>
                 </div>
@@ -499,32 +532,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
-    <script src="js/main.js?v=29" defer></script>
-    <script>
-        // Diagnostic logging
-        console.log('='.repeat(60));
-        console.log('LV ROBOTICS - Script Diagnostics');
-        console.log('='.repeat(60));
-        
-        window.addEventListener('load', () => {
-            console.log('📊 FINAL Script Load Status:');
-            console.log('  1. Supabase library:', !!window.supabase ? '✓ Loaded' : '✗ NOT loaded');
-            console.log('  2. Supabase.createClient:', typeof window.supabase?.createClient === 'function' ? '✓ Available' : '✗ NOT available');
-            console.log('  3. Gallery functions:', typeof loadGalleryFromSupabase !== 'undefined' ? '✓ Available' : '✗ NOT available');
-            console.log('  4. sbClient status:', typeof sbClient !== 'undefined' ? `✓ Created: ${sbClient ? 'YES' : 'NO'}` : '✗ Not set');
-            
-            if (!window.supabase) {
-                console.error('❌ CRITICAL: Supabase library failed to load!');
-                document.body.innerHTML += '<div style="background:red;color:white;padding:20px;margin:20px;">ERROR: Supabase library not loaded. Gallery features will not work.</div>';
-            }
-        });
-        
-        // Also log after a small delay
-        setTimeout(() => {
-            console.log('📊 Delayed diagnostics (500ms):');
-            console.log('  sbClient:', typeof sbClient !== 'undefined' ? (sbClient ? 'INITIALIZED' : 'null') : 'NOT DEFINED');
-            console.log('  window.supabase.createClient type:', typeof window.supabase?.createClient);
-        }, 500);
-    </script>
+    <script src="js/main.js?v=40" defer></script>
 </body>
 </html>

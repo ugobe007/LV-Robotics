@@ -131,7 +131,9 @@ function initHeroCarousel() {
         if (slides.length <= 1 || prefersReduced) return;
 
         let idx = 0;
-        setInterval(() => {
+        let heroInterval = null;
+
+        const rotateHero = () => {
             slides[idx].classList.remove('active');
             idx = (idx + 1) % slides.length;
             slides[idx].classList.add('active');
@@ -142,12 +144,32 @@ function initHeroCarousel() {
                     captionEl.style.opacity = '1';
                 }, 400);
             }
-        }, 6000);
+        };
+
+        const startHeroRotation = () => {
+            if (heroInterval || document.hidden) return;
+            heroInterval = setInterval(rotateHero, 6000);
+        };
+
+        const stopHeroRotation = () => {
+            if (!heroInterval) return;
+            clearInterval(heroInterval);
+            heroInterval = null;
+        };
+
+        startHeroRotation();
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopHeroRotation();
+            } else {
+                startHeroRotation();
+            }
+        });
     });
 }
 
 // Debug mode - disable in production
-const DEBUG = true; // Set to true only during development
+const DEBUG = false;
 const debugLog = (...args) => { if (DEBUG) console.log(...args); };
 const debugError = (...args) => { if (DEBUG) console.error(...args); };
 
@@ -158,11 +180,20 @@ const SUPABASE_URL = 'https://ubanpswucfkdvixityoe.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InViYW5wc3d1Y2ZrZHZpeGl0eW9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDk2MjgsImV4cCI6MjA5NjQyNTYyOH0.KogBL-y8tq5VkAucR6WABmr6D3yLXlx1vNvRJu7FpPY';
 let sbClient = null;
 
+async function waitForSbClient(maxAttempts = 50, delayMs = 100) {
+    let attempts = 0;
+    while (!sbClient && attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+        attempts++;
+    }
+    return !!sbClient;
+}
+
 // Initialize Supabase with error handling - with retries
 async function initializeSupabase() {
-    console.log('Initializing Supabase...');
-    console.log('SUPABASE_URL:', SUPABASE_URL);
-    console.log('SUPABASE_ANON_KEY exists?', !!SUPABASE_ANON_KEY && SUPABASE_ANON_KEY.length > 0);
+    debugLog('Initializing Supabase...');
+    debugLog('SUPABASE_URL:', SUPABASE_URL);
+    debugLog('SUPABASE_ANON_KEY exists?', !!SUPABASE_ANON_KEY && SUPABASE_ANON_KEY.length > 0);
     
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
         console.error('✗ Supabase credentials not available');
@@ -174,7 +205,7 @@ async function initializeSupabase() {
         if (window.supabase && typeof window.supabase.createClient === 'function') {
             try {
                 sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✓ Supabase client initialized successfully on attempt', attempt);
+                debugLog('✓ Supabase client initialized successfully on attempt', attempt);
                 return true;
             } catch (error) {
                 console.error(`✗ Supabase initialization error on attempt ${attempt}:`, error);
@@ -183,7 +214,7 @@ async function initializeSupabase() {
         }
         
         if (attempt < 10) {
-            console.log(`⚠ Waiting for Supabase library (attempt ${attempt}/10)...`);
+            debugLog(`⚠ Waiting for Supabase library (attempt ${attempt}/10)...`);
             await new Promise(resolve => setTimeout(resolve, 200));
         }
     }
@@ -193,7 +224,7 @@ async function initializeSupabase() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOMContentLoaded: Starting initialization...');
+    debugLog('DOMContentLoaded: Starting initialization...');
     
     // Initialize Supabase
     const supabaseReady = await initializeSupabase();
@@ -255,24 +286,56 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
     
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // Smooth scrolling for anchor links (handles '#events', 'index.html#events', etc.)
+    function scrollToHashTarget(hash) {
+        if (!hash) return;
+        const target = document.querySelector(hash);
+        if (target) {
+            const navbar = document.querySelector('.site-nav') || document.getElementById('navbar');
+            const navbarHeight = navbar ? navbar.offsetHeight : 0;
+            const targetPosition = target.offsetTop - navbarHeight - 16;
+            
+            window.scrollTo({
+                top: Math.max(0, targetPosition),
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    document.querySelectorAll('a[href*="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const navbar = document.querySelector('.site-nav');
-                const navbarHeight = navbar ? navbar.offsetHeight : 0;
-                const targetPosition = target.offsetTop - navbarHeight - 12;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+            const href = this.getAttribute('href');
+            if (!href) return;
+            
+            const hashIndex = href.indexOf('#');
+            if (hashIndex === -1) return;
+            
+            const pathBeforeHash = href.substring(0, hashIndex);
+            const hash = href.substring(hashIndex);
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            
+            if (!pathBeforeHash || pathBeforeHash === currentPath || pathBeforeHash === './' || (currentPath === 'index.html' && pathBeforeHash === 'index.html')) {
+                if (hash && hash !== '#') {
+                    const target = document.querySelector(hash);
+                    if (target) {
+                        e.preventDefault();
+                        scrollToHashTarget(hash);
+                        if (window.history && window.history.pushState) {
+                            window.history.pushState(null, null, hash);
+                        }
+                    }
+                }
             }
         });
     });
     
+    // On initial page load with hash in URL (e.g., index.html#events)
+    if (window.location.hash) {
+        setTimeout(() => {
+            scrollToHashTarget(window.location.hash);
+        }, 300);
+    }
+
     // Navbar scroll effect
     const navbar = document.getElementById('navbar');
     if (navbar) {
@@ -348,7 +411,7 @@ function showSignInModal() {
         modal.className = 'post-modal';
         modal.innerHTML = `
             <div class="modal-content" style="max-width: 450px;">
-                <button class="modal-close" onclick="closeSignInModal()">&times;</button>
+                <button class="modal-close" data-role="close-signin-modal">&times;</button>
                 <div style="padding: 1.5rem;">
                     <h2 style="color: #a8e6a1; margin-bottom: 0.5rem; text-align: center;">Sign In</h2>
                     <p style="color: #e2e8f0; margin-bottom: 1.5rem; text-align: center; font-size: 0.95rem;">Enter your email and password</p>
@@ -358,7 +421,7 @@ function showSignInModal() {
                             style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 2px solid #e2e8f0; background: white; font-size: 1rem; margin-bottom: 0.75rem;">
                         <input type="password" id="modalAuthPassword" placeholder="Password (min 6 characters)" 
                             style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 2px solid #e2e8f0; background: white; font-size: 1rem; margin-bottom: 0.75rem;">
-                        <button class="btn btn-primary" onclick="signInWithPassword()" style="width: 100%; font-size: 1rem; padding: 0.85rem;">
+                        <button class="btn btn-primary" data-role="signin-password" style="width: 100%; font-size: 1rem; padding: 0.85rem;">
                             Continue
                         </button>
                         <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.75rem; text-align: center;">
@@ -376,6 +439,15 @@ function showSignInModal() {
         document.body.appendChild(modal);
         
         modal.addEventListener('click', (e) => {
+            const trigger = e.target.closest('[data-role]');
+            if (trigger?.dataset.role === 'close-signin-modal') {
+                closeSignInModal();
+                return;
+            }
+            if (trigger?.dataset.role === 'signin-password') {
+                signInWithPassword();
+                return;
+            }
             if (e.target === modal) closeSignInModal();
         });
         
@@ -653,27 +725,28 @@ function addLink() {
 
 function showMediaPreview() {
     const preview = document.getElementById('mediaPreview');
+    if (!preview) return;
     let previewHTML = '';
     
     if (currentMediaType === 'image') {
         previewHTML = `
             <div class="post-media">
                 <img src="${currentMedia}" alt="Preview">
-                <button onclick="clearMedia()" style="margin-top: 0.5rem;" class="media-btn">✕ Remove</button>
+                <button data-action="clear-media" style="margin-top: 0.5rem;" class="media-btn">✕ Remove</button>
             </div>
         `;
     } else if (currentMediaType === 'video') {
         previewHTML = `
             <div class="post-media">
                 <video controls src="${currentMedia}"></video>
-                <button onclick="clearMedia()" style="margin-top: 0.5rem;" class="media-btn">✕ Remove</button>
+                <button data-action="clear-media" style="margin-top: 0.5rem;" class="media-btn">✕ Remove</button>
             </div>
         `;
     } else if (currentMediaType === 'link') {
         previewHTML = `
             <div class="post-media">
                 <a href="${currentMedia}" target="_blank" rel="noopener">🔗 ${currentMedia}</a>
-                <button onclick="clearMedia()" style="margin-top: 0.5rem;" class="media-btn">✕ Remove</button>
+                <button data-action="clear-media" style="margin-top: 0.5rem;" class="media-btn">✕ Remove</button>
             </div>
         `;
     }
@@ -694,6 +767,7 @@ let isSubmittingPost = false;
 async function addPost() {
     const textArea = document.getElementById('bulletinText');
     const postsContainer = document.getElementById('bulletinPosts');
+    const postBtn = document.querySelector('.post-form .btn.btn-primary');
     const postText = textArea.value.trim();
     
     if (postText === '' && !currentMedia) {
@@ -706,28 +780,16 @@ async function addPost() {
         return;
     }
 
-    // Check if user is authenticated when posting media
-    if (currentMedia && sbClient) {
-        const { data: sessionData } = await sbClient.auth.getSession();
-        debugLog('Session check before posting:', sessionData);
-        if (!sessionData?.session?.user) {
-            // User not signed in - offer choice
-            const choice = confirm('💡 Sign up to save your uploads forever!\n\nWithout signing up, your post will only be visible in your browser.\n\nClick OK to sign up now, or Cancel to post without saving.');
-            if (choice) {
-                showSignInModal();
-                if (postBtn) {
-                    postBtn.disabled = false;
-                    postBtn.textContent = 'Post';
-                }
-                isSubmittingPost = false;
-                return;
-            } else {
-                // User chose to post without signing up - will use localStorage
-                debugLog('User chose to post without signing up');
-            }
-        } else {
-            debugLog('User is authenticated, media will be uploaded to cloud');
-        }
+    if (!sbClient) {
+        alert('Sign in is temporarily unavailable. Please try again in a moment.');
+        return;
+    }
+
+    const { data: sessionData } = await sbClient.auth.getSession();
+    if (!sessionData?.session?.user) {
+        alert('Please sign in or create an account to post.');
+        showSignInModal();
+        return;
     }
 
     const nowTs = Date.now();
@@ -738,7 +800,6 @@ async function addPost() {
 
     if (isSubmittingPost) return;
     isSubmittingPost = true;
-    const postBtn = document.querySelector('.post-form .btn.btn-primary');
     if (postBtn) {
         postBtn.disabled = true;
         postBtn.textContent = 'Posting...';
@@ -761,17 +822,17 @@ async function addPost() {
         uploadedUrl = await tryUploadToSupabase(currentMedia, 'image');
         const url = uploadedUrl || currentMedia;
         // Add error handler for images that fail to load
-        mediaHTML = `<img src="${url}" alt="Post image" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';">
+        mediaHTML = `<img src="${url}" alt="Post image">
                       <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Image failed to load</div>`;
-        thumbnailHTML = `<img src="${url}" alt="Post thumbnail" class="post-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EImage not available%3C/text%3E%3C/svg%3E'">`;
+        thumbnailHTML = `<img src="${url}" alt="Post thumbnail" class="post-thumbnail">`;
     } else if (currentMedia && currentMediaType === 'video') {
         debugLog('Adding video to post');
         uploadedUrl = await tryUploadToSupabase(currentMedia, 'video');
         const url = uploadedUrl || currentMedia;
         // Add error handler for videos that fail to load
-        mediaHTML = `<video controls src="${url}" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';"></video>
+        mediaHTML = `<video controls src="${url}"></video>
                       <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Video failed to load</div>`;
-        thumbnailHTML = `<video src="${url}" class="post-thumbnail" muted onerror="this.style.display='none';"></video>`;
+        thumbnailHTML = `<video src="${url}" class="post-thumbnail" muted></video>`;
     } else if (currentMedia && currentMediaType === 'link') {
         debugLog('Adding link to post:', currentMedia);
         // Validate URL format
@@ -795,7 +856,6 @@ async function addPost() {
     // Store full content in data attributes
     post.setAttribute('data-text', postText);
     post.setAttribute('data-media', mediaHTML);
-    const { data: sessionData } = sbClient ? await sbClient.auth.getSession() : { data: null };
     const userId = sessionData?.session?.user?.id || 'User';
     post.setAttribute('data-user-id', userId);
     post.setAttribute('data-time', timeString);
@@ -804,6 +864,7 @@ async function addPost() {
         ${thumbnailHTML}
         <div class="post-author-badge">Member</div>
     `;
+    wirePostMediaErrorHandlers(post);
     
     // Add click handler to open modal
     post.addEventListener('click', () => openPostModal(post));
@@ -1178,15 +1239,15 @@ async function renderPostsFromSupabase() {
             if (p.media_url && p.media_type === 'image') {
                 const imageUrl = getImageUrl(p.media_url);
                 // Add error handler for images that fail to load
-                mediaHTML = `<img src="${imageUrl}" alt="Post image" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';">
+                mediaHTML = `<img src="${imageUrl}" alt="Post image">
                               <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Image failed to load</div>`;
-                thumbnailHTML = `<img src="${imageUrl}" alt="Post thumbnail" class="post-thumbnail" style="background: #f0f0f0;" onerror="this.style.background='#e0e0e0'; this.style.opacity='0.5'; console.log('Image failed:', this.src);">`;
+                thumbnailHTML = `<img src="${imageUrl}" alt="Post thumbnail" class="post-thumbnail" style="background: #f0f0f0;">`;
                 debugLog('Image post - URL:', imageUrl); // Debug
             } else if (p.media_url && p.media_type === 'video') {
                 // Add error handler for videos that fail to load
-                mediaHTML = `<video controls src="${p.media_url}" onerror="this.style.display='none'; this.parentElement.querySelector('.media-error')?.style.display='block';"></video>
+                mediaHTML = `<video controls src="${p.media_url}"></video>
                               <div class="media-error" style="display:none; padding:1rem; background:#fee; text-align:center; color:#c00;">⚠️ Video failed to load</div>`;
-                thumbnailHTML = `<video src="${p.media_url}" class="post-thumbnail" muted onerror="this.style.display='none';"></video>`;
+                thumbnailHTML = `<video src="${p.media_url}" class="post-thumbnail" muted></video>`;
             } else if (p.media_url && p.media_type === 'link') {
                 // Validate and display URL
                 let displayUrl = p.media_url;
@@ -1213,6 +1274,7 @@ async function renderPostsFromSupabase() {
                 ${thumbnailHTML}
                 <div class="post-author-badge">Member${canDelete ? ' · <button class="media-btn" data-delete="1">Delete</button>' : ''}</div>
             `;
+            wirePostMediaErrorHandlers(post);
             
             // Add click handler to open modal (but not for delete button)
             post.addEventListener('click', (e) => {
@@ -1267,7 +1329,7 @@ function openPostModal(postElement) {
         modal.className = 'post-modal';
         modal.innerHTML = `
             <div class="modal-content">
-                <button class="modal-close" onclick="closePostModal()">&times;</button>
+                <button class="modal-close" data-role="close-post-modal">&times;</button>
                 <div class="modal-header">
                     <span class="modal-author"></span>
                     <span class="modal-time"></span>
@@ -1280,6 +1342,11 @@ function openPostModal(postElement) {
         
         // Close on background click
         modal.addEventListener('click', (e) => {
+            const trigger = e.target.closest('[data-role]');
+            if (trigger?.dataset.role === 'close-post-modal') {
+                closePostModal();
+                return;
+            }
             if (e.target === modal) closePostModal();
         });
     }
@@ -1293,6 +1360,7 @@ function openPostModal(postElement) {
     if (media) {
         // Media HTML is constructed by our code only from database URLs, so it's safe
         mediaDiv.innerHTML = media;
+        wirePostMediaErrorHandlers(mediaDiv);
     }
     modal.querySelector('.modal-text').textContent = text || '';
     
@@ -1309,6 +1377,106 @@ function closePostModal() {
         document.body.style.overflow = '';
     }
 }
+
+function wirePostMediaErrorHandlers(root) {
+    if (!root) return;
+    root.querySelectorAll('img, video').forEach((el) => {
+        if (el.dataset.errorBound === '1') return;
+        el.dataset.errorBound = '1';
+        el.addEventListener('error', () => {
+            el.style.display = 'none';
+            const mediaErr = el.parentElement?.querySelector('.media-error');
+            if (mediaErr) mediaErr.style.display = 'block';
+        });
+    });
+}
+
+function initDeclarativeActions() {
+    document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-action]');
+        if (!trigger) return;
+
+        const action = trigger.dataset.action;
+        switch (action) {
+            case 'request-magic-link':
+                e.preventDefault();
+                requestMagicLink();
+                break;
+            case 'oauth-google':
+                e.preventDefault();
+                oauthSignIn('google');
+                break;
+            case 'oauth-github':
+                e.preventDefault();
+                oauthSignIn('github');
+                break;
+            case 'sign-out':
+                e.preventDefault();
+                signOut();
+                break;
+            case 'show-signin-modal':
+                e.preventDefault();
+                showSignInModal();
+                break;
+            case 'select-image':
+                e.preventDefault();
+                document.getElementById('imageUpload')?.click();
+                break;
+            case 'select-video':
+                e.preventDefault();
+                document.getElementById('videoUpload')?.click();
+                break;
+            case 'add-link':
+                e.preventDefault();
+                addLink();
+                break;
+            case 'add-post':
+                e.preventDefault();
+                addPost();
+                break;
+            case 'clear-media':
+                e.preventDefault();
+                clearMedia();
+                break;
+            default:
+                break;
+        }
+    });
+
+    document.getElementById('imageUpload')?.addEventListener('change', handleImageUpload);
+    document.getElementById('videoUpload')?.addEventListener('change', handleVideoUpload);
+
+    document.querySelectorAll('[data-sponsorship-value]').forEach((el) => {
+        el.addEventListener('click', () => {
+            const target = document.getElementById('sponsorshipType');
+            if (target) target.value = el.dataset.sponsorshipValue || '';
+        });
+    });
+
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const msg = document.getElementById('contactMessage');
+            if (!msg) return;
+            msg.className = 'form-message success';
+            msg.textContent = 'Thanks! Your message has been recorded.';
+            this.reset();
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 4000);
+        });
+    }
+}
+
+function requestMagicLink() {
+    showSignInModal();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initDeclarativeActions();
+    wirePostMediaErrorHandlers(document);
+});
 
 // Make closePostModal available globally
 window.closePostModal = closePostModal;
@@ -1643,6 +1811,8 @@ async function loadGalleryFromSupabase() {
 
 // Community Highlights - Auto-rotating gallery
 let galleryRotationInterval = null; // Store interval ID to prevent duplicates
+let galleryRotationStartTimeout = null;
+let galleryVisibilityHandler = null;
 
 function initializeGalleryRotation() {
     const slides = Array.from(document.querySelectorAll('.gallery-slide'));
@@ -1721,24 +1891,46 @@ function initializeGalleryRotation() {
         showSlide(currentSlide);
     }
     
-    // Clear any existing interval to prevent duplicates
-    if (galleryRotationInterval) {
-        clearInterval(galleryRotationInterval);
-        debugLog('🎬 Cleared previous rotation interval');
-    }
-    
-    // Auto-rotate: Start rotating after 3 seconds, then every 5 seconds
-    debugLog('🎬 Starting auto-rotate timer (first rotation in 3 seconds)');
-    setTimeout(() => {
-        debugLog('🎬 TIMER FIRED: First auto-rotation executing');
-        nextSlide();
-        
-        galleryRotationInterval = setInterval(() => {
-            debugLog('🎬 INTERVAL FIRED: Regular rotation executing');
+    const stopGalleryRotation = () => {
+        if (galleryRotationStartTimeout) {
+            clearTimeout(galleryRotationStartTimeout);
+            galleryRotationStartTimeout = null;
+        }
+        if (galleryRotationInterval) {
+            clearInterval(galleryRotationInterval);
+            galleryRotationInterval = null;
+            debugLog('🎬 Cleared previous rotation interval');
+        }
+    };
+
+    const startGalleryRotation = () => {
+        stopGalleryRotation();
+        if (document.hidden) return;
+        debugLog('🎬 Starting auto-rotate timer (first rotation in 3 seconds)');
+        galleryRotationStartTimeout = setTimeout(() => {
+            debugLog('🎬 TIMER FIRED: First auto-rotation executing');
             nextSlide();
-        }, 5000);
-        debugLog('🎬 Rotation interval started (repeats every 5 seconds)');
-    }, 3000);
+            galleryRotationInterval = setInterval(() => {
+                debugLog('🎬 INTERVAL FIRED: Regular rotation executing');
+                nextSlide();
+            }, 5000);
+            debugLog('🎬 Rotation interval started (repeats every 5 seconds)');
+        }, 3000);
+    };
+
+    if (galleryVisibilityHandler) {
+        document.removeEventListener('visibilitychange', galleryVisibilityHandler);
+    }
+    galleryVisibilityHandler = () => {
+        if (document.hidden) {
+            stopGalleryRotation();
+        } else {
+            startGalleryRotation();
+        }
+    };
+    document.addEventListener('visibilitychange', galleryVisibilityHandler);
+
+    startGalleryRotation();
     
     // Allow clicking indicators to navigate
     indicators.forEach((indicator, index) => {
@@ -1754,22 +1946,16 @@ function initializeGalleryRotation() {
 
 // Initialize gallery from Supabase when DOM is ready
 async function initializeGallery() {
-    console.log('📸 Initializing gallery...');
-    
-    // Wait for Supabase to be ready
-    let attempts = 0;
-    while (!sbClient && attempts < 50) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-    }
-    
-    if (!sbClient) {
+    debugLog('📸 Initializing gallery...');
+
+    const ready = await waitForSbClient(50, 100);
+    if (!ready) {
         console.warn('⚠️ Supabase not ready after 5 seconds, using fallback');
         loadFallbackGallery();
         return;
     }
     
-    console.log('✅ Supabase ready, loading gallery...');
+    debugLog('✅ Supabase ready, loading gallery...');
     try {
         await loadGalleryFromSupabase();
     } catch (err) {
@@ -1906,11 +2092,104 @@ function injectBulletinFab() {
 async function loadUpcomingEvents() {
     const eventsSection = document.querySelector('#events .events-grid');
     if (!eventsSection) return; // Not on homepage
+
+    const fallbackEvents = [
+        {
+            slug: 'foundational-models',
+            title: 'Foundational Models',
+            short_description: 'LV Robotics: Foundation Models Are Changing How We Build Robots',
+            reason_to_attend: 'Explore how vision-language-action (VLA) models and physical foundation models decouple physical intelligence from specific hardware.',
+            description: 'For most of robotics history, intelligent automation was built forward: Task -> Program -> Robot -> Action. Whenever a robot needed to perform a new task, engineers had to write new code, gather fresh demonstrations, retrain architecture, and test.\n\nToday that paradigm is shifting. Robot foundation models, Vision-Language-Action (VLA) models, and world models are decoupling physical intelligence from specific tasks—and even from specific hardware embodiments.\n\nJoin us as we explore DeepMind Gemini Robotics 2, Stanford SimToolReal, PI\'s pi0.7, and OS3 physical intelligence.',
+            image_url: 'images/marcus_sophia.jpg',
+            start_date: '2026-09-17T17:30:00-07:00',
+            end_date: '2026-09-17T19:30:00-07:00',
+            location_type: 'in_person',
+            location_name: 'Desert Research Institute',
+            location_address: '755 East Flamingo Rd, Las Vegas, NV',
+            organizer_name: 'Las Vegas Robotics Meetup',
+            registration_required: true,
+            registration_url: 'https://www.meetup.com/las-vegas-robotics-meetup/events/316423143/',
+            category: 'Meetup',
+            status: 'published'
+        }
+    ];
+
+    const renderEventCards = (events) => {
+        if (!events || events.length === 0) {
+            eventsSection.innerHTML = `
+                <div class="events-empty">
+                    <i class="far fa-calendar-plus"></i>
+                    <h3>New events coming soon</h3>
+                    <p>We're lining up our next workshops, meetups, and competitions. Become a member to be the first to know.</p>
+                    <a href="membership.html" class="btn btn-primary">Become a Member</a>
+                </div>`;
+            return;
+        }
+
+        eventsSection.innerHTML = '';
+
+        events.forEach(event => {
+            const startDate = new Date(event.start_date);
+            const month = startDate.toLocaleString('en-US', { month: 'short' });
+            const day = startDate.getDate();
+            const time = startDate.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            const locationIcon = event.location_type === 'virtual' ? 'video' : 'map-marker-alt';
+            const locationText = event.location_type === 'virtual' ? 'Virtual Event' :
+                                event.location_name || 'TBA';
+
+            const eventCard = document.createElement('div');
+            eventCard.className = event.image_url ? 'event-card event-card-featured' : 'event-card';
+            eventCard.innerHTML = `
+                ${event.image_url ? `
+                <a href="event.html?slug=${event.slug}" class="event-visual" aria-label="${event.title}">
+                    <div class="event-date-overlay">
+                        <span class="month">${month}</span>
+                        <span class="day">${day}</span>
+                    </div>
+                    <img src="${event.image_url}" alt="${event.title}" class="event-image">
+                </a>` : ''}
+                <div class="event-meta-wrap">
+                    <div class="event-date${event.image_url ? ' event-date-secondary' : ''}">
+                        <span class="month">${month}</span>
+                        <span class="day">${day}</span>
+                    </div>
+                    <div class="event-details">
+                        ${event.image_url ? '<p class="event-kicker">Featured meetup</p>' : ''}
+                        <h3>${event.title}</h3>
+                        ${event.reason_to_attend ? `<p class="event-why-attend">${event.reason_to_attend}</p>` : ''}
+                        <p class="event-time"><i class="far fa-clock"></i> ${time}</p>
+                        <p class="event-location"><i class="fas fa-${locationIcon}"></i> ${locationText}</p>
+                        <a href="event.html?slug=${event.slug}" class="btn btn-small">View Details</a>
+                    </div>
+                </div>
+            `;
+
+            eventsSection.appendChild(eventCard);
+        });
+
+        // Readjust scroll position if page was loaded directly with a section hash
+        if (window.location.hash) {
+            const hashTarget = document.querySelector(window.location.hash);
+            if (hashTarget) {
+                const navbar = document.querySelector('.site-nav') || document.getElementById('navbar');
+                const navbarHeight = navbar ? navbar.offsetHeight : 0;
+                window.scrollTo({
+                    top: Math.max(0, hashTarget.offsetTop - navbarHeight - 16),
+                    behavior: 'smooth'
+                });
+            }
+        }
+    };
+
+    // Always show the fallback event immediately so the section doesn't depend
+    // on async Supabase initialization.
+    renderEventCards(fallbackEvents);
     
     try {
-        // Wait for Supabase to be available
-        if (!sbClient) {
-            setTimeout(loadUpcomingEvents, 500);
+        const ready = sbClient ? true : await waitForSbClient(20, 250);
+        if (!ready) {
+            console.warn('⚠️ Supabase not ready for upcoming events, keeping fallback card');
             return;
         }
         
@@ -1924,49 +2203,14 @@ async function loadUpcomingEvents() {
         
         if (error) throw error;
         
-        if (!events || events.length === 0) {
-            eventsSection.innerHTML = `
-                <div class="events-empty">
-                    <i class="far fa-calendar-plus"></i>
-                    <h3>New events coming soon</h3>
-                    <p>We're lining up our next workshops, meetups, and competitions. Become a member to be the first to know.</p>
-                    <a href="membership.html" class="btn btn-primary">Become a Member</a>
-                </div>`;
-            return;
-        }
+        const mergedEvents = [
+            ...fallbackEvents.filter(f => !((events || []).some(e => e.slug === f.slug))),
+            ...(events || []).filter(e => !fallbackEvents.some(f => f.slug === e.slug))
+        ].sort((a, b) => new Date(a.start_date) - new Date(b.start_date)).slice(0, 3);
+
+        renderEventCards(mergedEvents);
         
-        // Clear existing events and add dynamic ones
-        eventsSection.innerHTML = '';
-        
-        events.forEach(event => {
-            const startDate = new Date(event.start_date);
-            const month = startDate.toLocaleString('en-US', { month: 'short' });
-            const day = startDate.getDate();
-            const time = startDate.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
-            
-            const locationIcon = event.location_type === 'virtual' ? 'video' : 'map-marker-alt';
-            const locationText = event.location_type === 'virtual' ? 'Virtual Event' : 
-                                event.location_name || 'TBA';
-            
-            const eventCard = document.createElement('div');
-            eventCard.className = 'event-card';
-            eventCard.innerHTML = `
-                <div class="event-date">
-                    <span class="month">${month}</span>
-                    <span class="day">${day}</span>
-                </div>
-                <div class="event-details">
-                    <h3>${event.title}</h3>
-                    <p class="event-time"><i class="far fa-clock"></i> ${time}</p>
-                    <p class="event-location"><i class="fas fa-${locationIcon}"></i> ${locationText}</p>
-                    <a href="event.html?slug=${event.slug}" class="btn btn-small">View Details</a>
-                </div>
-            `;
-            
-            eventsSection.appendChild(eventCard);
-        });
-        
-        console.log(`✓ Loaded ${events.length} upcoming events from database`);
+        debugLog(`✓ Loaded ${mergedEvents.length} upcoming events from database`);
         
     } catch (err) {
         console.error('Error loading events:', err);
@@ -1989,8 +2233,9 @@ async function loadPastEvents() {
     if (!grid) return; // Not on homepage
 
     try {
-        if (!sbClient) {
-            setTimeout(loadPastEvents, 500);
+        const ready = sbClient ? true : await waitForSbClient(20, 250);
+        if (!ready) {
+            console.warn('⚠️ Supabase not ready for past events, skipping dynamic load');
             return;
         }
 
@@ -2037,7 +2282,7 @@ async function loadPastEvents() {
             grid.appendChild(card);
         });
 
-        console.log(`✓ Loaded ${events.length} past events from database`);
+        debugLog(`✓ Loaded ${events.length} past events from database`);
 
     } catch (err) {
         console.error('Error loading past events:', err);
@@ -2050,6 +2295,13 @@ async function loadPastEvents() {
 // Data is proxied same-origin via nginx /rfr-api/ to avoid CORS.
 // ============================================
 const RFR_API_BASE = '/rfr-api';
+const RFR_FETCH_TIMEOUT_MS = 8000;
+const RFR_FETCH_RETRIES = 1;
+const RFR_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const RFR_CACHE_KEYS = {
+    benchmark: 'rfr_cache_benchmark',
+    brief: 'rfr_cache_brief'
+};
 
 function rfrEscape(str) {
     return String(str == null ? '' : str)
@@ -2076,63 +2328,180 @@ function rfrStatusLabel(status) {
     return status ? status.charAt(0).toUpperCase() + status.slice(1) : 'Unknown';
 }
 
+function rfrSafeUrl(rawUrl) {
+    if (!rawUrl) return '';
+    const url = String(rawUrl).trim();
+    if (/^https?:\/\//i.test(url)) return url;
+    return '';
+}
+
+function rfrReadCache(key) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.ts) return null;
+        if ((Date.now() - Number(parsed.ts)) > RFR_CACHE_TTL_MS) return null;
+        return parsed.data || null;
+    } catch (err) {
+        return null;
+    }
+}
+
+function rfrWriteCache(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+    } catch (err) {
+        // Storage failures should not block page rendering.
+    }
+}
+
+async function rfrFetchJson(path, { timeoutMs = RFR_FETCH_TIMEOUT_MS, retries = RFR_FETCH_RETRIES } = {}) {
+    let lastError = null;
+
+    for (let attempt = 0; attempt <= retries; attempt++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+        try {
+            const res = await fetch(`${RFR_API_BASE}${path}`, {
+                headers: { 'Accept': 'application/json' },
+                signal: controller.signal
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.json();
+        } catch (err) {
+            lastError = err;
+            if (attempt === retries) break;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    throw lastError || new Error('ReadyForRobots request failed');
+}
+
+function rfrNormalizeRobots(data) {
+    const robots = (data && data.robots) || [];
+    return robots
+        .filter(r => r && (r.score_total != null) && r.name)
+        .sort((a, b) => (Number(b.score_total) || 0) - (Number(a.score_total) || 0))
+        .slice(0, 10);
+}
+
+function rfrRenderBenchmark(board, robots, { fromCache = false } = {}) {
+    if (!board) return;
+
+    if (!robots || robots.length === 0) {
+        board.innerHTML = '<div class="ri-empty">Benchmark data is being refreshed - check back soon.</div>';
+        return;
+    }
+
+    const rows = robots.map((r, i) => {
+        const score = Math.round(Number(r.score_total) || 0);
+        const heir = (r.heif_total != null) ? Number(r.heif_total).toFixed(2) : '—';
+        const statusClass = rfrStatusClass(r.status);
+        const statusLabel = rfrStatusLabel(r.status);
+        const url = rfrSafeUrl(r.product_url);
+        const safeUrl = url ? rfrEscape(url) : '';
+        const nameCell = safeUrl
+            ? `<a href="${safeUrl}" target="_blank" rel="noopener">${rfrEscape(r.name)}</a>`
+            : rfrEscape(r.name);
+
+        return `
+            <div class="ri-row">
+                <div class="ri-rank">${i + 1}</div>
+                <div class="ri-robot">
+                    <span class="ri-robot-name">${nameCell}</span>
+                    <span class="ri-robot-vendor">${rfrEscape(r.vendor || '')}</span>
+                </div>
+                <div class="ri-status"><span class="ri-badge ${statusClass}">${statusLabel}</span></div>
+                <div class="ri-score">
+                    <div class="ri-score-num">${score}</div>
+                    <div class="ri-score-bar"><span style="width:${Math.min(100, score)}%"></span></div>
+                    <div class="ri-heir">HEIR ${heir}/5</div>
+                </div>
+            </div>`;
+    }).join('');
+
+    board.innerHTML = `
+        <div class="ri-row ri-head">
+            <div class="ri-rank">#</div>
+            <div class="ri-robot">Robot</div>
+            <div class="ri-status">Status</div>
+            <div class="ri-score">HEIR Score</div>
+        </div>
+        ${rows}`;
+
+    if (fromCache) {
+        board.insertAdjacentHTML('afterbegin', '<div class="ri-empty" style="padding:0.85rem 1rem;font-size:0.9rem;border-bottom:1px solid rgba(255,255,255,0.06);">Showing the last available benchmark snapshot while live data reconnects.</div>');
+    }
+}
+
+function rfrNormalizeStories(data) {
+    const stories = (data && data.topStories) || [];
+    return stories.filter(s => s && s.company).slice(0, 6);
+}
+
+function rfrRenderBrief(grid, stories, generatedAt, { fromCache = false } = {}) {
+    if (!grid) return;
+
+    if (!stories || stories.length === 0) {
+        grid.innerHTML = '<div class="ri-empty">Today\'s brief is being assembled - check back soon.</div>';
+        return;
+    }
+
+    grid.innerHTML = stories.map(s => {
+        const company = rfrEscape(s.company);
+        const category = rfrEscape(s.category || 'Signal');
+        const impact = rfrEscape(s.impact || '');
+        const text = rfrEscape(s.snippet || s.summary || '');
+        return `
+            <article class="ri-brief-card">
+                <div class="ri-brief-top">
+                    <span class="ri-brief-tag">${category}</span>
+                    ${impact ? `<span class="ri-brief-impact">${impact}</span>` : ''}
+                </div>
+                <h3>${company}</h3>
+                <p>${text}</p>
+            </article>`;
+    }).join('');
+
+    const sec = document.querySelector('.ri-brief-section .section-subtitle');
+    if (sec) {
+        const oldStamp = sec.querySelector('.ri-stamp');
+        if (oldStamp) oldStamp.remove();
+
+        if (generatedAt) {
+            const stamp = new Date(generatedAt).toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            const suffix = fromCache ? ' (cached)' : '';
+            sec.insertAdjacentHTML('beforeend', ` <span class="ri-stamp">Updated ${stamp}${suffix}</span>`);
+        }
+    }
+}
+
 async function loadHumanoidBenchmark() {
     const board = document.getElementById('benchmarkBoard');
     if (!board) return; // Not on robots.html
 
     try {
-        const res = await fetch(`${RFR_API_BASE}/humanoid/robots`, { headers: { 'Accept': 'application/json' } });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        let robots = (data && data.robots) || [];
-
-        robots = robots
-            .filter(r => r && (r.score_total != null) && r.name)
-            .sort((a, b) => (b.score_total || 0) - (a.score_total || 0))
-            .slice(0, 10);
-
-        if (robots.length === 0) {
-            board.innerHTML = '<div class="ri-empty">Benchmark data is being refreshed — check back soon.</div>';
-            return;
-        }
-
-        const rows = robots.map((r, i) => {
-            const score = Math.round(r.score_total || 0);
-            const heir = (r.heif_total != null) ? Number(r.heif_total).toFixed(2) : '—';
-            const statusClass = rfrStatusClass(r.status);
-            const statusLabel = rfrStatusLabel(r.status);
-            const url = r.product_url ? rfrEscape(r.product_url) : '';
-            const nameCell = url
-                ? `<a href="${url}" target="_blank" rel="noopener">${rfrEscape(r.name)}</a>`
-                : rfrEscape(r.name);
-            return `
-                <div class="ri-row">
-                    <div class="ri-rank">${i + 1}</div>
-                    <div class="ri-robot">
-                        <span class="ri-robot-name">${nameCell}</span>
-                        <span class="ri-robot-vendor">${rfrEscape(r.vendor || '')}</span>
-                    </div>
-                    <div class="ri-status"><span class="ri-badge ${statusClass}">${statusLabel}</span></div>
-                    <div class="ri-score">
-                        <div class="ri-score-num">${score}</div>
-                        <div class="ri-score-bar"><span style="width:${Math.min(100, score)}%"></span></div>
-                        <div class="ri-heir">HEIR ${heir}/5</div>
-                    </div>
-                </div>`;
-        }).join('');
-
-        board.innerHTML = `
-            <div class="ri-row ri-head">
-                <div class="ri-rank">#</div>
-                <div class="ri-robot">Robot</div>
-                <div class="ri-status">Status</div>
-                <div class="ri-score">HEIR Score</div>
-            </div>
-            ${rows}`;
-        console.log(`✓ Loaded ${robots.length} humanoid benchmarks from ReadyForRobots`);
+        const data = await rfrFetchJson('/humanoid/robots');
+        const robots = rfrNormalizeRobots(data);
+        rfrRenderBenchmark(board, robots);
+        rfrWriteCache(RFR_CACHE_KEYS.benchmark, { robots });
+        debugLog(`✓ Loaded ${robots.length} humanoid benchmarks from ReadyForRobots`);
     } catch (err) {
         console.error('Error loading humanoid benchmark:', err);
-        board.innerHTML = '<div class="ri-empty">Couldn\u2019t reach the live benchmark right now. <a href="https://readyforrobots.com/robots" target="_blank" rel="noopener">View it on ReadyForRobots →</a></div>';
+        const cached = rfrReadCache(RFR_CACHE_KEYS.benchmark);
+        if (cached && Array.isArray(cached.robots) && cached.robots.length > 0) {
+            rfrRenderBenchmark(board, cached.robots, { fromCache: true });
+            return;
+        }
+        board.innerHTML = '<div class="ri-empty">Couldn\'t reach the live benchmark right now. <a href="https://readyforrobots.com/robots" target="_blank" rel="noopener">View it on ReadyForRobots →</a></div>';
     }
 }
 
@@ -2141,43 +2510,21 @@ async function loadRobotBrief() {
     if (!grid) return; // Not on robots.html
 
     try {
-        const res = await fetch(`${RFR_API_BASE}/newsletter/edition`, { headers: { 'Accept': 'application/json' } });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const stories = (data && data.topStories) || [];
-        const top = stories.filter(s => s && s.company).slice(0, 6);
-
-        if (top.length === 0) {
-            grid.innerHTML = '<div class="ri-empty">Today\u2019s brief is being assembled — check back soon.</div>';
-            return;
-        }
-
-        grid.innerHTML = top.map(s => {
-            const company = rfrEscape(s.company);
-            const category = rfrEscape(s.category || 'Signal');
-            const impact = rfrEscape(s.impact || '');
-            const text = rfrEscape(s.snippet || s.summary || '');
-            return `
-                <article class="ri-brief-card">
-                    <div class="ri-brief-top">
-                        <span class="ri-brief-tag">${category}</span>
-                        ${impact ? `<span class="ri-brief-impact">${impact}</span>` : ''}
-                    </div>
-                    <h3>${company}</h3>
-                    <p>${text}</p>
-                </article>`;
-        }).join('');
-
+        const data = await rfrFetchJson('/newsletter/edition');
+        const top = rfrNormalizeStories(data);
         const genAt = data && data.summary && data.summary.generated_at;
-        if (genAt) {
-            const stamp = new Date(genAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            const sec = document.querySelector('.ri-brief-section .section-subtitle');
-            if (sec) sec.insertAdjacentHTML('beforeend', ` <span class="ri-stamp">Updated ${stamp}</span>`);
-        }
-        console.log(`✓ Loaded ${top.length} brief stories from ReadyForRobots`);
+
+        rfrRenderBrief(grid, top, genAt);
+        rfrWriteCache(RFR_CACHE_KEYS.brief, { stories: top, generatedAt: genAt || null });
+        debugLog(`✓ Loaded ${top.length} brief stories from ReadyForRobots`);
     } catch (err) {
         console.error('Error loading robot brief:', err);
-        grid.innerHTML = '<div class="ri-empty">Couldn\u2019t reach today\u2019s brief right now. <a href="https://readyforrobots.com" target="_blank" rel="noopener">Read it on ReadyForRobots →</a></div>';
+        const cached = rfrReadCache(RFR_CACHE_KEYS.brief);
+        if (cached && Array.isArray(cached.stories) && cached.stories.length > 0) {
+            rfrRenderBrief(grid, cached.stories, cached.generatedAt, { fromCache: true });
+            return;
+        }
+        grid.innerHTML = '<div class="ri-empty">Couldn\'t reach today\'s brief right now. <a href="https://readyforrobots.com" target="_blank" rel="noopener">Read it on ReadyForRobots →</a></div>';
     }
 }
 

@@ -203,6 +203,58 @@ async function upsert(rows: Record<string, unknown>[]) {
   return { upserted: rows.length };
 }
 
+// ---- Fallback HTML parsing --------------------------------------------------
+
+async function fetchMeetupHtmlEvents(group: string): Promise<Record<string, unknown>[]> {
+  const eventsUrl = `https://www.meetup.com/${group}/events/`;
+  const res = await fetch(eventsUrl, {
+    headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
+  });
+  if (!res.ok) {
+    throw new Error(`Meetup HTML fetch failed (${res.status}) for ${eventsUrl}`);
+  }
+  const html = await res.text();
+  const match = html.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/) || html.match(/__NEXT_DATA__\s*=\s*({.*?});/);
+  if (!match) {
+    throw new Error("Could not find __NEXT_DATA__ in Meetup page HTML");
+  }
+  const data = JSON.parse(match[1]);
+  const apollo = data?.props?.pageProps?.__APOLLO_STATE__ || {};
+  const rows: Record<string, unknown>[] = [];
+  
+  for (const [key, val] of Object.entries(apollo)) {
+    if (key.startsWith("Event:") && val && typeof val === "object") {
+      const item = val as Record<string, any>;
+      const id = String(item.id || key.replace(/^Event:/, ""));
+      if (!id) continue;
+      const startDate = item.dateTime ? new Date(item.dateTime).toISOString() : null;
+      const endDate = item.endTime ? new Date(item.endTime).toISOString() : null;
+      
+      rows.push({
+        meetup_event_id: id,
+        source: "meetup",
+        slug: `meetup-${id}`,
+        title: item.title ?? "Untitled Meetup Event",
+        short_description: shortDesc(item.description),
+        description: item.description ?? null,
+        image_url: null,
+        category: "Meetup",
+        status: "published",
+        start_date: startDate,
+        end_date: endDate,
+        location_type: item.isOnline ? "online" : "in_person",
+        location_name: item.venue?.name ?? "Las Vegas, NV",
+        location_address: item.venue?.address_1 ?? null,
+        organizer_name: "Las Vegas Robotics Meetup",
+        registration_required: true,
+        registration_url: item.eventUrl ?? `https://www.meetup.com/${group}/events/${id}/`,
+        synced_at: new Date().toISOString(),
+      });
+    }
+  }
+  return rows;
+}
+
 // ---- Handler ---------------------------------------------------------------
 
 Deno.serve(async (req) => {
@@ -220,20 +272,29 @@ Deno.serve(async (req) => {
       Deno.env.get("MEETUP_GROUP_URLNAME") || DEFAULT_GROUP;
     const icalUrl = `https://www.meetup.com/${group}/events/ical/`;
 
-    const res = await fetch(icalUrl, {
-      headers: { "User-Agent": "LV-Robotics-Sync/1.0 (+https://lv-robotics.fly.dev)" },
-    });
-    if (!res.ok) {
-      throw new Error(`Meetup iCal fetch failed (${res.status}) for ${icalUrl}`);
+    let rows: Record<string, unknown>[] = [];
+    let methodUsed = "ical";
+
+    try {
+      const res = await fetch(icalUrl, {
+        headers: { "User-Agent": "LV-Robotics-Sync/1.0 (+https://lv-robotics.fly.dev)" },
+      });
+      if (!res.ok) {
+        throw new Error(`iCal status ${res.status}`);
+      }
+      const ics = await res.text();
+      const parsed = parseIcs(ics);
+      rows = parsed.map(mapEvent).filter((r) => r.start_date);
+    } catch (_err) {
+      // iCal endpoint returned 404 or failed; fallback to HTML JSON state parsing
+      methodUsed = "html_next_data";
+      rows = await fetchMeetupHtmlEvents(group);
     }
-    const ics = await res.text();
-    const parsed = parseIcs(ics);
-    const rows = parsed.map(mapEvent).filter((r) => r.start_date);
 
     if (isTest) {
       return new Response(
         JSON.stringify(
-          { test: true, group, fetched: parsed.length, mappable: rows.length, sample: rows.slice(0, 3) },
+          { test: true, group, method: methodUsed, fetched: rows.length, mappable: rows.length, sample: rows.slice(0, 3) },
           null,
           2,
         ),
@@ -243,7 +304,7 @@ Deno.serve(async (req) => {
 
     const result = await upsert(rows);
     return new Response(
-      JSON.stringify({ ok: true, group, fetched: parsed.length, ...result, at: new Date().toISOString() }),
+      JSON.stringify({ ok: true, group, method: methodUsed, fetched: rows.length, ...result, at: new Date().toISOString() }),
       { headers: { ...cors, "Content-Type": "application/json" } },
     );
   } catch (err) {

@@ -1,0 +1,241 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - main [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img "Innovation Henderson" [ref=e7]
+        - generic [ref=e8]:
+          - link "About" [ref=e9] [cursor=pointer]:
+            - /url: "#about"
+          - link "Programs" [ref=e10] [cursor=pointer]:
+            - /url: "#programs"
+          - link "Events" [ref=e11] [cursor=pointer]:
+            - /url: "#events"
+          - link "Roadmap" [ref=e12] [cursor=pointer]:
+            - /url: "#roadmap"
+          - link "Get Involved" [ref=e13] [cursor=pointer]:
+            - /url: "#get-involved"
+          - link "Donate" [ref=e14] [cursor=pointer]:
+            - /url: /donate
+          - link "LaunchLab" [ref=e17] [cursor=pointer]:
+            - /url: /launchlab
+        - generic [ref=e18]:
+          - link "Sign In" [ref=e19] [cursor=pointer]:
+            - /url: /login
+          - link "Join the Community" [ref=e20] [cursor=pointer]:
+            - /url: /registration
+    - generic [ref=e21]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: Innovation Platform
+          - heading "Where Henderson Innovates." [level=1] [ref=e29]: Where HendersonInnovates.
+          - paragraph [ref=e30]: Converting local innovation into local companies and jobs through events, education, capital, and a structured startup pipeline built for Henderson.
+          - generic [ref=e31]:
+            - link "Get Started" [ref=e32] [cursor=pointer]:
+              - /url: /registration
+            - link "See the Pipeline" [ref=e35] [cursor=pointer]:
+              - /url: "#programs"
+        - generic [ref=e38]:
+          - img "Innovation Henderson" [ref=e40]
+          - img "Tech Alley Henderson" [ref=e41]
+      - generic [ref=e43]:
+        - paragraph [ref=e44]: The Innovation Pipeline
+        - heading "From First Event to Funded Company" [level=2] [ref=e45]
+        - paragraph [ref=e46]: A structured path taking founders from community connection to commercialization — all within Henderson.
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - generic [ref=e58]: Stage 01
+            - heading "Events" [level=3] [ref=e59]
+            - paragraph [ref=e60]: Tech Alley Henderson
+            - generic [ref=e61]: Active Now
+            - paragraph [ref=e63]: Monthly innovation convenings with expert speakers, networking, and community building. Free to attend.
+          - generic [ref=e64]:
+            - generic [ref=e70]: Stage 02
+            - heading "Education" [level=3] [ref=e71]
+            - paragraph [ref=e72]: LaunchLab
+            - generic [ref=e73]: "2026"
+            - paragraph [ref=e74]: Founder-to-commercialization cohort program graduating up to 20 startups per cycle.
+          - generic [ref=e75]:
+            - generic [ref=e80]: Stage 03
+            - heading "Capital" [level=3] [ref=e81]
+            - paragraph [ref=e82]: Angel Feeder Fund
+            - generic [ref=e83]: "2026"
+            - paragraph [ref=e84]: Angel capital access designed to keep promising startups growing locally.
+          - generic [ref=e85]:
+            - generic [ref=e91]: Stage 04
+            - heading "Commercialized" [level=3] [ref=e92]
+            - paragraph [ref=e93]: 2027 Innovation Hub
+            - generic [ref=e94]: "2027"
+            - paragraph [ref=e95]: Establish Innovation District in Henderson built for high-density collaboration and scaling.
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: Flagship — Stage 01
+          - heading "Tech Alley Henderson" [level=3] [ref=e106]
+          - paragraph [ref=e107]: The premier monthly innovation convening in Southern Nevada. Free food, featured speakers, networking, and community — every last Wednesday at The Pass Casino on Water Street.
+          - generic [ref=e108]:
+            - generic [ref=e109]: Wed, Apr 29th
+            - generic [ref=e113]: 5:00 PM
+            - generic [ref=e118]: The Pass Casino
+          - generic [ref=e123]:
+            - link "Register for April" [ref=e124] [cursor=pointer]:
+              - /url: /registration
+            - link "Learn More" [ref=e127] [cursor=pointer]:
+              - /url: /tech-alley
+        - img "Tech Alley Henderson" [ref=e133]
+      - generic [ref=e138]:
+        - generic [ref=e139]: Applications Open — Cohort 1
+        - heading "Apply to LaunchLab" [level=3] [ref=e146]
+        - paragraph [ref=e147]: Innovation Henderson's structured program for founders ready to go from idea to execution. Mentorship, real-world strategies, and a launch playbook — Cohort 1 kicks off September 8.
+        - generic [ref=e148]:
+          - generic [ref=e149]: September 8, 2026
+          - generic [ref=e153]: 5:00 PM – 7:30 PM
+          - generic [ref=e158]: LaunchPad · Henderson
+        - generic [ref=e163]:
+          - link "Apply Now" [ref=e164] [cursor=pointer]:
+            - /url: /launchlab#ready-to-apply
+          - link "Learn More" [ref=e167] [cursor=pointer]:
+            - /url: /launchlab
+      - generic [ref=e178]:
+        - paragraph [ref=e179]: Next Event
+        - heading "April Meetup Countdown" [level=2] [ref=e180]
+        - paragraph [ref=e181]: April 29, 2026
+        - generic [ref=e182]:
+          - generic [ref=e183]:
+            - generic [ref=e184]:
+              - generic [ref=e185]: "00"
+              - generic [ref=e186]: Days
+            - generic [ref=e187]: ":"
+          - generic [ref=e188]:
+            - generic [ref=e189]:
+              - generic [ref=e190]: "00"
+              - generic [ref=e191]: Hours
+            - generic [ref=e192]: ":"
+          - generic [ref=e193]:
+            - generic [ref=e194]:
+              - generic [ref=e195]: "00"
+              - generic [ref=e196]: Mins
+            - generic [ref=e197]: ":"
+          - generic [ref=e199]:
+            - generic [ref=e200]: "00"
+            - generic [ref=e201]: Secs
+        - generic [ref=e203]:
+          - generic [ref=e204]:
+            - img "Tech Alley Henderson" [ref=e205]
+            - img "Innovation Henderson" [ref=e207]
+          - paragraph [ref=e208]: April 29, 2026
+      - generic [ref=e210]:
+        - paragraph [ref=e211]: Why We Exist
+        - heading "Henderson is one of the fastest-growing cities in the country. But it still lacks a startup pipeline." [level=2] [ref=e212]: Henderson is one of the fastest-growing cities in the country.But it still lacks a startup pipeline.
+        - generic [ref=e213]:
+          - paragraph [ref=e214]: High-potential founders often leave Henderson for ecosystems in Austin, LA, or the Bay Area because there's no clear path from idea to funded company here. The talent exists — the infrastructure doesn't.
+          - paragraph [ref=e215]: Innovation Henderson is building that infrastructure — a structured pipeline taking founders from community events to education, capital, and a physical incubator. All within Henderson.
+        - generic [ref=e216]:
+          - generic [ref=e217]: Events
+          - generic [ref=e221]: Education
+          - generic [ref=e225]: Capital
+          - generic [ref=e229]: Commercialized
+      - generic [ref=e232]:
+        - paragraph [ref=e233]: 2026 Roadmap
+        - heading "What We're Building This Year" [level=2] [ref=e234]
+        - paragraph [ref=e235]: Concrete milestones on the path to making Henderson a regional innovation hub.
+        - generic [ref=e238]:
+          - generic [ref=e244]:
+            - heading "First LaunchLab Cohort" [level=4] [ref=e245]
+            - paragraph [ref=e246]: Graduate up to 20 startups through the founder-to-commercialization program.
+          - generic [ref=e255]:
+            - heading "Founder Showcase on Water Street" [level=4] [ref=e256]
+            - paragraph [ref=e257]: Public pitch event putting Henderson startups in front of investors and community leaders.
+          - generic [ref=e264]:
+            - heading "Operational Nonprofit with Active Board" [level=4] [ref=e265]
+            - paragraph [ref=e266]: Fully operational organization with a board of directors guiding ecosystem strategy.
+          - generic [ref=e271]:
+            - heading "Capital Feeder Fund Established" [level=4] [ref=e272]
+            - paragraph [ref=e273]: Angel and venture fund keeping early-stage capital flowing to local founders.
+          - generic [ref=e279]:
+            - heading "Regional Innovation Visibility" [level=4] [ref=e280]
+            - paragraph [ref=e281]: Position Henderson as a recognized innovation destination in Southern Nevada.
+      - generic [ref=e283]:
+        - generic [ref=e284]:
+          - paragraph [ref=e285]: Get Involved
+          - heading "There's a Place for You Here" [level=2] [ref=e286]
+        - generic [ref=e287]:
+          - link [ref=e288] [cursor=pointer]:
+            - /url: /registration
+            - heading "Attend an Event" [level=3] [ref=e295]
+            - paragraph [ref=e296]: Show up to Tech Alley. Free food, great speakers, and real connections every last Wednesday.
+            - generic [ref=e297]: Register Now
+          - link [ref=e300] [cursor=pointer]:
+            - /url: /launchlab
+            - heading "Apply to LaunchLab" [level=3] [ref=e307]
+            - paragraph [ref=e308]: Got a startup idea? Apply to our commercialization cohort for structured mentorship.
+            - generic [ref=e309]: Learn More
+          - link [ref=e312] [cursor=pointer]:
+            - /url: mailto:Lorraine@innovationhenderson.org
+            - heading "Mentor or Advise" [level=3] [ref=e319]
+            - paragraph [ref=e320]: Share your expertise as an advisor or mentor to founders in the pipeline.
+            - generic [ref=e321]: Get in Touch
+          - link [ref=e324] [cursor=pointer]:
+            - /url: /speak
+            - heading "Speak at Tech Alley" [level=3] [ref=e329]
+            - paragraph [ref=e330]: Take the stage to share your expertise or showcase your business with the local tech community.
+            - generic [ref=e331]: Apply to Speak
+      - generic [ref=e335]:
+        - heading "Ready to Build Henderson's Future?" [level=2] [ref=e336]
+        - paragraph [ref=e337]: Join hundreds of entrepreneurs, founders, and community leaders shaping Henderson into a destination for innovation.
+        - generic [ref=e338]:
+          - link "Create Your Free Account" [ref=e339] [cursor=pointer]:
+            - /url: /registration
+          - link "See Next Event" [ref=e342] [cursor=pointer]:
+            - /url: /tech-alley
+      - generic [ref=e346]:
+        - generic [ref=e347]:
+          - generic [ref=e348]:
+            - img "Innovation Henderson" [ref=e349]
+            - paragraph [ref=e350]: Building Henderson's innovation ecosystem — converting local ideas into local companies and jobs.
+            - generic [ref=e351]:
+              - link "Lorraine@innovationhenderson.org" [ref=e352] [cursor=pointer]:
+                - /url: mailto:Lorraine@innovationhenderson.org
+              - link "(725) 324-5522" [ref=e357] [cursor=pointer]:
+                - /url: tel:7253245522
+              - generic [ref=e361]: Water Street, Henderson, NV
+          - generic [ref=e365]:
+            - heading "Programs" [level=4] [ref=e366]
+            - list [ref=e367]:
+              - listitem [ref=e368]:
+                - link "Tech Alley Henderson" [ref=e369] [cursor=pointer]:
+                  - /url: "#events"
+              - listitem [ref=e370]:
+                - link "LaunchLab (2026)" [ref=e371] [cursor=pointer]:
+                  - /url: /launchlab
+              - listitem [ref=e372]: Angel Feeder Fund (2026)
+              - listitem [ref=e373]: Innovation Hub (2027)
+          - generic [ref=e374]:
+            - heading "Connect" [level=4] [ref=e375]
+            - list [ref=e376]:
+              - listitem [ref=e377]:
+                - link "About" [ref=e378] [cursor=pointer]:
+                  - /url: "#about"
+              - listitem [ref=e379]:
+                - link "Get Involved" [ref=e380] [cursor=pointer]:
+                  - /url: "#get-involved"
+              - listitem [ref=e381]:
+                - link "2026 Roadmap" [ref=e382] [cursor=pointer]:
+                  - /url: "#roadmap"
+              - listitem [ref=e383]:
+                - link "Follow Us" [ref=e384] [cursor=pointer]:
+                  - /url: "#"
+        - link "Powered by Social Alignment" [ref=e385] [cursor=pointer]:
+          - /url: https://socialalignmentai.com/sa/raas/home
+          - generic [ref=e386]: Powered by
+          - img "Social Alignment" [ref=e387]
+        - generic [ref=e388]:
+          - paragraph [ref=e389]: © 2026 Innovation Henderson. All rights reserved.
+          - generic [ref=e390]:
+            - link "Privacy" [ref=e391] [cursor=pointer]:
+              - /url: "#"
+            - link "Terms" [ref=e392] [cursor=pointer]:
+              - /url: "#"
+            - link "Contact" [ref=e393] [cursor=pointer]:
+              - /url: mailto:Lorraine@innovationhenderson.org

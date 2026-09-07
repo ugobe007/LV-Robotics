@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="images/lv-robotics-icon-2026.png?v=2">
     <link rel="apple-touch-icon" href="images/lv-robotics-icon-2026.png?v=2">
     <meta name="theme-color" content="#050807">
-    <link rel="stylesheet" href="css/styles.css?v=64">
+    <link rel="stylesheet" href="css/styles.css?v=72">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -49,19 +49,19 @@
         <!-- Auth Controls - Centered -->
         <div style="text-align: center; margin-bottom: 2rem;">
             <div id="authSignedOut" style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                <button class="btn btn-primary" onclick="oauthSignIn('google')" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">
+                <button class="btn btn-primary" data-action="oauth-google" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">
                     <i class="fab fa-google" style="margin-right: 0.5rem;"></i>Google
                 </button>
-                <button class="btn btn-secondary" onclick="oauthSignIn('github')" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">
+                <button class="btn btn-secondary" data-action="oauth-github" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">
                     <i class="fab fa-github" style="margin-right: 0.5rem;"></i>GitHub
                 </button>
-                <button class="btn btn-primary" onclick="showSignInModal()" style="padding: 0.6rem 1.5rem; font-size: 0.95rem; background: #2ecc71;">
-                    <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>Sign in to post
+                <button class="btn btn-primary" data-action="show-signin-modal" style="padding: 0.6rem 1.5rem; font-size: 0.95rem; background: #2ecc71;">
+                    <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>Sign up or sign in to post
                 </button>
             </div>
             <div id="authSignedIn" style="display:none; justify-content: center; align-items:center; gap:0.75rem;">
                 <span id="authUserEmail" style="color: #a8e6a1; font-weight: 600;"></span>
-                <button class="btn btn-secondary" onclick="signOut()" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">Sign out</button>
+                <button class="btn btn-secondary" data-action="sign-out" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">Sign out</button>
             </div>
         </div>
         
@@ -71,21 +71,21 @@
                     <h3>Share with the Community</h3>
                     <textarea id="bulletinText" placeholder="What's happening in robotics?"></textarea>
                     <div class="media-controls">
-                        <button onclick="document.getElementById('imageUpload').click()" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
+                        <button data-action="select-image" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             📷 Add Image
                         </button>
-                        <button onclick="document.getElementById('videoUpload').click()" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
+                        <button data-action="select-video" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             🎥 Add Video
                         </button>
-                        <button onclick="addLink()" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
+                        <button data-action="add-link" class="media-btn" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             🔗 Add Link
                         </button>
                     </div>
-                    <input type="file" id="imageUpload" class="media-input" accept="image/*" onchange="handleImageUpload(event)">
-                    <input type="file" id="videoUpload" class="media-input" accept="video/*" onchange="handleVideoUpload(event)">
+                    <input type="file" id="imageUpload" class="media-input" accept="image/*">
+                    <input type="file" id="videoUpload" class="media-input" accept="video/*">
                     <div id="mediaPreview"></div>
                     <div style="text-align: center; margin-top: 1.5rem;">
-                        <button onclick="addPost()" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem;">Post</button>
+                        <button data-action="add-post" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem;">Post</button>
                     </div>
                 </div>
                 
@@ -143,10 +143,10 @@
                 <div class="footer-section">
                     <h3>Connect</h3>
                     <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://www.meetup.com/las-vegas-robotics-meetup/events/" target="_blank" rel="noopener noreferrer" aria-label="Meetup"><i class="fab fa-meetup"></i></a>
+                        <a href="https://github.com/ugobe007/LV-Robotics" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="mailto:info@lvrobotics.org" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="sponsorship.html" aria-label="Sponsorship"><i class="fas fa-handshake"></i></a>
                     </div>
                 </div>
             </div>
@@ -157,6 +157,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="js/main.js?v=29" defer></script>
+    <script src="js/main.js?v=40" defer></script>
 </body>
 </html>
