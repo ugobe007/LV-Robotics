@@ -83,37 +83,25 @@ async function deletePostSupabase(postId, mediaUrl) {
     }
 }
 
-// Hero background photo carousel (depth + meaning)
+// Hero background photo carousel (5 curated images for clean, impactful visual rhythm)
 function initHeroCarousel() {
     const carousels = document.querySelectorAll('.hero-bg-carousel');
     if (!carousels.length) return;
 
     const slidesData = [
+        { src: 'images/hero/gxo-apollo-hero.png', caption: 'Apollo on the Warehouse Floor' },
         { src: 'images/hero/robot-vegas.jpg', caption: 'Built in Las Vegas' },
-        { src: 'images/hero/optimus-ballet.png', caption: 'Humanoids find their balance' },
-        { src: 'images/hero/gxo-apollo-hero.png', caption: 'Apollo on the warehouse floor' },
-        { src: 'images/hero/figure01.jpg', caption: 'The age of humanoids' },
-        { src: 'images/hero/humanoid-fleet.png', caption: 'Fleets at scale' },
-        { src: 'images/hero/gxo-warehouse-box.png', caption: 'Robots at work' },
-        { src: 'images/hero/unitree-running.jpg', caption: 'Machines in motion' },
-        { src: 'images/hero/apptronik-sorting.png', caption: 'Dexterity, sorted' },
-        { src: 'images/hero/humanoid-dance.png', caption: 'Machines that move with us' },
-        { src: 'images/hero/humanoid-bending.jpg', caption: 'Engineering intelligence' },
-        { src: 'images/hero/robot-stacking-blocks.png', caption: 'Precision, block by block' },
-        { src: 'images/hero/expo-manipulation.png', caption: 'Hands-on automation' },
-        { src: 'images/hero/optimus-dancing.png', caption: 'A new kind of teammate' },
-        { src: 'images/hero/robot-high-kick.png', caption: 'Agility in motion' },
-        { src: 'images/hero/community.jpg', caption: 'A community of builders' },
-        { src: 'images/hero/lunar-space-elevator.png', caption: 'Reaching beyond Earth' },
-        { src: 'images/hero/orbital-interior.png', caption: 'Designing tomorrow' },
-        { src: 'images/hero/humanoid.jpg', caption: 'Designing the future' },
+        { src: 'images/hero/unitree-running.jpg', caption: 'Machines in Motion' },
+        { src: 'images/hero/community.jpg', caption: 'Las Vegas Robotics Community' },
+        { src: 'images/hero/lunar-space-elevator.png', caption: 'Vision Vegas 2040' },
     ];
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     carousels.forEach(carousel => {
-        // Caption is an adjacent .hero-bg-caption within the same hero section
-        const captionEl = (carousel.parentElement || document).querySelector('.hero-bg-caption');
+        const parent = carousel.parentElement || document;
+        const captionEl = parent.querySelector('.hero-bg-caption');
+        const dotsContainer = parent.querySelector('.hero-carousel-dots');
 
         const slides = slidesData.map((d, i) => {
             const el = document.createElement('div');
@@ -126,6 +114,20 @@ function initHeroCarousel() {
             return el;
         });
 
+        // Create interactive dots if container exists
+        let dotEls = [];
+        if (dotsContainer) {
+            dotsContainer.innerHTML = '';
+            dotEls = slidesData.map((d, i) => {
+                const dot = document.createElement('button');
+                dot.className = i === 0 ? 'hero-dot active' : 'hero-dot';
+                dot.setAttribute('aria-label', `Slide ${i + 1}: ${d.caption}`);
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+                return dot;
+            });
+        }
+
         if (captionEl) captionEl.textContent = slidesData[0].caption;
 
         if (slides.length <= 1 || prefersReduced) return;
@@ -133,22 +135,37 @@ function initHeroCarousel() {
         let idx = 0;
         let heroInterval = null;
 
-        const rotateHero = () => {
+        const updateActiveState = (newIdx) => {
             slides[idx].classList.remove('active');
-            idx = (idx + 1) % slides.length;
+            if (dotEls[idx]) dotEls[idx].classList.remove('active');
+            idx = newIdx;
             slides[idx].classList.add('active');
+            if (dotEls[idx]) dotEls[idx].classList.add('active');
+
             if (captionEl) {
                 captionEl.style.opacity = '0';
                 setTimeout(() => {
                     captionEl.textContent = slidesData[idx].caption;
                     captionEl.style.opacity = '1';
-                }, 400);
+                }, 300);
             }
+        };
+
+        const rotateHero = () => {
+            const nextIdx = (idx + 1) % slides.length;
+            updateActiveState(nextIdx);
+        };
+
+        const goToSlide = (targetIdx) => {
+            if (targetIdx === idx) return;
+            stopHeroRotation();
+            updateActiveState(targetIdx);
+            startHeroRotation();
         };
 
         const startHeroRotation = () => {
             if (heroInterval || document.hidden) return;
-            heroInterval = setInterval(rotateHero, 6000);
+            heroInterval = setInterval(rotateHero, 5500);
         };
 
         const stopHeroRotation = () => {
