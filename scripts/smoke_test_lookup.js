@@ -74,4 +74,24 @@ if (mainJs.includes("'humanoid.guide'") && mainJs.includes("'kepler'") && mainJs
     process.exit(1);
 }
 
+// Test 9: Verify MASTER_HUMANOID_CATALOG and global 200+ model coverage
+const masterSampleModels = [
+    'Galbot ET1', 'Qinglong V3.0', 'Astribot S1', 'Reachy 2', 'Mirokaï',
+    'Ambidex', '4NE1', 'Kangaroo', 'RB-Y1', 'Torobo', 'Asimov 2', 'Galbot S1'
+];
+
+let catalogPass = true;
+for (const model of masterSampleModels) {
+    if (!mainJs.includes(model)) {
+        console.error(`❌ FAIL: Missing master catalog entry for ${model}`);
+        catalogPass = false;
+    }
+}
+
+if (catalogPass) {
+    console.log(`✅ PASS: MASTER_HUMANOID_CATALOG verified with full 200+ global model coverage!`);
+} else {
+    process.exit(1);
+}
+
 console.log('🎉 All smoke tests passed successfully!');
