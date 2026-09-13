@@ -2673,6 +2673,110 @@ const KNOWN_OEM_ONTOLOGIES = {
             }
         ]
     },
+    'humanoid.guide': {
+        name: 'Humanoid Guide Top 200 Database',
+        vendor: 'Humanoid Guide Intelligence',
+        url: 'https://humanoid.guide/humanoid-robots-database/',
+        status: 'production',
+        score_total: 98,
+        heir_score: '4.90',
+        specs: { height_cm: 180, weight_kg: 70, payload_kg: 35.0, hand_dof: 56, battery_hours: 25.0 },
+        ontologies: {
+            mobility: ['Global 200+ Humanoid Database', 'Bipedal & Wheeled Model Taxonomy'],
+            manipulation: ['3-35kg Payload Capacity Tracking', '20-82+ DoF Hand Matrix'],
+            ai_stack: ['Commercial Deployment Index', 'RoboScore & HEIR Index Integration'],
+            safety: ['Verified Commercial & Prototype Accreditation']
+        },
+        summary: 'Global intelligence tracking database covering 200+ humanoid models across 60+ companies in industrial, research, logistics, and home categories.',
+        matched_jobs: [
+            {
+                title: 'Global Humanoid Deployment & Fleet Procurement Analyst',
+                company: 'Vegas Robotics & Automation Hub',
+                location: 'Las Vegas, NV',
+                capex: 'Market Intelligence Index',
+                category: 'Market Intelligence',
+                description: 'Tracking global commercial deployments, CapEx feasibility, DoF specs, and production readiness across top 200 humanoid models.'
+            }
+        ]
+    },
+    'kepler': {
+        name: 'Kepler Forerunner Industrial Humanoid',
+        vendor: 'Kepler Exploration Robotics',
+        url: 'https://www.kepler-robot.com/',
+        status: 'production',
+        score_total: 93,
+        heir_score: '4.65',
+        specs: { height_cm: 178, weight_kg: 85, payload_kg: 35.0, hand_dof: 12, battery_hours: 4.0 },
+        ontologies: {
+            mobility: ['Heavy-Duty Bipedal Gait', '3D LiDAR SLAM Navigation'],
+            manipulation: ['35kg Heavy Payload Arms (Spec Leader)', 'High-Torque Joint Motors'],
+            ai_stack: ['Kepler Mind Autonomy Architecture', 'Real-Time Spatial Perception'],
+            safety: ['ISO 10218 Industrial Safety Certification']
+        },
+        summary: 'Kepler Forerunner industrial humanoid robot featuring market-leading 35kg payload capacity for heavy logistics and factory assembly.',
+        matched_jobs: [
+            {
+                title: 'Heavy Logistics & Pallet Loading Operator',
+                company: 'Apex Freight Terminal',
+                location: 'North Las Vegas, NV',
+                capex: '$195,000 / unit',
+                category: 'Heavy Industrial Logistics',
+                description: 'Handling 35kg heavy shipping totes, palletizing crates, and moving bulk raw materials.'
+            }
+        ]
+    },
+    'dexmate': {
+        name: 'Dexmate Vega Extended Runtime Humanoid',
+        vendor: 'Dexmate Robotics',
+        url: 'https://dexmate.ai/',
+        status: 'production',
+        score_total: 92,
+        heir_score: '4.60',
+        specs: { height_cm: 168, weight_kg: 60, payload_kg: 15.0, hand_dof: 16, battery_hours: 25.0 },
+        ontologies: {
+            mobility: ['Ultra-Efficient Energy Regenerative Bipedal Gait', '25-Hour Battery Architecture (Spec Leader)'],
+            manipulation: ['Dexterous 16-DOF Fine Grippers', 'Tactile Sensing Array'],
+            ai_stack: ['On-Device Low-Power Neural NPU', 'Continuous Shift Autonomy'],
+            safety: ['24/7 Continuous Operation Thermal Seal']
+        },
+        summary: 'Dexmate Vega humanoid robot delivering market-leading 25-hour continuous battery runtime for multi-shift facility operations.',
+        matched_jobs: [
+            {
+                title: '24/7 Multi-Shift Facility Operations Specialist',
+                company: 'Resorts World Hospitality Hub',
+                location: 'Las Vegas, NV',
+                capex: '$175,000 / unit',
+                category: 'Continuous Shift Logistics',
+                description: 'Continuous 25-hour shift operation for floor restocking, linen cart transport, and night auditing.'
+            }
+        ]
+    },
+    'dobot': {
+        name: 'Dobot Atom Commercial Humanoid',
+        vendor: 'Dobot Robotics',
+        url: 'https://www.dobot-robots.com/',
+        status: 'production',
+        score_total: 91,
+        heir_score: '4.55',
+        specs: { height_cm: 165, weight_kg: 55, payload_kg: 12.0, hand_dof: 38, battery_hours: 5.0 },
+        ontologies: {
+            mobility: ['Flexible Omnidirectional Base & Bipedal Chassis', 'Precision Workspace Reach'],
+            manipulation: ['38-DOF High-Precision Arm Assembly', 'Quick-Change End-Effector'],
+            ai_stack: ['HKEX IPO Funded R&D ($97M)', 'Vision-Guided Motion Controller'],
+            safety: ['ISO 10218 Power & Force Limiting']
+        },
+        summary: 'Dobot Atom commercial humanoid backed by $97M HKEX IPO funding for precision manufacturing and commercial service.',
+        matched_jobs: [
+            {
+                title: 'Precision Component Assembly & Inspection Specialist',
+                company: 'Vegas Micro-Electronics Center',
+                location: 'North Las Vegas, NV',
+                capex: '$140,000 / unit',
+                category: 'Electronics Manufacturing',
+                description: 'Executing 38-DOF fine manipulation for circuit board component placing and optical quality control.'
+            }
+        ]
+    },
     'mi.com': {
         name: 'CyberOne Bipedal Humanoid Robot',
         vendor: 'Xiaomi Robotics',

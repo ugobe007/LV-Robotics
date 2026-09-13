@@ -66,4 +66,12 @@ if (allFound) {
     process.exit(1);
 }
 
+// Test 8: Verify humanoid.guide database and 2026 spec leaders (Kepler, Dexmate, Dobot) are indexed
+if (mainJs.includes("'humanoid.guide'") && mainJs.includes("'kepler'") && mainJs.includes("'dexmate'") && mainJs.includes("'dobot'")) {
+    console.log('✅ PASS: humanoid.guide Top 200 Index, Kepler Forerunner, Dexmate Vega, Dobot Atom verified!');
+} else {
+    console.error('❌ FAIL: Missing humanoid.guide or 2026 spec leader entries!');
+    process.exit(1);
+}
+
 console.log('🎉 All smoke tests passed successfully!');
