@@ -2621,6 +2621,32 @@ const KNOWN_OEM_ONTOLOGIES = {
             }
         ]
     },
+    '1x.tech/eve': {
+        name: 'EVE Wheeled Humanoid Robot',
+        vendor: '1X Technologies',
+        url: 'https://1x.tech/eve',
+        status: 'production',
+        score_total: 90,
+        heir_score: '4.50',
+        specs: { height_cm: 186, weight_kg: 86, payload_kg: 15.0, hand_dof: 14, battery_hours: 6.0 },
+        ontologies: {
+            mobility: ['Omnidirectional Wheeled Base', 'Soft Tendon Actuation', 'Elevating Torso'],
+            manipulation: ['Dual-Arm Tactile Grippers', 'Human-Safe Compliant Motors'],
+            ai_stack: ['Teleoperation-to-Autonomous Engine', 'Embodied Spatial Perception'],
+            safety: ['Soft Exterior Body Protection', 'Emergency Collision Stop']
+        },
+        summary: 'EVE wheeled humanoid robot engineered by 1X for commercial security patrol, logistics escort, and facility supply handling.',
+        matched_jobs: [
+            {
+                title: 'Commercial Facility Security Guard & Patrol',
+                company: 'Vegas Commercial Hub',
+                location: 'Las Vegas, NV',
+                capex: '$155,000 / unit',
+                category: 'Facility Security',
+                description: 'Autonomous 24/7 facility security patrol, door state auditing, and perimeter monitoring.'
+            }
+        ]
+    },
     'agilityrobotics.com': {
         name: 'Digit Bipedal Logistics Robot',
         vendor: 'Agility Robotics',
@@ -2644,6 +2670,370 @@ const KNOWN_OEM_ONTOLOGIES = {
                 capex: '$185,000 / unit',
                 category: 'Logistics & Warehouse',
                 description: 'Moving 18kg totes between automated conveyor lines, staging racks, and autonomous mobile robots.'
+            }
+        ]
+    },
+    'mi.com': {
+        name: 'CyberOne Bipedal Humanoid Robot',
+        vendor: 'Xiaomi Robotics',
+        url: 'https://www.mi.com/cyberone',
+        status: 'production',
+        score_total: 88,
+        heir_score: '4.40',
+        specs: { height_cm: 177, weight_kg: 52, payload_kg: 15.0, hand_dof: 12, battery_hours: 3.5 },
+        ontologies: {
+            mobility: ['Human-Scale Bipedal Gait', 'Dynamic Posture Balance', 'Real-Time Terrain Mapping'],
+            manipulation: ['Dual-Arm Tactile Handling', 'Precision Gripping'],
+            ai_stack: ['Mi-Sense 3D Spatial Perception', 'Audio-Visual Emotion Engine', 'Self-Supervised Autonomy'],
+            safety: ['ISO Safety Standard', 'Compliant Motor Limiters']
+        },
+        summary: 'CyberOne humanoid robot featuring 3D spatial vision, emotional recognition AI, and real-time bipedal posture balancing.',
+        matched_jobs: [
+            {
+                title: 'Retail Store & Event Concierge Specialist',
+                company: 'Vegas Commercial Showcase',
+                location: 'Las Vegas, NV',
+                capex: '$130,000 / unit',
+                category: 'Retail & Events',
+                description: 'Interactive greeting, booth guidance, and customer assistance at trade shows and flagship retail stores.'
+            }
+        ]
+    },
+    'humanoid.com': {
+        name: 'HMND 01 Bipedal Humanoid',
+        vendor: 'Humanoid Inc.',
+        url: 'https://humanoid.com/',
+        status: 'pilot',
+        score_total: 92,
+        heir_score: '4.60',
+        specs: { height_cm: 172, weight_kg: 68, payload_kg: 18.0, hand_dof: 16, battery_hours: 5.0 },
+        ontologies: {
+            mobility: ['Full Bipedal Gait', '3D LiDAR SLAM Navigation'],
+            manipulation: ['16-DOF Human-Equivalent Hands', 'Tactile Sensor Array'],
+            ai_stack: ['End-to-End Neural Teleoperation', 'Vision-Language-Action Stack'],
+            safety: ['ISO 10218 Safety Protocol', 'Emergency Stop Interlock']
+        },
+        summary: 'HMND 01 bipedal humanoid designed for industrial sub-assembly, warehouse logistics, and hotel room service delivery.',
+        matched_jobs: [
+            {
+                title: 'Resort Room Service & Supply Cart Distribution',
+                company: 'Bellagio Resort & Casino',
+                location: 'Las Vegas, NV',
+                capex: '$170,000 / unit',
+                category: 'Hospitality & Logistics',
+                description: 'Automated 24/7 linen and room service supply cart distribution across resort towers.'
+            }
+        ]
+    },
+    'maccorobotics.com': {
+        name: 'KIME Food & Beverage Humanoid Kiosk',
+        vendor: 'Macco Robotics',
+        url: 'https://maccorobotics.com/kime',
+        status: 'production',
+        score_total: 87,
+        heir_score: '4.35',
+        specs: { height_cm: 160, weight_kg: 95, payload_kg: 8.0, hand_dof: 10, battery_hours: 12.0 },
+        ontologies: {
+            mobility: ['Stationary Kiosk Base & Rail Mount', 'Cleanroom Hygiene IP65'],
+            manipulation: ['Food-Grade Dual Arm Dispensing', 'Automated Tap & Cup Gripping'],
+            ai_stack: ['Commercial POS Integration', 'Order Queue AI Engine'],
+            safety: ['Food Safety NSF Certified', 'Encased Glass Enclosure']
+        },
+        summary: 'KIME commercial humanoid kiosk for automated cocktail, coffee, and food serving in high-volume hospitality venues.',
+        matched_jobs: [
+            {
+                title: 'Resort Cocktail & Coffee Bartending Kiosk',
+                company: 'MGM Resorts Hospitality',
+                location: 'Las Vegas, NV',
+                capex: '$110,000 / unit',
+                category: 'Food & Beverage Automation',
+                description: 'Automated 24/7 cocktail and gourmet coffee serving kiosk with integrated touchscreen POS.'
+            }
+        ]
+    },
+    'hihonor.com': {
+        name: 'Lightning Humanoid Platform',
+        vendor: 'Honor Robotics',
+        url: 'https://www.hihonor.com/',
+        status: 'research',
+        score_total: 86,
+        heir_score: '4.30',
+        specs: { height_cm: 170, weight_kg: 60, payload_kg: 12.0, hand_dof: 14, battery_hours: 5.0 },
+        ontologies: {
+            mobility: ['Harmonic Drive Bipedal Gait', 'Multi-Camera Perception SLAM'],
+            manipulation: ['Compliant Arm Joints', 'Tactile Fingertip Sensors'],
+            ai_stack: ['On-Device Neural Processing Unit', 'Spatial Perception Model'],
+            safety: ['Force-Limiting Safe Joint Stop']
+        },
+        summary: 'Lightning humanoid robot featuring high-density harmonic joint motors and on-device neural vision processing.',
+        matched_jobs: [
+            {
+                title: 'Commercial Office Reception & Inventory Auditor',
+                company: 'Vegas Tech Center',
+                location: 'Las Vegas, NV',
+                capex: '$125,000 / unit',
+                category: 'Office & Facility Management',
+                description: 'Automated floor check-in, office package distribution, and inventory scanning.'
+            }
+        ]
+    },
+    'softbankrobotics.com': {
+        name: 'NAO6 Companion & Educator Humanoid',
+        vendor: 'SoftBank Robotics',
+        url: 'https://softbankrobotics.com/emea/en/nao',
+        status: 'deployed',
+        score_total: 84,
+        heir_score: '4.20',
+        specs: { height_cm: 58, weight_kg: 5.5, payload_kg: 1.5, hand_dof: 5, battery_hours: 1.5 },
+        ontologies: {
+            mobility: ['Compact Bipedal Walking Engine', 'Fall Detection & Auto-Recovery'],
+            manipulation: ['Prehensile 3-Finger Hands', 'Touch Sensor Head Array'],
+            ai_stack: ['Multi-Language Conversational SDK', 'Facial & Voice Recognition'],
+            safety: ['Soft Rounded Body Shell', 'Low Mass Child Safety']
+        },
+        summary: 'NAO6 compact humanoid robot widely used for STEM education, pediatric therapy, and interactive hotel guest greeting.',
+        matched_jobs: [
+            {
+                title: 'Robotics Lab Instructor & STEM Educator',
+                company: 'Las Vegas STEAM Innovation Center',
+                location: 'Las Vegas, NV',
+                capex: '$15,000 / unit',
+                category: 'Education & Training',
+                description: 'Interactive coding, robotics SDK teaching, and STEM workshop facilitation.'
+            }
+        ]
+    },
+    'xpeng.com': {
+        name: 'Next-Gen IRON Humanoid Robot',
+        vendor: 'XPENG Robotics',
+        url: 'https://www.xpeng.com/',
+        status: 'pilot',
+        score_total: 93,
+        heir_score: '4.65',
+        specs: { height_cm: 178, weight_kg: 70, payload_kg: 20.0, hand_dof: 18, battery_hours: 4.5 },
+        ontologies: {
+            mobility: ['Turing AI Powered Bipedal Gait', 'High-Torque Joint Actuation'],
+            manipulation: ['18-DOF Tactile Bimanual Hands', 'High Payload Precision Handling'],
+            ai_stack: ['XPENG Turing AI Chip Architecture', 'End-to-End Neural Assembly Engine'],
+            safety: ['TUV Industrial Safety Certification']
+        },
+        summary: 'Next-Gen IRON humanoid robot equipped with 60+ joint DOFs and Turing AI chip architecture for automotive assembly and logistics.',
+        matched_jobs: [
+            {
+                title: 'Automotive Factory Line Sub-Assembly Operator',
+                company: 'Nevada Advanced Manufacturing Hub',
+                location: 'Sparks, NV',
+                capex: '$210,000 / unit',
+                category: 'Automotive Manufacturing',
+                description: 'Automotive sheet metal positioning, harness clipping, and chassis component fastening.'
+            }
+        ]
+    },
+    'tesla.com': {
+        name: 'Tesla Optimus Gen 2 Humanoid',
+        vendor: 'Tesla Inc.',
+        url: 'https://www.tesla.com/optimus',
+        status: 'pilot',
+        score_total: 96,
+        heir_score: '4.80',
+        specs: { height_cm: 173, weight_kg: 56, payload_kg: 20.0, hand_dof: 11, battery_hours: 4.0 },
+        ontologies: {
+            mobility: ['Custom Actuator Bipedal Gait', 'Dynamic Balance Engine'],
+            manipulation: ['11-DOF Tactile Fingertip Sensors', 'High-Precision Pick & Place'],
+            ai_stack: ['FSD Vision Neural Net Architecture', 'End-to-End Neural Task Execution'],
+            safety: ['Tuned Force Feedback Dampeners']
+        },
+        summary: 'Tesla Optimus Gen 2 humanoid featuring FSD neural vision stack, custom actuators, and 11-DOF tactile hands for factory automation.',
+        matched_jobs: [
+            {
+                title: 'Factory Battery Cell Sorting & Pallet Stacker',
+                company: 'Tesla Gigafactory Nevada',
+                location: 'Sparks, NV',
+                capex: '$200,000 / unit',
+                category: 'Advanced Manufacturing',
+                description: 'Sorting battery cells, loading conveyance racks, and executing automated tote transfers.'
+            }
+        ]
+    },
+    'promo-bot.ai': {
+        name: 'Promobot V.4 Service Robot',
+        vendor: 'Promobot',
+        url: 'https://promo-bot.ai/',
+        status: 'deployed',
+        score_total: 85,
+        heir_score: '4.25',
+        specs: { height_cm: 150, weight_kg: 75, payload_kg: 10.0, hand_dof: 8, battery_hours: 8.0 },
+        ontologies: {
+            mobility: ['Autonomous Wheeled Base', 'Obstacle LiDAR Sensor Ring'],
+            manipulation: ['Gesturing Arm Joints', 'Integrated Receipt Printer & POS'],
+            ai_stack: ['Demographic Facial Analytics', 'Multi-Language Voice Dialogue'],
+            safety: ['Soft Rounded Exterior', 'Emergency Collision Stop']
+        },
+        summary: 'Promobot V.4 autonomous service robot for customer greeting, demographic analytics, and interactive event hosting.',
+        matched_jobs: [
+            {
+                title: 'Trade Show Host & Loyalty Registration Kiosk',
+                company: 'Las Vegas Convention Center',
+                location: 'Las Vegas, NV',
+                capex: '$40,000 / unit',
+                category: 'Events & Host Operations',
+                description: 'Interactive guest greeting, badge printing, and event promotion at convention halls.'
+            }
+        ]
+    },
+    'clonerobotics.com': {
+        name: 'Protoclone Musculoskeletal Android',
+        vendor: 'Clone Robotics',
+        url: 'https://clonerobotics.com/',
+        status: 'research',
+        score_total: 90,
+        heir_score: '4.50',
+        specs: { height_cm: 172, weight_kg: 45, payload_kg: 15.0, hand_dof: 27, battery_hours: 3.0 },
+        ontologies: {
+            mobility: ['Biomimetic Skeletal Structure', 'Artificial Hydraulic Tendons'],
+            manipulation: ['27-DOF Musculoskeletal Hand', 'High-Density Tactile Skin'],
+            ai_stack: ['Hydraulic Muscle Control Engine', 'Biomechanical Neural Net'],
+            safety: ['Pneumatic Pressure Limiter']
+        },
+        summary: 'Protoclone biomimetic android featuring 27-DOF artificial muscle hands and hydraulic tendon control.',
+        matched_jobs: [
+            {
+                title: 'Precision Micro-Assembly & Soldering Specialist',
+                company: 'Vegas High-Tech Electronics Facility',
+                location: 'North Las Vegas, NV',
+                capex: '$160,000 / unit',
+                category: 'Electronics Manufacturing',
+                description: 'Executing ultra-fine 27-DOF finger manipulation for micro-soldering and circuit board inspection.'
+            }
+        ]
+    },
+    'tri.global': {
+        name: 'Punyo Soft Carrying Humanoid',
+        vendor: 'Toyota Research Institute (TRI)',
+        url: 'https://www.tri.global/',
+        status: 'research',
+        score_total: 91,
+        heir_score: '4.55',
+        specs: { height_cm: 160, weight_kg: 55, payload_kg: 25.0, hand_dof: 10, battery_hours: 4.0 },
+        ontologies: {
+            mobility: ['Mobile Omnidirectional Base', 'Compliance Suspension'],
+            manipulation: ['Soft Tactile Chest & Arm Covers', 'Whole-Body Hug Carrying'],
+            ai_stack: ['Contact-Rich Manipulation AI', 'Visuomotor Policy Network'],
+            safety: ['Air-Pillow Soft Body Protection']
+        },
+        summary: 'Punyo soft humanoid robot developed by TRI using whole-body contact and soft tactile materials to carry large, awkward objects.',
+        matched_jobs: [
+            {
+                title: 'Resort Hotel Bulk Laundry & Linen Transport',
+                company: 'Resorts World Las Vegas',
+                location: 'Las Vegas, NV',
+                capex: '$150,000 / unit',
+                category: 'Hospitality & Heavy Transport',
+                description: 'Whole-body carrying of bulky laundry hampers, room packages, and event supplies.'
+            }
+        ]
+    },
+    'engineeredarts.co.uk': {
+        name: 'RoboThespian Expressive Humanoid',
+        vendor: 'Engineered Arts',
+        url: 'https://www.engineeredarts.co.uk/robot/robothespian/',
+        status: 'deployed',
+        score_total: 89,
+        heir_score: '4.45',
+        specs: { height_cm: 175, weight_kg: 42, payload_kg: 3.0, hand_dof: 10, battery_hours: 12.0 },
+        ontologies: {
+            mobility: ['Stationary Pedestal Mount', 'Pneumatic Upper Body Kinematics'],
+            manipulation: ['Expressive Animatronic Hands', 'Micro-LED Facial Screen'],
+            ai_stack: ['Tritium Robot Operating System', 'Multi-Language Presentation Engine'],
+            safety: ['Pneumatic Compliant Safety']
+        },
+        summary: 'RoboThespian expressive humanoid robot used in science centers, corporate events, and live theater presentations.',
+        matched_jobs: [
+            {
+                title: 'Science Center Keynote Presenter & MC',
+                company: 'Las Vegas Science Museum',
+                location: 'Las Vegas, NV',
+                capex: '$85,000 / unit',
+                category: 'Entertainment & Education',
+                description: 'Delivering interactive science lectures, hosting keynote presentations, and entertaining museum guests.'
+            }
+        ]
+    },
+    'cast.ut.ac.ir': {
+        name: 'Surena IV Bipedal Humanoid',
+        vendor: 'University of Tehran (CAST)',
+        url: 'http://cast.ut.ac.ir/',
+        status: 'research',
+        score_total: 83,
+        heir_score: '4.15',
+        specs: { height_cm: 170, weight_kg: 68, payload_kg: 10.0, hand_dof: 12, battery_hours: 2.5 },
+        ontologies: {
+            mobility: ['Custom 43-DOF Joint Kinematics', 'Real-Time Footstep Trajectory Planner'],
+            manipulation: ['12-DOF Upper Arm Grippers', 'Object Grasping SDK'],
+            ai_stack: ['Stereo Vision SLAM', 'Dynamic Balance Controller'],
+            safety: ['Compliant Ankle Actuators']
+        },
+        summary: 'Surena IV 43-DOF bipedal humanoid robot developed by CAST at the University of Tehran for gait research and obstacle navigation.',
+        matched_jobs: [
+            {
+                title: 'Robotics Gait & Trajectory Research Demonstrator',
+                company: 'Vegas Autonomous Systems Lab',
+                location: 'Las Vegas, NV',
+                capex: '$65,000 / unit',
+                category: 'Academic & R&D',
+                description: 'Bipedal walking trajectory testing, footstep balance research, and obstacle clearance evaluation.'
+            }
+        ]
+    },
+    'x-humanoid.com': {
+        name: 'Tiangong Ultra Electric Bipedal Humanoid',
+        vendor: 'Beijing Humanoid Innovation Center / X-Humanoid',
+        url: 'https://www.x-humanoid.com/',
+        status: 'production',
+        score_total: 92,
+        heir_score: '4.60',
+        specs: { height_cm: 163, weight_kg: 43, payload_kg: 12.0, hand_dof: 12, battery_hours: 3.0 },
+        ontologies: {
+            mobility: ['Open-Source Bipedal Gait Engine (6.0 km/h Running)', 'High-Torque Electric Motors'],
+            manipulation: ['Dual-Arm Precision Gripper', 'Tactile Sensing Array'],
+            ai_stack: ['Vision SLAM Navigation', 'Dynamic Slope & Stair Traversal RL'],
+            safety: ['Lightweight Dampening Shell']
+        },
+        summary: 'Tiangong Ultra electric bipedal humanoid capable of stable 6.0 km/h running and outdoor slope traversal.',
+        matched_jobs: [
+            {
+                title: 'Outdoor Perimeter Security Patrol Operator',
+                company: 'Vegas Commercial Logistics Park',
+                location: 'Las Vegas, NV',
+                capex: '$150,000 / unit',
+                category: 'Perimeter Security',
+                description: 'High-speed autonomous perimeter patrol, obstacle jumping, and real-time thermal hazard scanning.'
+            }
+        ]
+    },
+    'ubtrobot.com': {
+        name: 'Walker S2 Industrial Humanoid',
+        vendor: 'UBTECH Robotics',
+        url: 'https://www.ubtrobot.com/',
+        status: 'production',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 172, weight_kg: 76, payload_kg: 15.0, hand_dof: 16, battery_hours: 3.5 },
+        ontologies: {
+            mobility: ['Coordinated Bipedal Walking Engine', 'Quick Swappable Battery Pack'],
+            manipulation: ['16-DOF Fine Dexterous Hands', 'Sub-Millisecond Component Insertion'],
+            ai_stack: ['Factory Floor Autonomy Software', '3D Perception Visual Inspection'],
+            safety: ['ISO 10218 Industrial Safety Interlock']
+        },
+        summary: 'Walker S2 industrial humanoid robot deployed in smart factories for quality inspection, parcel sorting, and component assembly.',
+        matched_jobs: [
+            {
+                title: 'Automotive Factory Quality Inspector & Component Sorter',
+                company: 'Nevada Smart Manufacturing Plant',
+                location: 'North Las Vegas, NV',
+                capex: '$190,000 / unit',
+                category: 'Industrial Manufacturing',
+                description: 'Visual quality inspection, automated tote sorting, and sub-millisecond component insertion on active assembly lines.'
             }
         ]
     }
@@ -2684,8 +3074,8 @@ function rfrSynthesizeOntologyFromDomain(rawUrl) {
     // Keyword taxonomy for raw (first-time) URL lookups
     const isMotionTech = /kinetix|motion|servo|actuat|drive|control|kinematics/i.test(fullStr);
     const isAiBrain = /skild|brain|ai|vla|model|cortex|neural|mind|cognitive/i.test(fullStr);
-    const isHumanoid = /humanoid|biped|beomni|apa|figure|unitree|apollo|1x|sanctuary|optimus|digit|atlas|robot/i.test(fullStr);
-    const isQuadruped = /quad|dog|spot|unitree|anybotics|ghost|walker/i.test(fullStr);
+    const isHumanoid = /humanoid|biped|beomni|apa|figure|unitree|apollo|1x|sanctuary|optimus|digit|atlas|robot|cyberone|eve|hmnd|kime|lightning|nao|neo|iron|promobot|protoclone|punyo|robothespian|surena|tiangong|walker|xiaomi|honor|xpeng|tesla|macco|ubtech|clone|engineeredarts/i.test(fullStr);
+    const isQuadruped = /quad|dog|spot|unitree|anybotics|ghost/i.test(fullStr);
     const isCobot = /arm|cobot|universal|fanuc|kuka|abb|ur|doosan|mech/i.test(fullStr);
 
     let systemName = `${brand} Autonomous System`;

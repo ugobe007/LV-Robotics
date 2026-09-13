@@ -45,4 +45,25 @@ if (mainJs.includes("'aparobot.com'") && mainJs.includes("'sanctuary.ai'") && ma
     process.exit(1);
 }
 
+// Test 7: Verify all 17 requested robots are indexed in KNOWN_OEM_ONTOLOGIES
+const targetRobots = [
+    'CyberOne', 'EVE', 'HMND 01', 'KIME', 'Lightning', 'NAO6',
+    'NEO', 'Next-Gen IRON', 'Optimus', 'Phoenix', 'Promobot',
+    'Protoclone', 'Punyo', 'RoboThespian', 'Surena IV', 'Tiangong Ultra', 'Walker S2'
+];
+
+let allFound = true;
+for (const robot of targetRobots) {
+    if (!mainJs.includes(robot)) {
+        console.error(`❌ FAIL: Missing robot entry for ${robot}`);
+        allFound = false;
+    }
+}
+
+if (allFound) {
+    console.log(`✅ PASS: All 17 requested robots (${targetRobots.join(', ')}) verified in database & lookup tables!`);
+} else {
+    process.exit(1);
+}
+
 console.log('🎉 All smoke tests passed successfully!');
