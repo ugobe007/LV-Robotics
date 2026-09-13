@@ -91,6 +91,34 @@
         </div>
     </section>
 
+    <!-- Global Humanoid Directory & Photo Catalog -->
+    <section class="vv-section ri-directory-section" id="directory">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-robot"></i> Global Humanoid Directory & Photo Specs (211 Models)</h2>
+                <p class="section-subtitle">Explore photos, technical specifications, DoF, payload, battery life, and AI compute hardware across 200+ global humanoid robots.</p>
+            </div>
+            
+            <div class="ri-directory-controls">
+                <div class="ri-search-wrap">
+                    <i class="fas fa-search ri-search-icon"></i>
+                    <input type="text" id="catalogSearchInput" class="ri-search-input" placeholder="Search by model, OEM, country, or compute (e.g. Unitree, Optimus, Galaxea, China, US)...">
+                </div>
+                <div class="ri-filter-pills" id="catalogFilterPills">
+                    <button type="button" class="ri-pill active" data-filter="all">All Models (211)</button>
+                    <button type="button" class="ri-pill" data-filter="us">USA (45)</button>
+                    <button type="button" class="ri-pill" data-filter="china">China (142)</button>
+                    <button type="button" class="ri-pill" data-filter="korea">South Korea (11)</button>
+                    <button type="button" class="ri-pill" data-filter="production">In Production</button>
+                    <button type="button" class="ri-pill" data-filter="prototype">Prototypes</button>
+                </div>
+            </div>
+
+            <div id="catalogGrid" class="ri-catalog-grid"></div>
+            <div id="catalogPagination" class="ri-catalog-pagination"></div>
+        </div>
+    </section>
+
     <!-- Humanoid Benchmark -->
     <section class="vv-section" id="benchmark">
         <div class="container">
@@ -158,6 +186,14 @@
             </div>
         </div>
     </footer>
+
+    <!-- Robot Profile Modal -->
+    <div id="robotProfileModal" class="ri-modal-backdrop" style="display:none;">
+        <div class="ri-modal-dialog">
+            <button id="closeRobotModalBtn" class="ri-modal-close" aria-label="Close modal">&times;</button>
+            <div id="robotModalBody" class="ri-modal-body"></div>
+        </div>
+    </div>
 
     <script src="js/main.js?v=40" defer></script>
 </body>

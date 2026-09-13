@@ -43,7 +43,19 @@ def build_js_catalog(json_path):
         except:
             battery = 4.0
 
-        country = r.get("country") if r.get("country") and r.get("country") != "N/A" else "Global"
+        c_raw = r.get("country") or ""
+        if c_raw and c_raw != "N/A":
+            country = c_raw
+        else:
+            v_lower = vendor.lower()
+            if any(k in v_lower for k in ["agibot", "unitree", "galaxea", "robotera", "fourier", "astribot", "leju", "dexforce", "limx", "topstar", "midea", "xpeng", "xiaomi", "pudu", "dobot", "jaka", "beijing", "shanghai", "zhejiang"]):
+                country = "China"
+            elif any(k in v_lower for k in ["tesla", "1x", "figure", "boston dynamics", "sanctuary", "apptronik", "agility", "weave", "psi", "andromeda"]):
+                country = "US"
+            elif any(k in v_lower for k in ["robotis", "rainbow", "lg", "aei", "robros"]):
+                country = "South Korea"
+            else:
+                country = "Global"
         compute = r.get("compute") if r.get("compute") and r.get("compute") != "N/A" else "High-Performance Edge AI Compute"
         status = r.get("status") if r.get("status") and r.get("status") != "N/A" else "Production / Pilot Deployment"
         markets = r.get("target_markets") if r.get("target_markets") and r.get("target_markets") != "N/A" else "Commercial Operations, Logistics, Manufacturing"
