@@ -6000,6 +6000,21 @@ body.has-site-nav .hamburger-menu { display: none; }
 
 
 /* ── Intuitive CRM Action Bar & Automated Job Application Styles ── */
+.ri-crm-autopilot-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(63, 209, 127, 0.15);
+    color: var(--brand-green-bright);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    margin-bottom: 0.4rem;
+    border: 1px solid rgba(63, 209, 127, 0.3);
+}
 .ri-crm-header {
     display: flex;
     justify-content: space-between;

@@ -7778,13 +7778,15 @@ function rfrBuildJobsCrmHtml(jobs, contextId = 'lookup') {
     }).join('');
 
     const initCheckedCount = unappliedCount > 0 ? unappliedCount : 0;
+    const btnLabel = initCheckedCount > 0 ? `Apply to ${initCheckedCount} Selected Jobs` : 'Apply to Select Jobs';
 
     return `
         <div class="ri-jobs-block ri-crm-container" id="${contextId}_crm_container">
             <div class="ri-crm-header">
                 <div>
+                    <div class="ri-crm-autopilot-tag"><i class="fas fa-bolt"></i> 1-Click Autopilot CRM</div>
                     <h4><i class="fas fa-briefcase"></i> Matched Buyer Jobs & CapEx Demand (${jobs.length})</h4>
-                    <p class="ri-crm-subtitle">Select target deployment jobs below to send 1-click automated proposals to enterprise buyers.</p>
+                    <p class="ri-crm-subtitle">Select deployment jobs below to execute 1-click automated proposals to enterprise buyers.</p>
                 </div>
                 <div class="ri-crm-controls">
                     <label class="ri-crm-select-all">
@@ -7792,7 +7794,7 @@ function rfrBuildJobsCrmHtml(jobs, contextId = 'lookup') {
                         <span>Select All</span>
                     </label>
                     <button type="button" id="${contextId}_applyBtn" class="btn btn-primary ri-crm-apply-btn" onclick="rfrExecuteAutomatedJobApplication('${contextId}')" ${initCheckedCount === 0 ? 'disabled' : ''}>
-                        <i class="fas fa-paper-plane"></i> <span id="${contextId}_applyBtnText">Apply to ${initCheckedCount} Jobs</span>
+                        <i class="fas fa-paper-plane"></i> <span id="${contextId}_applyBtnText">${rfrEscape(btnLabel)}</span>
                     </button>
                 </div>
             </div>
@@ -7811,7 +7813,7 @@ function rfrUpdateJobsCrmState(contextId) {
 
     const count = checked.length;
     if (applyBtnText) {
-        applyBtnText.textContent = count > 0 ? `Apply to ${count} Jobs` : 'Select Jobs to Apply';
+        applyBtnText.textContent = count > 0 ? `Apply to ${count} Selected Jobs` : 'Apply to Select Jobs';
     }
     if (applyBtn) {
         applyBtn.disabled = count === 0;
