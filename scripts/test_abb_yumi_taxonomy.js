@@ -90,9 +90,9 @@ mobileRobotsResult.then(res => {
     assert(res.profile.name.includes('YuMi'), 'Product selection of YuMi overrides mobile-robots path hint');
     assert(!res.profile.matched_jobs.some(j => j.category === 'No amr jobs'), 'No invalid "No amr jobs" message');
 
-    // Test 4: First-time raw URL synthesis for YuMi (no pre-indexed OEM entry)
+    // Test 4: First-time raw URL synthesis for YuMi (resolves via catalog/taxonomy)
     const rawYuMiProfile = sandbox.rfrSynthesizeOntologyFromDomain('https://custom-integrator.de/solutions/yumi-assembly-cell');
-    assert(rawYuMiProfile.name.includes('YuMi Dual-Arm'), 'Raw URL with YuMi synthesizes as Collaborative Robot Arm');
+    assert(rawYuMiProfile.name.includes('YuMi'), 'Raw URL with YuMi resolves to YuMi Collaborative Robot Arm');
     assert(rawYuMiProfile.matched_jobs.length >= 2, 'Raw YuMi synthesis produces valid matched jobs');
 
     // Test 5: First-time raw URL synthesis for AMR

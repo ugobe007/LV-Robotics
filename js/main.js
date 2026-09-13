@@ -6867,15 +6867,367 @@ const MASTER_HUMANOID_CATALOG = [
         "llm": "Vision-Language-Action Autonomy Model",
         "height_cm": 165.0,
         "weight_kg": 60.0,
-        "payload_kg": 5.0,
-        "dof_overall": 20,
         "runtime_hours": 2.0
+    }
+];
+
+const GLOBAL_ROBOT_PRODUCT_CATALOG = [
+    {
+        name: 'YuMi (IRB 14000)',
+        vendor: 'ABB Robotics',
+        category: 'Collaborative Robot Arm & Precision Assembly',
+        status: 'production',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 57, weight_kg: 38, payload_kg: 0.5, hand_dof: 14, battery_hours: 8.0 },
+        keywords: ['yumi', 'irb 14000', 'irb14000', 'abb yumi'],
+        ontologies: {
+            mobility: ['Fixed Base & FlexFeeder Table Mounting', 'Dual 7-Axis Articulated Reach'],
+            manipulation: ['Sub-Millisecond 0.02mm Pick & Place', 'Integrated Servo Grippers', 'Tactile Force Feedback'],
+            ai_stack: ['RobotStudio Autonomy Engine', 'Vision-Guided Small-Parts Pick & Place', 'Trajectory Optimization'],
+            safety: ['PL d Cat 3 Collaborative Safety', 'Padded Soft-Touch Arm Shell', 'Power & Force Limiting']
+        },
+        summary: 'Pioneering dual-arm collaborative robot engineered for high-speed small-parts assembly, electronics packaging, medical device sorting, and barrier-free human-robot collaboration.',
+        matched_jobs: [
+            {
+                title: 'YuMi Dual-Arm Micro-Assembly & Kitting Cell Operator',
+                company: 'Vegas Advanced Micro-Electronics Center',
+                location: 'North Las Vegas, NV',
+                capex: '$135,000 / unit',
+                category: 'Electronics & Precision Assembly',
+                description: 'Deploying ABB YuMi dual-arm cobot with sub-millisecond tactile force feedback for high-speed PCB insertion, small-parts assembly, and optical quality inspection.'
+            },
+            {
+                title: 'Collaborative Kitting & Sterile Packaging Specialist',
+                company: 'Las Vegas Medical & Pharmaceutical Logistics',
+                location: 'Las Vegas, NV',
+                capex: '$125,000 / unit',
+                category: 'Medical & Cleanroom Automation',
+                description: 'Barrier-free human-robot co-working for sterile kit packaging, syringe sortation, and laboratory sample tray handling.'
+            }
+        ]
+    },
+    {
+        name: 'GoFa (CRB 15000)',
+        vendor: 'ABB Robotics',
+        category: 'Collaborative Robot Arm',
+        status: 'production',
+        score_total: 93,
+        heir_score: '4.65',
+        specs: { height_cm: 95, weight_kg: 27, payload_kg: 10.0, hand_dof: 6, battery_hours: 8.0 },
+        keywords: ['gofa', 'crb 15000', 'crb15000', 'abb gofa'],
+        ontologies: {
+            mobility: ['Fixed Base & AMR Rail Mounting', 'Reach 1.62m'],
+            manipulation: ['Sub-Millisecond Screwdriving', 'Quick-Change Tool Coupler', '0.02mm Repeatability'],
+            ai_stack: ['ABB Omnicore Controller', 'Wizard Easy Programming', 'Lead-Through Teaching'],
+            safety: ['Category 3 PL d Safety', 'Integrated Torque Sensors in all 6 Joints']
+        },
+        summary: 'High-payload collaborative cobot arm with class-leading reach, joint torque sensors, and intuitive lead-through programming for machine tending and screwdriving.',
+        matched_jobs: [
+            {
+                title: 'Collaborative Machine Tending & CNC Load Operator',
+                company: 'Apex Precision Machining Hub',
+                location: 'Henderson, NV',
+                capex: '$140,000 / unit',
+                category: 'CNC & Machine Tending',
+                description: 'Deploying ABB GoFa cobot arm for 24/7 automated CNC chuck loading, part blow-off, and CMM inspection.'
+            },
+            {
+                title: 'Automated Fastening & Screwdriving Cell',
+                company: 'Nevada Industrial Automation Center',
+                location: 'Las Vegas, NV',
+                capex: '$130,000 / unit',
+                category: 'Manufacturing Sub-Assembly',
+                description: 'Precision joint torque sensing cobot arm executing automated fastener driving and torque verification.'
+            }
+        ]
+    },
+    {
+        name: 'UR20 / UR30 / UR10e / UR5e',
+        vendor: 'Universal Robots',
+        category: 'Collaborative Robot Arm (Cobot)',
+        status: 'production',
+        score_total: 95,
+        heir_score: '4.75',
+        specs: { height_cm: 110, weight_kg: 64, payload_kg: 20.0, hand_dof: 6, battery_hours: 8.0 },
+        keywords: ['ur20', 'ur30', 'ur10e', 'ur5e', 'ur3e', 'universal robots', 'universal robot'],
+        ontologies: {
+            mobility: ['Modular Fixed Base & Heavy Pedestal', '1750mm Workspace Reach'],
+            manipulation: ['Universal PolyScope Palletizing', 'Capacitive Touch Sensing', 'Integrated Vacuum & Servo Grippers'],
+            ai_stack: ['UR Caps Ecosystem', 'Opto-Force Trajectory Control', 'Python/ROS API Interface'],
+            safety: ['ISO 10218-1 & ISO 13849-1 PL d', '17 Safety Functions with Customizable Stopping Time']
+        },
+        summary: 'The world benchmark in collaborative robot arms for heavy palletizing, welding, machine tending, and flexible factory automation.',
+        matched_jobs: [
+            {
+                title: 'High-Payload Palletizing & Case Packing Operator',
+                company: 'Las Vegas Enterprise Logistics Center',
+                location: 'Las Vegas, NV',
+                capex: '$165,000 / unit',
+                category: 'Warehouse & Packaging',
+                description: 'Deploying Universal Robots UR20 cobot cell for continuous 20kg case palletizing, slip-sheet placement, and stretch wrapping.'
+            },
+            {
+                title: 'Robotic MIG Welding & Structural Fabrication Cell',
+                company: 'North Las Vegas Metal Fabricators',
+                location: 'North Las Vegas, NV',
+                capex: '$150,000 / unit',
+                category: 'Metal Fabrication & Welding',
+                description: 'Precision cobot welding arm executing seam tracking, multi-pass weld paths, and thermal quality monitoring.'
+            }
+        ]
+    },
+    {
+        name: 'CRX-10iA / CRX-20iA / CRX-25iA',
+        vendor: 'FANUC Robotics',
+        category: 'Collaborative Robot Arm',
+        status: 'production',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 120, weight_kg: 40, payload_kg: 10.0, hand_dof: 6, battery_hours: 8.0 },
+        keywords: ['crx', 'crx-10ia', 'crx-20ia', 'crx-25ia', 'fanuc crx', 'fanuc cobot'],
+        ontologies: {
+            mobility: ['Underslung & AGV Rail Mount', 'Maintenance-Free 8-Year Operation'],
+            manipulation: ['FANUC iRVision 2D/3D', 'Force Sensor iDect', 'Soft-Stop Collision Guard'],
+            ai_stack: ['R-30iB Mini Plus Controller', 'Drag & Drop Tablet Programming', 'FANUC Dual Check Safety (DCS)'],
+            safety: ['ISO 10218-1 Certified Collaborative Safety', 'Contact Stop Force Limiting']
+        },
+        summary: 'Industrial-grade maintenance-free collaborative robot arm engineered by FANUC for extreme reliability in harsh manufacturing environments.',
+        matched_jobs: [
+            {
+                title: 'Automated CNC Lathe Load/Unload Operator',
+                company: 'Apex Industrial Precision Manufacturing',
+                location: 'Henderson, NV',
+                capex: '$145,000 / unit',
+                category: 'Machine Tending & CNC',
+                description: 'FANUC CRX collaborative robot cell executing automated workpiece loading, air blast cleaning, and vision inspection.'
+            }
+        ]
+    },
+    {
+        name: 'LBR iiwa / LBR iisy',
+        vendor: 'KUKA Robotics',
+        category: 'Collaborative Robot Arm',
+        status: 'production',
+        score_total: 93,
+        heir_score: '4.65',
+        specs: { height_cm: 100, weight_kg: 30, payload_kg: 14.0, hand_dof: 7, battery_hours: 8.0 },
+        keywords: ['lbr iiwa', 'lbr iisy', 'iiwa', 'kuka cobot', 'kuka iiwa'],
+        ontologies: {
+            mobility: ['7-Axis Redundant Kinematics', 'Obstacle Avoidance Reach'],
+            manipulation: ['Sub-Millisecond Joint Torque Sensing', 'Tactile Assembly Insertion'],
+            ai_stack: ['KUKA Sunrise.OS', 'Fast Robot Interface (FRI)', 'Impedance Control Mode'],
+            safety: ['Category 3 PL d Safety', 'Active Force Feedback Safe Stop']
+        },
+        summary: 'Sensitive 7-axis lightweight collaborative robot arm with torque sensors in every joint for haptic industrial assembly and medical applications.',
+        matched_jobs: [
+            {
+                title: 'Haptic Medical Device & Gearbox Assembly Specialist',
+                company: 'Vegas Advanced Precision Systems',
+                location: 'Las Vegas, NV',
+                capex: '$155,000 / unit',
+                category: 'High-Precision Assembly',
+                description: 'Sensitive 7-axis KUKA iiwa cobot cell for force-guided micro-gear alignment, press fitting, and tactile clearance testing.'
+            }
+        ]
+    },
+    {
+        name: 'Flexley AMR (Flexley Move / Flexley Lift / Flexley Tug)',
+        vendor: 'ABB Mobile Automation (ASTI)',
+        category: 'Autonomous Mobile Robot (AMR) & AGV Logistics',
+        status: 'production',
+        score_total: 93,
+        heir_score: '4.65',
+        specs: { height_cm: 35, weight_kg: 180, payload_kg: 1500.0, hand_dof: 0, battery_hours: 12.0 },
+        keywords: ['flexley', 'asti', 'abb flexley', 'flexley amr', 'flexley move', 'flexley lift'],
+        ontologies: {
+            mobility: ['3D Vision & LiDAR SLAM Navigation', '360° Omnidirectional Drive', 'Dynamic Fleet Interlock'],
+            manipulation: ['Automated Hydraulic Lift Deck', 'Conveyor Top Module', 'Towing Hitch Hook'],
+            ai_stack: ['ABB AMR Fleet Manager Engine', 'Dynamic Obstacle Re-Routing', 'Enterprise WMS/ERP Sync'],
+            safety: ['ISO 3691-4 AMR Safety Standard', 'Safety Laser Scanners', '3D Safety Camera Field']
+        },
+        summary: 'Heavy-payload autonomous mobile robot fleet for manufacturing line feeding, automated pallet transport, and high-density warehouse logistics.',
+        matched_jobs: [
+            {
+                title: 'AMR Line-Side Replenishment & Material Handling Lead',
+                company: 'Nevada EV Battery Gigafactory',
+                location: 'Sparks, NV',
+                capex: '$165,000 / unit',
+                category: 'Warehouse & Logistics AMR',
+                description: 'Deploying ABB Flexley AMR fleet for autonomous SLAM material transport, tote delivery, and heavy sub-assembly line feeding.'
+            },
+            {
+                title: 'Autonomous Pallet Transport & Goods-to-Person Fleet',
+                company: 'Las Vegas Enterprise Fulfillment Center',
+                location: 'Las Vegas, NV',
+                capex: '$185,000 / unit',
+                category: 'Supply Chain & Fulfillment',
+                description: '24/7 autonomous mobile robot fleet executing dynamic obstacle avoidance, warehouse cross-docking, and high-density pallet transport.'
+            }
+        ]
+    },
+    {
+        name: 'MiR250 / MiR600 / MiR1350 / MiR100',
+        vendor: 'Mobile Industrial Robots (MiR)',
+        category: 'Autonomous Mobile Robot (AMR)',
+        status: 'production',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 30, weight_kg: 220, payload_kg: 1350.0, hand_dof: 0, battery_hours: 10.0 },
+        keywords: ['mir100', 'mir250', 'mir600', 'mir1350', 'mir amr', 'mobile industrial robots'],
+        ontologies: {
+            mobility: ['Laser Scanner 360° SLAM', 'Narrow Passage Navigation (80cm)', 'Fast Swap Battery Dock'],
+            manipulation: ['MiR Top Roller Conveyor', 'MiR Pallet Lift 1350', 'Shelf Carrier Top Module'],
+            ai_stack: ['MiR Fleet Management System', 'REST API Autonomy', '3D Camera Object Avoidance'],
+            safety: ['ISO 3691-4 Safety Standard', 'SICK MicroScan3 Safety Lasers', 'ESD Protected Frame']
+        },
+        summary: 'Market-leading autonomous mobile robots for internal material transport, heavy pallet logistics, and cleanroom/ESD manufacturing supply lines.',
+        matched_jobs: [
+            {
+                title: 'Cleanroom ESD Material Transport AMR Operator',
+                company: 'Vegas Semiconductor & Tech Center',
+                location: 'North Las Vegas, NV',
+                capex: '$150,000 / unit',
+                category: 'Cleanroom & Electronics Logistics',
+                description: 'Deploying MiR ESD-safe AMR fleet for automated wafer cassette transport and sterile material delivery.'
+            }
+        ]
+    },
+    {
+        name: 'OTTO 100 / OTTO 600 / OTTO 1500 / OTTO Lifter',
+        vendor: 'OTTO Motors (Rockwell Automation)',
+        category: 'Autonomous Mobile Robot (AMR)',
+        status: 'production',
+        score_total: 95,
+        heir_score: '4.75',
+        specs: { height_cm: 35, weight_kg: 260, payload_kg: 1500.0, hand_dof: 0, battery_hours: 14.0 },
+        keywords: ['otto 100', 'otto 600', 'otto 1500', 'otto lifter', 'otto motors', 'otto amr'],
+        ontologies: {
+            mobility: ['All-Steel Heavy Duty Chassis', 'Sub-Centimeter LiDAR SLAM', 'Autonomous Fast Charge'],
+            manipulation: ['Integrated Pallet Forks', 'Conveyor Top-Deck', 'Lift Deck Module'],
+            ai_stack: ['OTTO App Manager', 'Fleet Analytics Engine', 'Rockwell FactoryTalk Integration'],
+            safety: ['ANSI/RIA R15.08 Compliant', 'Category 3/PL d Safety Architecture']
+        },
+        summary: 'Mission-critical heavy-duty AMR platform engineered for demanding 24/7 industrial manufacturing floor and warehouse pallet movement.',
+        matched_jobs: [
+            {
+                title: 'Heavy Payload Pallet AMR Fleet Manager',
+                company: 'Apex Industrial Supply Chain Hub',
+                location: 'Henderson, NV',
+                capex: '$190,000 / unit',
+                category: 'Heavy Industrial AMR Logistics',
+                description: 'Autonomous OTTO 1500 AMR fleet executing 1.5-ton pallet transfer from inbound receiving to high-bay rack aisles.'
+            }
+        ]
+    },
+    {
+        name: 'Spot (Enterprise / Explorer)',
+        vendor: 'Boston Dynamics',
+        category: 'Quadruped Inspection & Field Platform',
+        status: 'production',
+        score_total: 96,
+        heir_score: '4.80',
+        specs: { height_cm: 84, weight_kg: 32, payload_kg: 14.0, hand_dof: 6, battery_hours: 3.5 },
+        keywords: ['spot', 'boston dynamics spot', 'spot robot', 'spot quadruped'],
+        ontologies: {
+            mobility: ['Omnidirectional Quadruped Gait', 'Stair & Obstacle Climbing', 'IP54 Weather Sealed Chassis'],
+            manipulation: ['Spot Arm 6-DOF Gripper', 'Thermal & Radiometric Camera Payload', 'Acoustic Leak Sensor'],
+            ai_stack: ['Spot Autowalk Autonomy', 'Orbital AI Perception', 'Remote Operations Teleop Console'],
+            safety: ['Self-Righting Fall Recovery', 'Perimeter Obstacle Avoidance', 'E-Stop Remote Interlock']
+        },
+        summary: 'The global standard in quadruped robotics for autonomous facility inspection, thermal leak auditing, hazard detection, and remote site monitoring.',
+        matched_jobs: [
+            {
+                title: 'Autonomous Resort Facility & Electrical Inspection Lead',
+                company: 'MGM Resorts Facility Engineering',
+                location: 'Las Vegas, NV',
+                capex: '$165,000 / unit',
+                category: 'Facility Inspection & Security',
+                description: 'Deploying Boston Dynamics Spot with thermal payload for 24/7 subterranean electrical vault inspection and HVAC audit across resort property.'
+            },
+            {
+                title: 'Hazardous Chemical & Acoustic Spill Patrol Specialist',
+                company: 'Nevada Industrial Chemical Processing',
+                location: 'Henderson, NV',
+                capex: '$175,000 / unit',
+                category: 'Industrial Safety & Auditing',
+                description: 'Quadruped inspection robot patrolling chemical containment zones for high-frequency acoustic pipe leaks and gas detection.'
+            }
+        ]
+    },
+    {
+        name: 'ANYmal / ANYmal X',
+        vendor: 'ANYbotics',
+        category: 'Quadruped Inspection Platform',
+        status: 'production',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 80, weight_kg: 50, payload_kg: 15.0, hand_dof: 0, battery_hours: 3.0 },
+        keywords: ['anymal', 'anymal x', 'anybotics', 'anymal quadruped'],
+        ontologies: {
+            mobility: ['Ex-Proof ATEX Zone 1 Certified', 'Stair & Metal Grating Traversal', 'IP67 Waterproof Enclosure'],
+            manipulation: ['Integrated Inspection Pan-Tilt Head', 'Optical Gas Imaging (OGI)', 'LiDAR 3D Scanner'],
+            ai_stack: ['ANYmal Autonomous Navigation Engine', 'AI Thermal Outlier Detector'],
+            safety: ['Explosion-Proof Sealed Enclosure', 'Autonomous Docking Station']
+        },
+        summary: 'Rugged ATEX-certified explosion-proof quadruped robot designed for offshore oil platforms, power stations, and hazardous industrial inspection.',
+        matched_jobs: [
+            {
+                title: 'ATEX Zone 1 Hazardous Plant Inspection Specialist',
+                company: 'Nevada Energy & Power Infrastructure',
+                location: 'Las Vegas, NV',
+                capex: '$210,000 / unit',
+                category: 'Hazardous Plant Inspection',
+                description: 'Deploying explosion-proof ANYmal X quadruped for autonomous thermal and acoustic inspections inside high-voltage transformer stations.'
+            }
+        ]
     }
 ];
 
 function rfrLookupMasterCatalog(queryStr) {
     if (!queryStr) return null;
     const q = String(queryStr).toLowerCase().trim();
+
+    // 1. Search GLOBAL_ROBOT_PRODUCT_CATALOG (Cobots, AMRs, Quadrupeds, Industrial Arms)
+    for (const item of GLOBAL_ROBOT_PRODUCT_CATALOG) {
+        const nameLower = item.name.toLowerCase();
+        const vendorLower = item.vendor.toLowerCase();
+        const kwList = item.keywords || [];
+
+        const isKwMatch = kwList.some(kw => q.includes(kw) || kw.includes(q));
+        if (isKwMatch || q.includes(nameLower) || nameLower.includes(q) || (q.length > 3 && vendorLower.includes(q))) {
+            return {
+                name: `${item.vendor} ${item.name}`,
+                vendor: item.vendor,
+                url: item.url || `https://readyforrobots.com/products/${encodeURIComponent(item.name)}`,
+                status: item.status || 'production',
+                score_total: item.score_total || 93,
+                heir_score: item.heir_score || '4.65',
+                photo_url: item.photo_url || '',
+                country: item.country || 'Global',
+                specs: item.specs || { height_cm: 100, weight_kg: 50, payload_kg: 10.0, hand_dof: 6, battery_hours: 8.0 },
+                ontologies: item.ontologies || {
+                    mobility: ['Precision Autonomy', 'Spatial Navigation'],
+                    manipulation: ['Tactile Dexterity', 'Pick & Place'],
+                    ai_stack: ['Autonomy Engine', 'Real-Time Control'],
+                    safety: ['ISO Safety Standard', 'Collision Interlock']
+                },
+                summary: item.summary || `Verified capability profile and hardware ontologies for ${item.vendor} ${item.name}.`,
+                matched_jobs: item.matched_jobs && item.matched_jobs.length > 0 ? item.matched_jobs : [
+                    {
+                        title: `${item.name} Commercial Operations Specialist`,
+                        company: 'Las Vegas Enterprise Operations Hub',
+                        location: 'Las Vegas, NV',
+                        capex: '$150,000 / unit',
+                        category: item.category || 'Enterprise Automation',
+                        description: `Deploying ${item.vendor} ${item.name} for 24/7 commercial operations and industrial automation.`
+                    }
+                ]
+            };
+        }
+    }
+
+    // 2. Search MASTER_HUMANOID_CATALOG (200+ Humanoids)
     for (const item of MASTER_HUMANOID_CATALOG) {
         const m = item.name.toLowerCase();
         const v = item.vendor.toLowerCase();
