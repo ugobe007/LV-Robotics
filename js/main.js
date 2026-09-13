@@ -2347,6 +2347,48 @@ const RFR_CACHE_KEYS = {
 // Indexed OEM Ontologies & Resilient Scraper Engine
 // ============================================
 const KNOWN_OEM_ONTOLOGIES = {
+    'epson.com': {
+        name: 'Epson Factory Automation SCARA & 6-Axis Robots',
+        vendor: 'Epson Robots',
+        url: 'https://epson.com/industrial-robots-factory-automation',
+        status: 'production',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 80, weight_kg: 28, payload_kg: 12.0, hand_dof: 6, battery_hours: 8.0 },
+        ontologies: {
+            mobility: ['Fixed Base & FlexFeeder Table Mounting', 'Reach 1000mm'],
+            manipulation: ['Sub-Millisecond 0.005mm Repeatability', 'Smart Motion Control', 'Integrated Vision Guidance'],
+            ai_stack: ['Epson RC+ Autonomy Engine', 'Vision-Guided Micro-Assembly', 'High-Speed Pick & Place'],
+            safety: ['ISO 10218-1 Safety Standard', 'Collision Force Feedback', 'IP65 Cleanroom Grade']
+        },
+        summary: 'Global leader in SCARA and 6-axis precision industrial robots engineered for high-speed micro-assembly, electronics packaging, medical device kitting, and factory automation.',
+        matched_jobs: [
+            {
+                title: 'Epson SCARA High-Speed Electronics Assembly Operator',
+                company: 'Vegas Advanced Micro-Electronics Center',
+                location: 'North Las Vegas, NV',
+                capex: '$135,000 / unit',
+                category: 'Electronics & Precision Assembly',
+                description: 'Deploying Epson SCARA robot cell for sub-millisecond PCB component placement, optical inspection, and automated kitting.'
+            },
+            {
+                title: 'Factory Automation & Machine Tending Operator',
+                company: 'Apex Precision Manufacturing Center',
+                location: 'Henderson, NV',
+                capex: '$145,000 / unit',
+                category: 'Factory Automation & Manufacturing',
+                description: 'Epson 6-axis articulated robot arm executing automated CNC load/unload, part blow-off, and quality audit.'
+            },
+            {
+                title: 'Warehouse Automated Packaging & Tray Sortation Robot',
+                company: 'Las Vegas Enterprise Logistics Center',
+                location: 'Las Vegas, NV',
+                capex: '$140,000 / unit',
+                category: 'Warehouse & Packaging Logistics',
+                description: 'High-speed pick-and-place robot arm executing automated tray loading, case packaging, and tote sortation.'
+            }
+        ]
+    },
     'abb.com/mobile-robots': {
         name: 'ABB Flexley AMR (Autonomous Mobile Robots)',
         vendor: 'ABB Mobile Automation',
