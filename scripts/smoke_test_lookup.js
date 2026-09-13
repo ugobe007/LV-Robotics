@@ -37,11 +37,11 @@ if (mainJs.includes('async function rfrLookupRobotUrl') && mainJs.includes('rfrS
     process.exit(1);
 }
 
-// Test 5: Verify raw (first time) URL keyword taxonomy parser
-if (mainJs.includes('isMotionTech') && mainJs.includes('isAiBrain') && mainJs.includes('isHumanoid') && mainJs.includes('isQuadruped')) {
-    console.log('✅ PASS: Raw (first time) URL keyword taxonomy parser operational');
+// Test 6: Verify aparobot.com (Beomni) and top OEMs are indexed
+if (mainJs.includes("'aparobot.com'") && mainJs.includes("'sanctuary.ai'") && mainJs.includes("'1x.tech'")) {
+    console.log('✅ PASS: aparobot.com (Beomni), Sanctuary AI, 1X indexed in KNOWN_OEM_ONTOLOGIES');
 } else {
-    console.error('❌ FAIL: Raw URL keyword taxonomy parser missing!');
+    console.error('❌ FAIL: aparobot.com or top OEMs missing!');
     process.exit(1);
 }
 

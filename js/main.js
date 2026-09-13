@@ -2526,6 +2526,126 @@ const KNOWN_OEM_ONTOLOGIES = {
                 description: 'Autonomous thermal scanning, acoustic vibration checks, and high-voltage breaker state inspection.'
             }
         ]
+    },
+    'aparobot.com': {
+        name: 'Beomni Humanoid Robot Platform',
+        vendor: 'APA Robotics / Beyond Imagination',
+        url: 'https://www.aparobot.com/robots/beomni',
+        status: 'production',
+        score_total: 90,
+        heir_score: '4.50',
+        specs: { height_cm: 175, weight_kg: 72, payload_kg: 18.0, hand_dof: 22, battery_hours: 5.0 },
+        ontologies: {
+            mobility: ['Omnidirectional Wheeled Base', 'Stabilized Torso Elevation', '3D LiDAR Spatial Mapping'],
+            manipulation: ['22-DOF Humanoid Haptic Hands', 'Tactile Sensing Array', 'Bi-Manual Fine Tool Handling'],
+            ai_stack: ['Teleoperation-to-Autonomous AI Engine', 'Real-Time Spatial Perception', 'Neural Skill Transfer'],
+            safety: ['ISO 10218 Safety Protocol', 'Force Feedback Interlock', 'IP54 Industrial Seal']
+        },
+        summary: 'Beomni general-purpose humanoid robot featuring 22-DOF tactile haptic hands, omnidirectional mobility, and teleop-to-autonomous AI for healthcare, hospitality, and warehouse operations.',
+        matched_jobs: [
+            {
+                title: 'Resort Guest Logistics & Room Service Operator',
+                company: 'Wynn Las Vegas & Encore Resort',
+                location: 'Las Vegas, NV',
+                capex: '$165,000 / unit',
+                category: 'Hospitality & Guest Operations',
+                description: 'Deploying Beomni humanoid for automated guest luggage transport, room service delivery, and public area assistance.'
+            },
+            {
+                title: 'Medical Supply & Pharmacy Distribution Assistant',
+                company: 'Sunrise Hospital & Medical Center',
+                location: 'Las Vegas, NV',
+                capex: '$150,000 / unit',
+                category: 'Healthcare & Cleanroom Logistics',
+                description: 'Automating sterile pharmacy tote sorting, prescription cart delivery, and medical supply inventory auditing.'
+            },
+            {
+                title: 'High-Speed Warehouse Sorting & Packaging Specialist',
+                company: 'Vegas Commercial Freight Hub',
+                location: 'Henderson, NV',
+                capex: '$180,000 / unit',
+                category: 'Logistics & Supply Chain',
+                description: 'Executing 22-DOF fine manipulation for fragile package handling, tote sorting, and conveyor belt transfers.'
+            }
+        ]
+    },
+    'sanctuary.ai': {
+        name: 'Phoenix General Purpose Humanoid',
+        vendor: 'Sanctuary AI',
+        url: 'https://sanctuary.ai/',
+        status: 'pilot',
+        score_total: 93,
+        heir_score: '4.65',
+        specs: { height_cm: 170, weight_kg: 68, payload_kg: 25.0, hand_dof: 20, battery_hours: 4.5 },
+        ontologies: {
+            mobility: ['Humanoid Bipedal & Wheeled Chassis', 'Spatial Vision Navigation'],
+            manipulation: ['Human-Equivalent Haptic Hands', 'Precision Pick & Place'],
+            ai_stack: ['Carbon AI Control Architecture', 'Explainable AI Task Engine'],
+            safety: ['Active Force Feedback Safety Ring']
+        },
+        summary: 'General-purpose humanoid robot designed to work alongside humans, powered by Carbon AI architecture for retail and warehouse operations.',
+        matched_jobs: [
+            {
+                title: 'Retail Store Merchandising & Shelf Restocker',
+                company: 'Las Vegas Commercial Center',
+                location: 'Las Vegas, NV',
+                capex: '$155,000 / unit',
+                category: 'Retail & Merchandising',
+                description: 'Autonomous night-shift restocking, shelf auditing, and inventory organization using 20-DOF haptic hands.'
+            }
+        ]
+    },
+    '1x.tech': {
+        name: 'NEO Bipedal Humanoid Robot',
+        vendor: '1X Technologies',
+        url: 'https://1x.tech/',
+        status: 'pilot',
+        score_total: 91,
+        heir_score: '4.55',
+        specs: { height_cm: 165, weight_kg: 30, payload_kg: 20.0, hand_dof: 20, battery_hours: 4.0 },
+        ontologies: {
+            mobility: ['Soft Tendon Bipedal Gait', 'Human-Safe Lightweight Motors'],
+            manipulation: ['Compliant Muscle-Like Actuators', 'Bi-Manual Grasping'],
+            ai_stack: ['Embodied AI Vision Stack', 'End-to-End Neural Teleoperation'],
+            safety: ['Ultra-Light Soft Body Construction', 'Fail-Safe Compliance']
+        },
+        summary: 'Lightweight, soft-actuated humanoid robot designed for safe human interaction, office assistance, and home/commercial logistics.',
+        matched_jobs: [
+            {
+                title: 'Commercial Office Logistics & Guest Assistant',
+                company: 'Downtown Vegas Innovation Hub',
+                location: 'Las Vegas, NV',
+                capex: '$140,000 / unit',
+                category: 'Commercial Office Automation',
+                description: 'Safe human-compliant assistance for document delivery, meeting setup, and office supply organization.'
+            }
+        ]
+    },
+    'agilityrobotics.com': {
+        name: 'Digit Bipedal Logistics Robot',
+        vendor: 'Agility Robotics',
+        url: 'https://agilityrobotics.com/',
+        status: 'deployed',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 175, weight_kg: 65, payload_kg: 18.0, hand_dof: 8, battery_hours: 4.0 },
+        ontologies: {
+            mobility: ['Digitized Bipedal Gait', 'Conveyor & Dock Alignment'],
+            manipulation: ['Tote Box Gripper Paddles', 'Ergonomic Height Reach'],
+            ai_stack: ['Agility Arc Fleet Manager', '3D Perception SLAM'],
+            safety: ['TUV Certified Active Collision Avoidance']
+        },
+        summary: 'Commercially deployed bipedal logistics robot built for box and tote movement in automated distribution warehouses.',
+        matched_jobs: [
+            {
+                title: 'Conveyor-to-Pallet Tote Stacker',
+                company: 'Amazon Fulfillment Center',
+                location: 'North Las Vegas, NV',
+                capex: '$185,000 / unit',
+                category: 'Logistics & Warehouse',
+                description: 'Moving 18kg totes between automated conveyor lines, staging racks, and autonomous mobile robots.'
+            }
+        ]
     }
 };
 
@@ -2554,9 +2674,9 @@ function rfrSynthesizeOntologyFromDomain(rawUrl) {
     const { cleanUrl, host, brand } = rfrNormalizeUrl(rawUrl);
     const fullStr = String(rawUrl).toLowerCase();
     
-    // Check indexed ontologies first
+    // Check indexed ontologies first (including host and path matches)
     for (const key of Object.keys(KNOWN_OEM_ONTOLOGIES)) {
-        if (host.includes(key) || key.includes(host)) {
+        if (host.includes(key) || key.includes(host) || fullStr.includes(key)) {
             return KNOWN_OEM_ONTOLOGIES[key];
         }
     }
@@ -2564,7 +2684,7 @@ function rfrSynthesizeOntologyFromDomain(rawUrl) {
     // Keyword taxonomy for raw (first-time) URL lookups
     const isMotionTech = /kinetix|motion|servo|actuat|drive|control|kinematics/i.test(fullStr);
     const isAiBrain = /skild|brain|ai|vla|model|cortex|neural|mind|cognitive/i.test(fullStr);
-    const isHumanoid = /humanoid|biped|figure|unitree|apollo|1x|sanctuary|optimus|digit|atlas|robot/i.test(fullStr);
+    const isHumanoid = /humanoid|biped|beomni|apa|figure|unitree|apollo|1x|sanctuary|optimus|digit|atlas|robot/i.test(fullStr);
     const isQuadruped = /quad|dog|spot|unitree|anybotics|ghost|walker/i.test(fullStr);
     const isCobot = /arm|cobot|universal|fanuc|kuka|abb|ur|doosan|mech/i.test(fullStr);
 
@@ -2599,6 +2719,19 @@ function rfrSynthesizeOntologyFromDomain(rawUrl) {
         aiOntology = ['Robotics Foundation Model', 'Sim-to-Real Transfer', 'Self-Supervised Spatial Perception'];
         safetyOntology = ['Real-Time Collision Avoidance', 'Fail-Safe Emergency Brake'];
         score = 92;
+    } else if (isHumanoid) {
+        systemName = `${brand} Humanoid Platform`;
+        categoryName = 'Humanoid Bipedal & Teleop Autonomy';
+        mobOntology = ['Bipedal & Wheeled Omnidirectional Gait', '3D Spatial LiDAR SLAM', 'Dynamic Balance'];
+        manipOntology = ['22-DOF Dexterous Haptic Hands', 'Tactile Sensing Finger Array', 'Precision Pick & Place'];
+        aiOntology = ['Teleoperation-to-Autonomous AI', 'Vision-Language-Action Stack', 'Spatial Perception'];
+        safetyOntology = ['ISO 10218 Safety Standard', 'Collision Force Limiting', 'IP54 Protection'];
+        height = 175;
+        weight = 72;
+        payload = 16.0;
+        dof = 22;
+        battery = 4.5;
+        score = 90;
     } else if (isQuadruped) {
         systemName = `${brand} Quadruped Autonomy Vehicle`;
         categoryName = 'Quadruped Inspection & Field Platform';
