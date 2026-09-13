@@ -5997,3 +5997,125 @@ body.has-site-nav .hamburger-menu { display: none; }
     display: flex;
     flex-direction: column;
 }
+
+
+/* ── Intuitive CRM Action Bar & Automated Job Application Styles ── */
+.ri-crm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+.ri-crm-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.88rem;
+    margin-top: 0.25rem;
+}
+.ri-crm-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+.ri-crm-select-all {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ri-crm-select-all input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--brand-green-bright);
+    cursor: pointer;
+}
+.ri-crm-apply-btn {
+    padding: 0.65rem 1.4rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(63, 209, 127, 0.25);
+    transition: all 0.25s ease;
+}
+.ri-crm-apply-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(63, 209, 127, 0.4);
+}
+.ri-crm-apply-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.ri-crm-apply-btn.ri-crm-applied {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+}
+
+.ri-crm-msg {
+    padding: 0.85rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+.ri-crm-processing {
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
+}
+.ri-crm-success {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+}
+
+.ri-job-check-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+}
+.ri-job-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--brand-green-bright);
+    cursor: pointer;
+}
+.ri-job-card.ri-job-selected {
+    border-color: rgba(63, 209, 127, 0.4);
+    background: rgba(15, 23, 42, 0.85);
+}
+.ri-job-card.ri-job-applied {
+    border-left-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+.ri-job-status-pill {
+    margin-top: 0.85rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.ri-ready-badge {
+    color: var(--brand-green-light);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.ri-applied-badge {
+    color: #34d399;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}

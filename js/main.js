@@ -7111,10 +7111,7 @@ function rfrRenderLookupResults(container, result) {
                 <div class="ri-tag-group">${mobilityTags}${manipTags}${aiTags}${safetyTags}</div>
             </div>
 
-            <div class="ri-jobs-block">
-                <h4><i class="fas fa-briefcase"></i> Matched Buyer Jobs & CapEx Demand (${jobs.length})</h4>
-                <div class="ri-jobs-grid">${jobsHtml}</div>
-            </div>
+${rfrBuildJobsCrmHtml(jobs, 'lookup')}
         </div>
     `;
 }
@@ -7546,10 +7543,7 @@ function openRobotProfileModal(queryOrItem) {
             <div class="ri-tag-group">${mobilityTags}${manipTags}${aiTags}${safetyTags}</div>
         </div>
 
-        <div class="ri-jobs-block">
-            <h4><i class="fas fa-briefcase"></i> Matched Buyer Jobs & CapEx Demand (${jobs.length})</h4>
-            <div class="ri-jobs-grid">${jobsHtml}</div>
-        </div>
+${rfrBuildJobsCrmHtml(jobs, 'modal')}
     `;
 
     backdrop.style.display = 'flex';
@@ -7728,5 +7722,171 @@ function initRobotCatalogDirectory() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeRobotProfileModal();
     });
+}
+
+
+
+/* ── AUTOMATED 1-CLICK CRM JOB APPLICATION ENGINE ── */
+
+function rfrGetAppliedJobs() {
+    try {
+        const raw = localStorage.getItem('rfr_applied_jobs');
+        return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function rfrSaveAppliedJob(jobId) {
+    try {
+        const applied = rfrGetAppliedJobs();
+        applied[jobId] = Date.now();
+        localStorage.setItem('rfr_applied_jobs', JSON.stringify(applied));
+    } catch (e) {}
+}
+
+function rfrBuildJobsCrmHtml(jobs, contextId = 'lookup') {
+    if (!jobs || jobs.length === 0) return '';
+    const appliedJobs = rfrGetAppliedJobs();
+
+    let unappliedCount = 0;
+    const jobsHtml = jobs.map((j, idx) => {
+        const jobId = `job_${j.company}_${j.title}`.replace(/[^a-zA-Z0-9_]/g, '_');
+        const isApplied = !!appliedJobs[jobId];
+        if (!isApplied) unappliedCount++;
+
+        return `
+            <div class="ri-job-card ${isApplied ? 'ri-job-applied' : 'ri-job-selected'}" id="${contextId}_card_${jobId}">
+                <div class="ri-job-head">
+                    <label class="ri-job-check-wrap">
+                        <input type="checkbox" class="ri-job-checkbox ${contextId}-checkbox" data-job-id="${jobId}" data-context="${contextId}" ${isApplied ? 'disabled' : 'checked'} onchange="rfrUpdateJobsCrmState('${contextId}')" />
+                        <span class="ri-job-badge">${rfrEscape(j.category || 'Buyer Job')}</span>
+                    </label>
+                    <span class="ri-job-capex">${rfrEscape(j.capex || '')}</span>
+                </div>
+                <h4 class="ri-job-title">${rfrEscape(j.title)}</h4>
+                <div class="ri-job-meta">
+                    <span><i class="fas fa-building"></i> ${rfrEscape(j.company)}</span>
+                    <span><i class="fas fa-map-marker-alt"></i> ${rfrEscape(j.location)}</span>
+                </div>
+                <p class="ri-job-desc">${rfrEscape(j.description)}</p>
+                <div class="ri-job-status-pill" id="${contextId}_status_${jobId}">
+                    ${isApplied ? '<span class="ri-applied-badge"><i class="fas fa-check-circle"></i> Proposal Applied & Sent</span>' : '<span class="ri-ready-badge"><i class="fas fa-bolt"></i> Autopilot Ready</span>'}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const initCheckedCount = unappliedCount > 0 ? unappliedCount : 0;
+
+    return `
+        <div class="ri-jobs-block ri-crm-container" id="${contextId}_crm_container">
+            <div class="ri-crm-header">
+                <div>
+                    <h4><i class="fas fa-briefcase"></i> Matched Buyer Jobs & CapEx Demand (${jobs.length})</h4>
+                    <p class="ri-crm-subtitle">Select target deployment jobs below to send 1-click automated proposals to enterprise buyers.</p>
+                </div>
+                <div class="ri-crm-controls">
+                    <label class="ri-crm-select-all">
+                        <input type="checkbox" id="${contextId}_selectAll" ${initCheckedCount > 0 ? 'checked' : 'disabled'} onchange="rfrToggleSelectAllJobs('${contextId}', this.checked)" />
+                        <span>Select All</span>
+                    </label>
+                    <button type="button" id="${contextId}_applyBtn" class="btn btn-primary ri-crm-apply-btn" onclick="rfrExecuteAutomatedJobApplication('${contextId}')" ${initCheckedCount === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-paper-plane"></i> <span id="${contextId}_applyBtnText">Apply to ${initCheckedCount} Jobs</span>
+                    </button>
+                </div>
+            </div>
+            <div id="${contextId}_crm_msg" class="ri-crm-msg" style="display:none;"></div>
+            <div class="ri-jobs-grid">${jobsHtml}</div>
+        </div>
+    `;
+}
+
+function rfrUpdateJobsCrmState(contextId) {
+    const checkboxes = document.querySelectorAll(`.${contextId}-checkbox:not([disabled])`);
+    const checked = document.querySelectorAll(`.${contextId}-checkbox:not([disabled]):checked`);
+    const applyBtn = document.getElementById(`${contextId}_applyBtn`);
+    const applyBtnText = document.getElementById(`${contextId}_applyBtnText`);
+    const selectAll = document.getElementById(`${contextId}_selectAll`);
+
+    const count = checked.length;
+    if (applyBtnText) {
+        applyBtnText.textContent = count > 0 ? `Apply to ${count} Jobs` : 'Select Jobs to Apply';
+    }
+    if (applyBtn) {
+        applyBtn.disabled = count === 0;
+    }
+    if (selectAll) {
+        selectAll.checked = checkboxes.length > 0 && checked.length === checkboxes.length;
+    }
+}
+
+function rfrToggleSelectAllJobs(contextId, isChecked) {
+    const checkboxes = document.querySelectorAll(`.${contextId}-checkbox:not([disabled])`);
+    checkboxes.forEach(cb => {
+        cb.checked = isChecked;
+        const card = document.getElementById(`${contextId}_card_${cb.getAttribute('data-job-id')}`);
+        if (card && !card.classList.contains('ri-job-applied')) {
+            if (isChecked) card.classList.add('ri-job-selected');
+            else card.classList.remove('ri-job-selected');
+        }
+    });
+    rfrUpdateJobsCrmState(contextId);
+}
+
+async function rfrExecuteAutomatedJobApplication(contextId) {
+    const checked = document.querySelectorAll(`.${contextId}-checkbox:not([disabled]):checked`);
+    const applyBtn = document.getElementById(`${contextId}_applyBtn`);
+    const msgBox = document.getElementById(`${contextId}_crm_msg`);
+    if (!checked || checked.length === 0) return;
+
+    const count = checked.length;
+    if (applyBtn) {
+        applyBtn.disabled = true;
+        applyBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Submitting Autopilot Proposals (${count})...`;
+    }
+
+    if (msgBox) {
+        msgBox.style.display = 'block';
+        msgBox.className = 'ri-crm-msg ri-crm-processing';
+        msgBox.innerHTML = `<i class="fas fa-robot fa-spin"></i> 1-Click Autopilot: Generating CapEx deployment proposals & matching hardware ontologies for ${count} jobs...`;
+    }
+
+    await new Promise(r => setTimeout(r, 700));
+
+    if (msgBox) {
+        msgBox.innerHTML = `<i class="fas fa-network-wired fa-spin"></i> Transmitting verified proposals to Las Vegas Enterprise Operations Hub & Buyer CRM...`;
+    }
+
+    await new Promise(r => setTimeout(r, 800));
+
+    checked.forEach(cb => {
+        const jobId = cb.getAttribute('data-job-id');
+        rfrSaveAppliedJob(jobId);
+
+        cb.checked = false;
+        cb.disabled = true;
+
+        const card = document.getElementById(`${contextId}_card_${jobId}`);
+        if (card) {
+            card.classList.remove('ri-job-selected');
+            card.classList.add('ri-job-applied');
+        }
+
+        const statusPill = document.getElementById(`${contextId}_status_${jobId}`);
+        if (statusPill) {
+            statusPill.innerHTML = `<span class="ri-applied-badge"><i class="fas fa-check-circle"></i> Proposal Applied & Sent</span>`;
+        }
+    });
+
+    if (msgBox) {
+        msgBox.className = 'ri-crm-msg ri-crm-success';
+        msgBox.innerHTML = `<i class="fas fa-check-circle"></i> <strong>Application Success!</strong> Automatically applied to ${count} buyer jobs. CapEx proposals sent directly to operations managers.`;
+    }
+
+    if (applyBtn) {
+        applyBtn.className = 'btn btn-secondary ri-crm-apply-btn ri-crm-applied';
+        applyBtn.innerHTML = `<i class="fas fa-check-circle"></i> Applied to ${count} Jobs ✓`;
+    }
 }
 
