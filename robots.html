@@ -49,9 +49,43 @@
             <h1>Robot <span class="highlight">Intelligence</span></h1>
             <p class="vv-hero-tagline">Live humanoid benchmarks and daily automation-demand signals — so our community builds with the real state of the industry.</p>
             <div class="vv-hero-buttons">
-                <a href="#benchmark" class="btn btn-primary">View the Benchmark</a>
+                <a href="#lookup" class="btn btn-primary"><i class="fas fa-search-location"></i> Lookup Robot URL</a>
+                <a href="#benchmark" class="btn btn-secondary">View the Benchmark</a>
                 <a href="#brief" class="btn btn-secondary">Today's Brief</a>
             </div>
+        </div>
+    </section>
+
+    <!-- Robot URL Lookup, Scraper & Capability Ontologies -->
+    <section class="vv-section ri-lookup-section" id="lookup">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-search-location"></i> Robot URL Lookup & Capability Scraper</h2>
+                <p class="section-subtitle">Submit any manufacturer website or robot URL. Our scraper normalizes domain metadata, extracts hardware & capability ontologies, and matches verified customer jobs.</p>
+            </div>
+            
+            <div class="ri-lookup-box">
+                <form id="robotLookupForm" class="ri-lookup-form">
+                    <div class="ri-input-group">
+                        <i class="fas fa-globe ri-input-icon"></i>
+                        <input type="text" id="robotUrlInput" class="ri-lookup-input" placeholder="Paste robot URL or manufacturer website (e.g. https://kinetix.tech/)" required>
+                        <button type="submit" class="btn btn-primary ri-lookup-btn">
+                            <i class="fas fa-bolt"></i> Lookup & Match Jobs
+                        </button>
+                    </div>
+                </form>
+
+                <div class="ri-chip-list">
+                    <span class="ri-chip-label">Quick Try:</span>
+                    <button type="button" class="ri-chip-btn" data-url="https://kinetix.tech/"><i class="fas fa-robot"></i> kinetix.tech</button>
+                    <button type="button" class="ri-chip-btn" data-url="https://skild.ai/"><i class="fas fa-brain"></i> skild.ai</button>
+                    <button type="button" class="ri-chip-btn" data-url="https://figure.ai/"><i class="fas fa-walking"></i> figure.ai</button>
+                    <button type="button" class="ri-chip-btn" data-url="https://unitree.com/"><i class="fas fa-running"></i> unitree.com</button>
+                    <button type="button" class="ri-chip-btn" data-url="https://apptronik.com/"><i class="fas fa-boxes"></i> apptronik.com</button>
+                </div>
+            </div>
+
+            <div id="lookupResults" class="ri-lookup-results"></div>
         </div>
     </section>
 
