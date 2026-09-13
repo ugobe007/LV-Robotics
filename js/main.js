@@ -7778,15 +7778,15 @@ function rfrBuildJobsCrmHtml(jobs, contextId = 'lookup') {
     }).join('');
 
     const initCheckedCount = unappliedCount > 0 ? unappliedCount : 0;
-    const btnLabel = initCheckedCount > 0 ? `Apply to ${initCheckedCount} Selected Jobs` : 'Apply to Select Jobs';
+    const btnLabel = initCheckedCount > 0 ? `Automate ${initCheckedCount} Job Applications` : 'Automate Job Applications';
 
     return `
         <div class="ri-jobs-block ri-crm-container" id="${contextId}_crm_container">
             <div class="ri-crm-header">
                 <div>
-                    <div class="ri-crm-autopilot-tag"><i class="fas fa-bolt"></i> 1-Click Autopilot CRM</div>
+                    <div class="ri-crm-autopilot-tag"><i class="fas fa-bolt"></i> Automate Job Applications</div>
                     <h4><i class="fas fa-briefcase"></i> Matched Buyer Jobs & CapEx Demand (${jobs.length})</h4>
-                    <p class="ri-crm-subtitle">Select deployment jobs below to execute 1-click automated proposals to enterprise buyers.</p>
+                    <p class="ri-crm-subtitle">Select target deployment jobs to execute 1-click automated applications to enterprise buyers.</p>
                 </div>
                 <div class="ri-crm-controls">
                     <label class="ri-crm-select-all">
@@ -7813,7 +7813,7 @@ function rfrUpdateJobsCrmState(contextId) {
 
     const count = checked.length;
     if (applyBtnText) {
-        applyBtnText.textContent = count > 0 ? `Apply to ${count} Selected Jobs` : 'Apply to Select Jobs';
+        applyBtnText.textContent = count > 0 ? `Automate ${count} Job Applications` : 'Automate Job Applications';
     }
     if (applyBtn) {
         applyBtn.disabled = count === 0;
