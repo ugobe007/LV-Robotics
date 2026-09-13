@@ -2347,6 +2347,124 @@ const RFR_CACHE_KEYS = {
 // Indexed OEM Ontologies & Resilient Scraper Engine
 // ============================================
 const KNOWN_OEM_ONTOLOGIES = {
+    'abb.com/mobile-robots': {
+        name: 'ABB Flexley AMR (Autonomous Mobile Robots)',
+        vendor: 'ABB Mobile Automation',
+        url: 'https://www.abb.com/global/en/areas/robotics/products/mobile-robots',
+        status: 'production',
+        score_total: 92,
+        heir_score: '4.60',
+        specs: { height_cm: 35, weight_kg: 180, payload_kg: 1500.0, hand_dof: 0, battery_hours: 12.0 },
+        ontologies: {
+            mobility: ['LiDAR & 3D Spatial SLAM Navigation', '360° Omnidirectional AMR Drive', 'Dynamic Fleet Interlock'],
+            manipulation: ['Integrated Automated Lift Table', 'Conveyor Top-Deck Transfer', 'Towing Hitch Assembly'],
+            ai_stack: ['ABB AMR Fleet Manager', 'Dynamic Obstacle Re-Routing', 'Real-Time Warehouse WMS Integration'],
+            safety: ['ISO 3691-4 AMR Safety Standard', 'Safety Laser Scanners', '3D Safety Camera Array']
+        },
+        summary: 'Autonomous mobile robot fleet for heavy payload transport, pallet movement, line-side manufacturing replenishment, and high-density warehouse logistics.',
+        matched_jobs: [
+            {
+                title: 'AMR Line-Side Replenishment & Material Handling Lead',
+                company: 'Nevada EV Battery Gigafactory',
+                location: 'Sparks, NV',
+                capex: '$165,000 / unit',
+                category: 'Warehouse & Logistics AMR',
+                description: 'Deploying ABB Flexley AMR fleet for autonomous SLAM material transport, tote delivery, and heavy sub-assembly line feeding.'
+            },
+            {
+                title: 'Autonomous Pallet Transport & Goods-to-Person Fleet',
+                company: 'Las Vegas Enterprise Fulfillment Center',
+                location: 'Las Vegas, NV',
+                capex: '$185,000 / unit',
+                category: 'Supply Chain & Fulfillment',
+                description: '24/7 autonomous mobile robot fleet executing dynamic obstacle avoidance, warehouse cross-docking, and high-density pallet transport.'
+            },
+            {
+                title: 'Resort Facilities & Cleanroom AMR Transport Operator',
+                company: 'MGM Resort Supply & Logistics Operations',
+                location: 'Las Vegas, NV',
+                capex: '$150,000 / unit',
+                category: 'Hospitality & Commercial Fleet',
+                description: 'Automated mobile robot navigation for multi-floor supply transport, linen cart towing, and commercial waste conveyance.'
+            }
+        ]
+    },
+    'abb.com/yumi': {
+        name: 'ABB YuMi (IRB 14000) Dual-Arm Collaborative Robot',
+        vendor: 'ABB Robotics',
+        url: 'https://new.abb.com/products/robotics/collaborative-robots/yumi',
+        status: 'production',
+        score_total: 94,
+        heir_score: '4.70',
+        specs: { height_cm: 57, weight_kg: 38, payload_kg: 0.5, hand_dof: 14, battery_hours: 8.0 },
+        ontologies: {
+            mobility: ['Fixed Base & FlexFeeder Table Mounting', 'Dual 7-Axis Articulated Reach'],
+            manipulation: ['Sub-Millisecond 0.02mm Precision', 'Integrated Servo Grippers & Vacuum Cups', 'Tactile Force Feedback'],
+            ai_stack: ['ABB RobotStudio Autonomy', 'Vision-Guided Small-Parts Pick & Place', 'Real-Time Trajectory Optimization'],
+            safety: ['PL d Cat 3 Collaborative Safety', 'Padded Soft-Touch Arm Structure', 'Power & Force Limiting']
+        },
+        summary: 'Pioneering dual-arm collaborative robot designed for small-parts assembly, electronics packaging, medical device sorting, and barrier-free human-robot collaboration.',
+        matched_jobs: [
+            {
+                title: 'YuMi Dual-Arm Electronics Micro-Assembly Operator',
+                company: 'Vegas Advanced Micro-Electronics Center',
+                location: 'North Las Vegas, NV',
+                capex: '$135,000 / unit',
+                category: 'Electronics & Precision Assembly',
+                description: 'Deploying ABB YuMi dual-arm cobot with sub-millisecond tactile force feedback for high-speed PCB insertion, small-parts assembly, and optical quality inspection.'
+            },
+            {
+                title: 'Collaborative Kitting & Sterile Packaging Specialist',
+                company: 'Las Vegas Medical & Pharmaceutical Logistics',
+                location: 'Las Vegas, NV',
+                capex: '$125,000 / unit',
+                category: 'Medical & Cleanroom Automation',
+                description: 'Barrier-free human-robot co-working for sterile kit packaging, syringe sortation, and laboratory sample tray handling.'
+            },
+            {
+                title: 'High-Speed Precision Component Pick-and-Place Cell',
+                company: 'Apex Industrial Automation Hub',
+                location: 'Henderson, NV',
+                capex: '$145,000 / unit',
+                category: 'Manufacturing & Sub-Assembly',
+                description: 'Dual-arm 14-DOF bi-manual manipulation cell executing rapid component placement, screw driving, and continuous quality audit.'
+            }
+        ]
+    },
+    'abb.com': {
+        name: 'ABB Robotics Platform (YuMi Cobots & Flexley AMRs)',
+        vendor: 'ABB Robotics',
+        url: 'https://www.abb.com/robotics',
+        status: 'production',
+        score_total: 93,
+        heir_score: '4.65',
+        specs: { height_cm: 120, weight_kg: 110, payload_kg: 25.0, hand_dof: 14, battery_hours: 10.0 },
+        ontologies: {
+            mobility: ['SLAM AMR Navigation & Track Mounting', 'Collaborative Arm Range'],
+            manipulation: ['Sub-Millisecond Pick & Place', 'Dual-Arm Dexterity', 'Tactile Sensing'],
+            ai_stack: ['ABB Omnicore Autonomy Engine', 'Vision-Language-Action Stack'],
+            safety: ['ISO 10218-1 & ISO 3691-4 Certified', 'Force-Limiting Safe Stop']
+        },
+        summary: 'Global leader in industrial cobots (YuMi, GoFa) and autonomous mobile robots (Flexley AMRs), delivering end-to-end factory automation and warehouse logistics.',
+        matched_jobs: [
+            {
+                title: 'YuMi Dual-Arm Micro-Assembly & Kitting Cell Operator',
+                company: 'Vegas Advanced Micro-Electronics Center',
+                location: 'North Las Vegas, NV',
+                capex: '$135,000 / unit',
+                category: 'Electronics & Precision Assembly',
+                description: 'Precision dual-arm collaborative robot cell for high-speed small-parts assembly, PCB insertion, and optical quality inspection.'
+            },
+            {
+                title: 'AMR Line-Side Replenishment & Pallet Logistics Lead',
+                company: 'Apex Logistics Hub',
+                location: 'Henderson, NV',
+                capex: '$165,000 / unit',
+                category: 'Warehouse & Logistics AMR',
+                description: 'Autonomous mobile robot fleet transport for heavy material conveyance, line feeding, and cross-dock pallet transfer.'
+            }
+        ]
+    },
     'kinetix.tech': {
         name: 'Kinetix System 1 (Motion & Actuation Intelligence)',
         vendor: 'Kinetix Tech',
@@ -6810,17 +6928,21 @@ function rfrLookupMasterCatalog(queryStr) {
         return catalogMatch;
     }
     
-    // 2. Check indexed OEM ontologies
-    for (const key of Object.keys(KNOWN_OEM_ONTOLOGIES)) {
-        if (host.includes(key) || key.includes(host) || fullStr.includes(key)) {
+    // 2. Check indexed OEM ontologies (sorting keys by length descending so specific paths match before root domain)
+    const oemKeys = Object.keys(KNOWN_OEM_ONTOLOGIES).sort((a, b) => b.length - a.length);
+    for (const key of oemKeys) {
+        const kLower = key.toLowerCase();
+        if (fullStr.includes(kLower) || host === kLower || (kLower !== 'humanoid.guide' && kLower.length > 3 && (host.includes(kLower) || kLower.includes(host)))) {
             return KNOWN_OEM_ONTOLOGIES[key];
         }
     }
 
     // Keyword taxonomy for raw (first-time) URL lookups
+    const isYuMi = /yumi|irb 14000|crb 15000|gofa/i.test(fullStr);
+    const isAmr = /mobile-robot|mobile_robot|amr|agv|asti|flexley|autonomous-mobile|otto|mir|fetch|locus|seegrid|geek\+|forwardx/i.test(fullStr);
     const isMotionTech = /kinetix|motion|servo|actuat|drive|control|kinematics/i.test(fullStr);
     const isAiBrain = /skild|brain|ai|vla|model|cortex|neural|mind|cognitive/i.test(fullStr);
-    const isHumanoid = /humanoid|biped|beomni|apa|figure|unitree|apollo|1x|sanctuary|optimus|digit|atlas|robot|cyberone|eve|hmnd|kime|lightning|nao|neo|iron|promobot|protoclone|punyo|robothespian|surena|tiangong|walker|xiaomi|honor|xpeng|tesla|macco|ubtech|clone|engineeredarts/i.test(fullStr);
+    const isHumanoid = /humanoid|biped|beomni|apa|figure|unitree|apollo|1x|sanctuary|optimus|digit|atlas|cyberone|eve|hmnd|kime|lightning|nao|neo|iron|promobot|protoclone|punyo|robothespian|surena|tiangong|walker|xiaomi|honor|xpeng|tesla|macco|ubtech|clone|engineeredarts/i.test(fullStr);
     const isQuadruped = /quad|dog|spot|unitree|anybotics|ghost/i.test(fullStr);
     const isCobot = /arm|cobot|universal|fanuc|kuka|abb|ur|doosan|mech/i.test(fullStr);
 
@@ -6837,8 +6959,114 @@ function rfrLookupMasterCatalog(queryStr) {
     let battery = 5.5;
     let score = 87;
 
-    if (isMotionTech) {
-        systemName = `${brand} Motion & Actuation Intelligence Platform`;
+    const brandDisplay = brand || 'Robot OEM';
+    let matchedJobs = [
+        {
+            title: `${brandDisplay} Facility & Cart Operations Specialist`,
+            company: 'Bellagio Resort & Hotel Operations',
+            location: 'Las Vegas, NV',
+            capex: '$175,000 / unit',
+            category: 'Hospitality & Resort Logistics',
+            description: `Deploying ${brandDisplay} platform for automated 24/7 linen transport, room delivery, and floor supply logistics across resort towers.`
+        },
+        {
+            title: 'Automated Micro-Assembly & Sorting Operator',
+            company: 'Vegas Advanced Manufacturing Center',
+            location: 'North Las Vegas, NV',
+            capex: '$145,000 / unit',
+            category: 'Manufacturing & Electronics',
+            description: `Precision motion control and tactile force feedback for high-speed component handling, packaging, and optical quality control.`
+        },
+        {
+            title: 'High-Density Palletizing & Tote Sortation Robot',
+            company: 'Apex Logistics Hub',
+            location: 'Henderson, NV',
+            capex: '$210,000 / unit',
+            category: 'Warehouse & Supply Chain',
+            description: `Autonomous palletizing and tote stacker executing automated sorting under ${payload}kg payload capacity.`
+        }
+    ];
+
+    if (isYuMi) {
+        systemName = `${brandDisplay} YuMi Dual-Arm Collaborative Robot`;
+        categoryName = 'Collaborative Robot Arm & Precision Assembly';
+        mobOntology = ['Fixed Base & FlexFeeder Table Mounting', 'Dual 7-Axis Articulated Reach'];
+        manipOntology = ['Sub-Millisecond 0.02mm Pick & Place', 'Integrated Servo Grippers', 'Tactile Force Feedback'];
+        aiOntology = ['RobotStudio Autonomy Engine', 'Vision-Guided Small-Parts Assembly', 'Trajectory Optimization'];
+        safetyOntology = ['PL d Cat 3 Collaborative Safety', 'Padded Soft-Touch Arm Shell', 'Power & Force Limiting'];
+        height = 57;
+        weight = 38;
+        payload = 0.5;
+        dof = 14;
+        battery = 8.0;
+        score = 94;
+        matchedJobs = [
+            {
+                title: 'YuMi Dual-Arm Micro-Assembly & Kitting Cell Operator',
+                company: 'Vegas Advanced Micro-Electronics Center',
+                location: 'North Las Vegas, NV',
+                capex: '$135,000 / unit',
+                category: 'Electronics & Precision Assembly',
+                description: 'Deploying ABB YuMi dual-arm cobot with sub-millisecond tactile force feedback for high-speed PCB insertion, small-parts assembly, and optical quality inspection.'
+            },
+            {
+                title: 'Collaborative Kitting & Sterile Packaging Specialist',
+                company: 'Las Vegas Medical & Pharmaceutical Logistics',
+                location: 'Las Vegas, NV',
+                capex: '$125,000 / unit',
+                category: 'Medical & Cleanroom Automation',
+                description: 'Barrier-free human-robot co-working for sterile kit packaging, syringe sortation, and laboratory sample tray handling.'
+            },
+            {
+                title: 'High-Speed Precision Component Pick-and-Place Cell',
+                company: 'Apex Industrial Automation Hub',
+                location: 'Henderson, NV',
+                capex: '$145,000 / unit',
+                category: 'Manufacturing & Sub-Assembly',
+                description: 'Dual-arm 14-DOF bi-manual manipulation cell executing rapid component placement, screw driving, and continuous quality audit.'
+            }
+        ];
+    } else if (isAmr) {
+        systemName = `${brandDisplay} Autonomous Mobile Robot (AMR) Logistics Platform`;
+        categoryName = 'Autonomous Mobile Robot (AMR) & AGV Logistics';
+        mobOntology = ['LiDAR & 3D Spatial SLAM Navigation', '360° Omnidirectional AMR Drive', 'Dynamic Fleet Interlock'];
+        manipOntology = ['Integrated Automated Lift Table', 'Conveyor Top-Deck Transfer', 'Towing Hitch Assembly'];
+        aiOntology = ['Fleet Management Autonomy Engine', 'Dynamic Obstacle Re-Routing', 'WMS Integration'];
+        safetyOntology = ['ISO 3691-4 AMR Safety Standard', '3D Safety Camera Array', 'Emergency Stop E-Brake'];
+        height = 35;
+        weight = 180;
+        payload = 1500.0;
+        dof = 0;
+        battery = 12.0;
+        score = 92;
+        matchedJobs = [
+            {
+                title: 'AMR Line-Side Replenishment & Material Handling Lead',
+                company: 'Nevada EV Battery Gigafactory',
+                location: 'Sparks, NV',
+                capex: '$165,000 / unit',
+                category: 'Warehouse & Logistics AMR',
+                description: 'Deploying ABB Flexley AMR fleet for autonomous SLAM material transport, tote delivery, and heavy sub-assembly line feeding.'
+            },
+            {
+                title: 'Autonomous Pallet Transport & Goods-to-Person Fleet',
+                company: 'Las Vegas Enterprise Fulfillment Center',
+                location: 'Las Vegas, NV',
+                capex: '$185,000 / unit',
+                category: 'Supply Chain & Fulfillment',
+                description: '24/7 autonomous mobile robot fleet executing dynamic obstacle avoidance, warehouse cross-docking, and high-density pallet transport.'
+            },
+            {
+                title: 'Resort Facilities & Cleanroom AMR Transport Operator',
+                company: 'MGM Resort Supply & Logistics Operations',
+                location: 'Las Vegas, NV',
+                capex: '$150,000 / unit',
+                category: 'Hospitality & Commercial Fleet',
+                description: 'Automated mobile robot navigation for multi-floor supply transport, linen cart towing, and commercial waste conveyance.'
+            }
+        ];
+    } else if (isMotionTech) {
+        systemName = `${brandDisplay} Motion & Actuation Intelligence Platform`;
         categoryName = 'Motion Control & High-Speed Actuation';
         mobOntology = ['Sub-Millisecond Trajectory Control', 'Dynamic Bipedal Balance', 'Precision Servo Actuation'];
         manipOntology = ['High-Payload Gripper Integration', 'Tactile Force Feedback', 'Haptic Torque Sensing'];
@@ -6848,7 +7076,7 @@ function rfrLookupMasterCatalog(queryStr) {
         dof = 16;
         score = 89;
     } else if (isAiBrain) {
-        systemName = `${brand} General Purpose Robot Brain`;
+        systemName = `${brandDisplay} General Purpose Robot Brain`;
         categoryName = 'AI Foundation Model & Physical Autonomy';
         mobOntology = ['Multi-Embodiment Navigation', 'Unstructured Terrain Traversal', 'SLAM Vision'];
         manipOntology = ['Zero-Shot General Manipulation', 'Bi-Manual Tool Execution', 'Adaptive Reach'];
@@ -6856,7 +7084,7 @@ function rfrLookupMasterCatalog(queryStr) {
         safetyOntology = ['Real-Time Collision Avoidance', 'Fail-Safe Emergency Brake'];
         score = 92;
     } else if (isHumanoid) {
-        systemName = `${brand} Humanoid Platform`;
+        systemName = `${brandDisplay} Humanoid Platform`;
         categoryName = 'Humanoid Bipedal & Teleop Autonomy';
         mobOntology = ['Bipedal & Wheeled Omnidirectional Gait', '3D Spatial LiDAR SLAM', 'Dynamic Balance'];
         manipOntology = ['22-DOF Dexterous Haptic Hands', 'Tactile Sensing Finger Array', 'Precision Pick & Place'];
@@ -6869,7 +7097,7 @@ function rfrLookupMasterCatalog(queryStr) {
         battery = 4.5;
         score = 90;
     } else if (isQuadruped) {
-        systemName = `${brand} Quadruped Autonomy Vehicle`;
+        systemName = `${brandDisplay} Quadruped Autonomy Vehicle`;
         categoryName = 'Quadruped Inspection & Field Platform';
         mobOntology = ['Dynamic Quadruped Gait', 'Stair & Obstacle Climbing', 'All-Weather IP67'];
         manipOntology = ['Mounted Inspection Arm', 'Sensory Payload Suite'];
@@ -6882,7 +7110,7 @@ function rfrLookupMasterCatalog(queryStr) {
         battery = 4.0;
         score = 88;
     } else if (isCobot) {
-        systemName = `${brand} Precision Industrial Cobot`;
+        systemName = `${brandDisplay} Precision Industrial Cobot`;
         categoryName = 'Collaborative Robot Arm';
         mobOntology = ['Fixed Base & AMR Rail Mounting', 'Flexible Workspace Reach'];
         manipOntology = ['Sub-Millisecond Pick & Place', 'Quick-Change Tool Coupler', 'Force Limiting'];
@@ -6894,9 +7122,25 @@ function rfrLookupMasterCatalog(queryStr) {
         dof = 6;
         battery = 8.0;
         score = 86;
+        matchedJobs = [
+            {
+                title: 'Collaborative Pick & Place Cell Operator',
+                company: 'Vegas Advanced Manufacturing Center',
+                location: 'North Las Vegas, NV',
+                capex: '$145,000 / unit',
+                category: 'Manufacturing & Electronics',
+                description: 'Precision sub-millisecond component placement and tactile assembly.'
+            },
+            {
+                title: 'Automated Kitting & Screwdriving Cell',
+                company: 'Apex Industrial Automation Hub',
+                location: 'Henderson, NV',
+                capex: '$135,000 / unit',
+                category: 'Industrial Sub-Assembly',
+                description: 'Collaborative robot arm executing automated screwdriving, insertion, and quality inspection.'
+            }
+        ];
     }
-
-    const brandDisplay = brand || 'Robot OEM';
 
     return {
         name: systemName,
@@ -6913,32 +7157,7 @@ function rfrLookupMasterCatalog(queryStr) {
             safety: safetyOntology
         },
         summary: `Extracted grounded capability profile for raw URL lookup (${host}). Categorized as ${categoryName} with verified hardware ontologies and matched commercial buyer opportunities.`,
-        matched_jobs: [
-            {
-                title: `${brandDisplay} Facility & Cart Operations Specialist`,
-                company: 'Bellagio Resort & Hotel Operations',
-                location: 'Las Vegas, NV',
-                capex: '$175,000 / unit',
-                category: 'Hospitality & Resort Logistics',
-                description: `Deploying ${brandDisplay} platform for automated 24/7 linen transport, room delivery, and floor supply logistics across resort towers.`
-            },
-            {
-                title: 'Automated Micro-Assembly & Sorting Operator',
-                company: 'Vegas Advanced Manufacturing Center',
-                location: 'North Las Vegas, NV',
-                capex: '$145,000 / unit',
-                category: 'Manufacturing & Electronics',
-                description: `Precision motion control and tactile force feedback for high-speed component handling, packaging, and optical quality control.`
-            },
-            {
-                title: 'High-Density Palletizing & Tote Sortation Robot',
-                company: 'Apex Logistics Hub',
-                location: 'Henderson, NV',
-                capex: '$210,000 / unit',
-                category: 'Warehouse & Supply Chain',
-                description: `Autonomous palletizing and tote stacker executing automated sorting under ${payload}kg payload capacity.`
-            }
-        ]
+        matched_jobs: matchedJobs
     };
 }
 
@@ -6947,6 +7166,8 @@ async function rfrLookupRobotUrl(rawUrl) {
     if (!host) {
         throw new Error('Please enter a valid URL (e.g. https://kinetix.tech/)');
     }
+
+    const fullStr = String(rawUrl).toLowerCase();
 
     // Check Master Catalog for exact model / product path match first
     const catalogMatch = rfrLookupMasterCatalog(rawUrl) || rfrLookupMasterCatalog(cleanUrl);
@@ -6957,9 +7178,11 @@ async function rfrLookupRobotUrl(rawUrl) {
         };
     }
 
-    // Check indexed OEM ontologies
-    for (const key of Object.keys(KNOWN_OEM_ONTOLOGIES)) {
-        if (host === key || (key !== 'humanoid.guide' && (host.includes(key) || key.includes(host)))) {
+    // Check indexed OEM ontologies (sorted by key length descending)
+    const oemKeys = Object.keys(KNOWN_OEM_ONTOLOGIES).sort((a, b) => b.length - a.length);
+    for (const key of oemKeys) {
+        const kLower = key.toLowerCase();
+        if (fullStr.includes(kLower) || host === kLower || (kLower !== 'humanoid.guide' && kLower.length > 3 && (host.includes(kLower) || kLower.includes(host)))) {
             return {
                 profile: KNOWN_OEM_ONTOLOGIES[key],
                 source: 'indexed_ontology'
@@ -7746,7 +7969,26 @@ function rfrSaveAppliedJob(jobId) {
 }
 
 function rfrBuildJobsCrmHtml(jobs, contextId = 'lookup') {
-    if (!jobs || jobs.length === 0) return '';
+    if (!jobs || jobs.length === 0) {
+        jobs = [
+            {
+                title: 'Enterprise Commercial Automation Deployment Lead',
+                company: 'Las Vegas Enterprise Operations Hub',
+                location: 'Las Vegas, NV',
+                capex: '$165,000 / unit',
+                category: 'Enterprise Automation',
+                description: 'Deploying verified commercial robotics system for 24/7 hospitality, logistics, and facility automation.'
+            },
+            {
+                title: 'High-Precision Pick & Place Cell Operator',
+                company: 'Apex Industrial Automation Center',
+                location: 'Henderson, NV',
+                capex: '$145,000 / unit',
+                category: 'Manufacturing & Assembly',
+                description: 'Precision motion control and tactile force feedback for high-speed component handling and quality audit.'
+            }
+        ];
+    }
     const appliedJobs = rfrGetAppliedJobs();
 
     let unappliedCount = 0;
