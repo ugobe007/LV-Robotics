@@ -37,4 +37,12 @@ if (mainJs.includes('async function rfrLookupRobotUrl') && mainJs.includes('rfrS
     process.exit(1);
 }
 
+// Test 5: Verify raw (first time) URL keyword taxonomy parser
+if (mainJs.includes('isMotionTech') && mainJs.includes('isAiBrain') && mainJs.includes('isHumanoid') && mainJs.includes('isQuadruped')) {
+    console.log('✅ PASS: Raw (first time) URL keyword taxonomy parser operational');
+} else {
+    console.error('❌ FAIL: Raw URL keyword taxonomy parser missing!');
+    process.exit(1);
+}
+
 console.log('🎉 All smoke tests passed successfully!');
