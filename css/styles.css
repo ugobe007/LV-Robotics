@@ -5498,6 +5498,43 @@ body.has-site-nav .hamburger-menu { display: none; }
     line-height: 1.6;
     margin: 1.25rem 0;
 }
+.ri-robot-photo-card {
+    position: relative;
+    width: 100%;
+    max-height: 360px;
+    margin: 1.25rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(63, 209, 127, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ri-robot-photo {
+    max-height: 350px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    padding: 0.5rem;
+    transition: transform 0.3s ease;
+}
+.ri-robot-photo:hover {
+    transform: scale(1.02);
+}
+.ri-robot-photo-badge {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    color: var(--brand-green-bright);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid rgba(63, 209, 127, 0.3);
+}
 .ri-spec-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
