@@ -4237,6 +4237,204 @@ section {
     letter-spacing: 0.02em;
 }
 
+/* Quotes Rotation Section (Home Page Carousel) */
+.quotes-rotation-section {
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #050b08 0%, #0c1813 50%, #040806 100%);
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(63, 209, 127, 0.15);
+    border-bottom: 1px solid rgba(63, 209, 127, 0.15);
+}
+
+.quotes-rotation-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(63, 209, 127, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.quotes-header {
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto 3.5rem auto;
+}
+
+.quotes-carousel-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.quotes-carousel-track {
+    position: relative;
+    min-height: 280px;
+}
+
+.quotes-carousel-track .quote-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.98);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 3.5rem 3rem 3rem 3rem;
+    border: 1px solid rgba(63, 209, 127, 0.25);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.quotes-carousel-track .quote-card.active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.quote-card-badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: 2.2rem;
+    color: rgba(63, 209, 127, 0.25);
+}
+
+.quote-text {
+    font-size: 1.25rem;
+    line-height: 1.85;
+    color: #e2ece7;
+    font-weight: 400;
+    margin-bottom: 2rem;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+}
+
+.quote-author-info {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quote-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(63, 209, 127, 0.25), rgba(16, 185, 129, 0.1));
+    border: 2px solid rgba(63, 209, 127, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3fd17f;
+    font-size: 1.3rem;
+    box-shadow: 0 0 15px rgba(63, 209, 127, 0.2);
+}
+
+.quote-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.quote-author-name {
+    font-size: 1.15rem;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.quote-author-title {
+    font-size: 0.9rem;
+    color: #3fd17f;
+    font-weight: 500;
+    margin-top: 0.2rem;
+}
+
+/* Carousel Nav Controls */
+.quotes-carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.quote-nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(63, 209, 127, 0.3);
+    color: #3fd17f;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.quote-nav-btn:hover {
+    background: rgba(63, 209, 127, 0.2);
+    border-color: #3fd17f;
+    color: #ffffff;
+    transform: scale(1.08);
+    box-shadow: 0 0 15px rgba(63, 209, 127, 0.3);
+}
+
+.quotes-carousel-dots {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.quote-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.quote-dot:hover {
+    background: rgba(63, 209, 127, 0.5);
+}
+
+.quote-dot.active {
+    width: 32px;
+    border-radius: 8px;
+    background: #3fd17f;
+    box-shadow: 0 0 10px rgba(63, 209, 127, 0.5);
+}
+
+@media (max-width: 768px) {
+    .quotes-carousel-track .quote-card {
+        padding: 2.5rem 1.75rem 2rem 1.75rem;
+    }
+    .quote-text {
+        font-size: 1.1rem;
+    }
+    .quote-author-name {
+        font-size: 1.05rem;
+    }
+    .quote-author-title {
+        font-size: 0.82rem;
+    }
+}
+
 /* Sponsorship Contact Section */
 .sponsorship-contact-section {
     padding: 6rem 2rem;
