@@ -1,0 +1,412 @@
+[
+  {
+    "oem": "Agibot",
+    "model": "AGIBOT A2",
+    "category": "Humanoid Industry Humanoid Robotics",
+    "price_str": "Purchase from $99,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/U98Bvm62Fh2TMLQDAEIz1SkJuOMIjnB2UZjy4UTT.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/agibot-a2",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=agibot-a2",
+    "specs": {}
+  },
+  {
+    "oem": "Agibot",
+    "model": "AGIBOT A3",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $48,500",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/kdvZxR0LXBNn7WcZtU6w1J1NveKVfLI6i3J6LTQB.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/agibot-a3",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=agibot-a3",
+    "specs": {}
+  },
+  {
+    "oem": "Agibot",
+    "model": "AGIBOT D1",
+    "category": "Humanoid Robotics Type Robot Dog Ma",
+    "price_str": "Purchase from $749",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/kUtI2S8Fe0GqtcVTfXGSKT3VDUzpgJZzR9XYfK1L.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/agibot-d1",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=agibot-d1",
+    "specs": {}
+  },
+  {
+    "oem": "Agibot",
+    "model": "AGIBOT X SERIES",
+    "category": "Humanoid Industry Humanoid Robotics",
+    "price_str": "Purchase from $49,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/rm5cCpiI1pUZWVyDinoDFcaStg9qMnrKxqlvzGYy.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/agibot-x-series",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=agibot-x-series",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOT  SCRUBBER-DRYER L3",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $24,000",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/26JbjZiEhWwDZ33KXh8r73l7lfhWuUAomHozDSS9.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-scrubber-dryer-l3",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-scrubber-dryer-l3",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOT CHARGING STATION CCS-02",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $3,675",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/v4BdQxOZLSAseliJyxphhurWhCaALHfvdLddRb7N.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-charging-station-ccs-02",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-charging-station-ccs-02",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOT SCRUBBER-DRYER L4",
+    "category": "Cleaning Industry Commerical Robot",
+    "price_str": "Purchase from $35,833",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/NnBK7B6o2UDwMh8Dw3ry1bktSXiBW6bNI0EoPiC8.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-scrubber-dryer-l4",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-scrubber-dryer-l4",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOT SCRUBBER-DRYER L50",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $41,820",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/Yuo2BsMEzcaxz6fSeSb9Dicp2hBIDbMcjMgNN5o1.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-scrubber-dryer-l50",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-scrubber-dryer-l50",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOT SPOT-CLEANING SP50",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $32,667",
+    "photo_url": "https://alpharoboticsai.com/assets/website/images/robot-06.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-spot-cleaning-sp50",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-spot-cleaning-sp50",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOT SWEEPER S5",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $25,000",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/DeUQxQZU91ipUL76UDfoakCxJAWYbTL8ZwuDjHRh.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-sweeper-s5",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-sweeper-s5",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOT WORKSTATION CWS-01",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $5,250",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/GTaR3IX3ijrPN24NmMA6vFX8zmQHkv9I4aNwEabD.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-workstation-cws-01",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-workstation-cws-01",
+    "specs": {}
+  },
+  {
+    "oem": "Cenobot",
+    "model": "CENOBOTS MOBILE WATER TANK WT3",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "$24,000",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/ShXete57C5ZhO3i2Ns8512NFQjxpmBuFxWJwoEFE.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobots-mobile-water-tank-wt3",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobots-mobile-water-tank-wt3",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "CENOBOT WORKSTATION WS3",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $3,300",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/3hQ2yVSvQQjDkUpNYnUZiGQUnWDSAwgX6bL7yMHI.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/cenobot-workstation-ws3",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=cenobot-workstation-ws3",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM BEETLE",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $25,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/9P9GmnWvAw91cvoIOC7LIYoVoEJBcR2OrjoT511Q.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-beetle",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-beetle",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM CHARGING - DOCKING STATION",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "$25,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/7etZ4ylffzQHChEARMgyAr3l1Gjba1hKxVYQbYkh.webp",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-charging-docking-station",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-charging-docking-station",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM MARVEL",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $60,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/VTbMUi3vpZyznXZC53NQw14iiFwRkwqCwwbgt9ft.webp",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-marvel",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-marvel",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM MIRA",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $60,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/Jv2i1mCRfNhhbm3OlSxyX29qZUkFwHgC8ArQadiP.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-mira",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-mira",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM OMNIE",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $43,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/qaA33fFrpxvtZ1qLMU6RXd7qveyEDA8FvRDeJHju.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-omnie",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-omnie",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM PHANTAS",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $23,800",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/B7HxMilQgYOmqDL9ZqcAAdYPZIpBuW6CCoC5osZw.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-phantas",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-phantas",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM SCRUBBER 50",
+    "category": "Cleaning Industry Commercial Robot",
+    "price_str": "Purchase from $40,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/8lagvu0a1SeSlgenwZPXICKUHV24KuZegR1s8Ypq.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-scrubber-50",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-scrubber-50",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM SCRUBBER 75",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $79,900",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/3RtSKPuKBGGuj4282rRuGyTLuVG8PAlXoTNoEkwZ.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-scrubber-75",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-scrubber-75",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM VACUUM 40",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $36,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/rkEqP0Z0AC9MPbR5wF9xNwK0JZjYD566tN5TfVWo.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-vacuum-40",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-vacuum-40",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM WORKSTATION - PHANTAS",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "$25,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/9kJwAFaydWseZSY6HermUnlqUrmrMJ8BVX6j1UTY.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-workstation-phantas",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-workstation-phantas",
+    "specs": {}
+  },
+  {
+    "oem": "Gausium",
+    "model": "GAUSIUM WORKSTATION - SCRUBBER 75",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "$25,999",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/yCiZsXn6b1zdSm4fNGEB17WMcfmMqvJmNrZDvgWk.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/gausium-workstation-scrubber-75",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=gausium-workstation-scrubber-75",
+    "specs": {}
+  },
+  {
+    "oem": "Ikitbot",
+    "model": "IKITBOT FALCON X2",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "$42,600",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/o8GoyhDoVXnpr7T8QANgPyblod8a4J1sRZ9XfXGr.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/ikitbot-falcon-x2",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=ikitbot-falcon-x2",
+    "specs": {}
+  },
+  {
+    "oem": "Ikitbot",
+    "model": "IKITBOT ONE S55",
+    "category": "Standard By 20-30Db Specifications",
+    "price_str": "$18,000",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/l2HxKOcnwbn3bY1TJG3ksoJDjAWiMBQMZoKuGGkf.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/ikitbot-one-s55",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=ikitbot-one-s55",
+    "specs": {}
+  },
+  {
+    "oem": "Ikitbot",
+    "model": "IKITBOT ONE S55 AD",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "$18,000",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/RHK6lY7mRZ9RbD8oWwTQe26AzaGbtPodySTgpM0K.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/ikitbot-one-s55-ad",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=ikitbot-one-s55-ad",
+    "specs": {}
+  },
+  {
+    "oem": "Ikitbot",
+    "model": "IKITBOT ONE S55 PRO WITH UVC",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $18,000",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/Y02VNq5SztBDu2SiCcl4h1EbskgYnxKztrufHaXw.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/ikitbot-one-s55-pro-with-uvc",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=ikitbot-one-s55-pro-with-uvc",
+    "specs": {}
+  },
+  {
+    "oem": "Pudu",
+    "model": "PUDU BELLABOT PRO",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Request Quote",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/tJm8p1EwjikEIg3W1voU3CkRtAYiGxQoRmMWxm4P.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/pudu-bellabot-pro",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=pudu-bellabot-pro",
+    "specs": {}
+  },
+  {
+    "oem": "Pudu",
+    "model": "PUDU CC1 PRO DISC",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Request Quote",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/ajpIOmyZHlmYU4gY4cw0jHQ6YV0y0J1G61PUqltn.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/pudu-cc1-pro-disc",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=pudu-cc1-pro-disc",
+    "specs": {}
+  },
+  {
+    "oem": "Pudu",
+    "model": "PUDU FLASHBOT",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "$42,600",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/aEzZL1UFJi6t6glgIBtNBGNsugFMZgr4EZZlj8le.webp",
+    "product_url": "https://alpharoboticsai.com/marketplace/pudu-flashbot",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=pudu-flashbot",
+    "specs": {}
+  },
+  {
+    "oem": "Pudu",
+    "model": "PUDU KETTY BOT",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Request Quote",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/Q8rpvEIurJp6EnytL7myPpFatiMiMzJtD76PtZlK.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/pudu-ketty-bot",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=pudu-ketty-bot",
+    "specs": {}
+  },
+  {
+    "oem": "Pudu",
+    "model": "PUDU T600",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Request Quote",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/HbT4yTj3ZD8yDcIM9CA6xOEzuu567sa5dzofSKxG.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/pudu-t600",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=pudu-t600",
+    "specs": {}
+  },
+  {
+    "oem": "Tennant",
+    "model": "TENNANT R4 ROVR AUTONOMOUS FLOOR SCRUBBER",
+    "category": "Cleaning Industry Commerical Robots",
+    "price_str": "Purchase from $48,300",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/OtUPbIzTlqS7EaNzivd5UWNeBOFACgOQfPzzO3Mf.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/tennant-r4-rovr-autonomous-floor-scrubber",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=tennant-r4-rovr-autonomous-floor-scrubber",
+    "specs": {}
+  },
+  {
+    "oem": "Tennant",
+    "model": "TENNANT X2 ROVR AUTONOMOUS FLOOR SCRUBBER",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $33,000",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/f8O7YnBu6TIOn3JOHAYT8iKVJYYpCjPMY8YO4hJU.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/tennant-x2-rovr-autonomous-floor-scrubber",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=tennant-x2-rovr-autonomous-floor-scrubber",
+    "specs": {}
+  },
+  {
+    "oem": "Unknown OEM",
+    "model": "AERO-X",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $42,600",
+    "photo_url": "https://alpharoboticsai.com/assets/website/images/robot-04.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/aero-x",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=aero-x",
+    "specs": {}
+  },
+  {
+    "oem": "Unknown OEM",
+    "model": "IR-600",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $102,000",
+    "photo_url": "https://alpharoboticsai.com/assets/website/images/robot-02.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/ir-600",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=ir-600",
+    "specs": {}
+  },
+  {
+    "oem": "Unknown OEM",
+    "model": "X7 ARM",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Purchase from $95,400",
+    "photo_url": "https://alpharoboticsai.com/assets/website/images/robot-02.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/x7-arm",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=x7-arm",
+    "specs": {}
+  },
+  {
+    "oem": "Viggo",
+    "model": "VIGGO AUTONOMOUS DRIVIG SCRUBBER SC50 PLUS",
+    "category": "Cleaning Industry Commercial Robot",
+    "price_str": "Request Quote",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/7QYDpJN9PdIbmyuq4qr2rlrcrKSsvuONz6PE0RXl.jpg",
+    "product_url": "https://alpharoboticsai.com/marketplace/viggo-autonomous-drivig-scrubber-sc50-plus",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=viggo-autonomous-drivig-scrubber-sc50-plus",
+    "specs": {}
+  },
+  {
+    "oem": "Viggo",
+    "model": "VIGGO AUTONOMOUS DRIVING FLOOR SCRUBBER-SC80",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Request Quote",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/qwrwpcOBXjtVDQZJybZNyj7rRi8lN8tBF9tnU8uh.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/viggo-autonomous-driving-floor-scrubber-sc80",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=viggo-autonomous-driving-floor-scrubber-sc80",
+    "specs": {}
+  },
+  {
+    "oem": "Viggo",
+    "model": "VIGGO S100-N AUTONOMOUS DRIVING",
+    "category": "Autonomous Mobile Robots Industry C",
+    "price_str": "Request Quote",
+    "photo_url": "https://alpharoboticsai.com/storage/products/covers/czOOtozf6jiIbbgGvO5dugn2ix0Fxgbj35ezM8mz.png",
+    "product_url": "https://alpharoboticsai.com/marketplace/viggo-s100-n-autonomous-driving",
+    "quote_url": "https://alpharoboticsai.com/request-quote?product=viggo-s100-n-autonomous-driving",
+    "specs": {}
+  }
+]
