@@ -185,6 +185,100 @@ function initHeroCarousel() {
     });
 }
 
+// Quotes Rotation Carousel
+function initQuotesRotation() {
+    const container = document.getElementById('quotesCarousel');
+    if (!container) return;
+
+    const cards = container.querySelectorAll('.quote-card');
+    const dots = container.querySelectorAll('.quote-dot');
+    const prevBtn = document.getElementById('quotePrevBtn');
+    const nextBtn = document.getElementById('quoteNextBtn');
+    if (!cards.length) return;
+
+    let currentIndex = 0;
+    let rotationTimer = null;
+    const intervalMs = 6000;
+
+    function showQuote(index) {
+        if (index < 0) index = cards.length - 1;
+        if (index >= cards.length) index = 0;
+
+        cards.forEach((card, i) => {
+            if (i === index) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+        });
+
+        dots.forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+
+        currentIndex = index;
+    }
+
+    function nextQuote() {
+        showQuote(currentIndex + 1);
+    }
+
+    function prevQuote() {
+        showQuote(currentIndex - 1);
+    }
+
+    function startTimer() {
+        stopTimer();
+        rotationTimer = setInterval(nextQuote, intervalMs);
+    }
+
+    function stopTimer() {
+        if (rotationTimer) {
+            clearInterval(rotationTimer);
+            rotationTimer = null;
+        }
+    }
+
+    nextBtn?.addEventListener('click', () => {
+        nextQuote();
+        startTimer();
+    });
+
+    prevBtn?.addEventListener('click', () => {
+        prevQuote();
+        startTimer();
+    });
+
+    dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+            const index = parseInt(dot.getAttribute('data-index') || '0', 10);
+            showQuote(index);
+            startTimer();
+        });
+    });
+
+    // Pause auto-rotation on mouse hover or touch interaction
+    container.addEventListener('mouseenter', stopTimer);
+    container.addEventListener('mouseleave', startTimer);
+
+    // Keyboard accessibility
+    container.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            nextQuote();
+            startTimer();
+        } else if (e.key === 'ArrowLeft') {
+            prevQuote();
+            startTimer();
+        }
+    });
+
+    startTimer();
+}
+
 // Debug mode - disable in production
 const DEBUG = false;
 const debugLog = (...args) => { if (DEBUG) console.log(...args); };
@@ -254,6 +348,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Initialize hero background carousel
     initHeroCarousel();
+
+    // Initialize rotating quotes carousel on home page
+    initQuotesRotation();
 
     // Site-wide sticky navbar + floating Community Bulletin button
     injectNavbar();
