@@ -76,7 +76,7 @@ if (mainJs.includes("'humanoid.guide'") && mainJs.includes("'kepler'") && mainJs
 
 // Test 9: Verify MASTER_HUMANOID_CATALOG and global 200+ model coverage
 const masterSampleModels = [
-    'Galbot ET1', 'Qinglong V3.0', 'Astribot S1', 'Reachy 2', 'Mirokaï',
+    'Galbot ET1', 'Qinglong V3.0', 'Astribot S1', 'Reachy 2', 'Miroka',
     'Ambidex', '4NE1', 'Kangaroo', 'RB-Y1', 'Torobo', 'Asimov 2', 'Galbot S1'
 ];
 
