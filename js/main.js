@@ -8440,6 +8440,11 @@ function initRobotCatalogDirectory() {
 
 
 
+function rfrEscapeJsonAttr(obj) {
+    if (!obj) return '\'{}\'';
+    return '\'' + rfrEscape(JSON.stringify(obj)).replace(/'/g, "\\'") + '\'';
+}
+
 /* ── AUTOMATED 1-CLICK CRM JOB APPLICATION ENGINE ── */
 
 function rfrGetAppliedJobs() {
@@ -8489,9 +8494,9 @@ function rfrBuildJobsCrmHtml(jobs, contextId = 'lookup') {
         if (!isApplied) unappliedCount++;
 
         return `
-            <div class="ri-job-card ${isApplied ? 'ri-job-applied' : 'ri-job-selected'}" id="${contextId}_card_${jobId}">
+            <div class="ri-job-card ${isApplied ? 'ri-job-applied' : 'ri-job-selected'}" id="${contextId}_card_${jobId}" onclick="rfrHandleJobCardClick(event, '${jobId}', ${rfrEscapeJsonAttr(j)})">
                 <div class="ri-job-head">
-                    <label class="ri-job-check-wrap">
+                    <label class="ri-job-check-wrap" onclick="event.stopPropagation();">
                         <input type="checkbox" class="ri-job-checkbox ${contextId}-checkbox" data-job-id="${jobId}" data-context="${contextId}" ${isApplied ? 'disabled' : 'checked'} onchange="rfrUpdateJobsCrmState('${contextId}')" />
                         <span class="ri-job-badge">${rfrEscape(j.category || 'Buyer Job')}</span>
                     </label>
@@ -8503,6 +8508,7 @@ function rfrBuildJobsCrmHtml(jobs, contextId = 'lookup') {
                     <span><i class="fas fa-map-marker-alt"></i> ${rfrEscape(j.location)}</span>
                 </div>
                 <p class="ri-job-desc">${rfrEscape(j.description)}</p>
+                <div class="ri-job-explore-hint"><i class="fas fa-external-link-alt"></i> Explore Opportunity & Share</div>
                 <div class="ri-job-status-pill" id="${contextId}_status_${jobId}">
                     ${isApplied ? '<span class="ri-applied-badge"><i class="fas fa-check-circle"></i> Proposal Applied & Sent</span>' : '<span class="ri-ready-badge"><i class="fas fa-bolt"></i> Autopilot Ready</span>'}
                 </div>
@@ -8625,3 +8631,442 @@ async function rfrExecuteAutomatedJobApplication(contextId) {
     }
 }
 
+
+
+
+/* ── LIVE ROBOT JOBS OPPORTUNITY MODAL & LINK SHARING ENGINE ── */
+
+const RFR_LIVE_JOBS_CORPUS = {
+    'job_q_casino_housekeeping': {
+        id: 'job_q_casino_housekeeping',
+        title: 'Housekeeping Supervisor & Autonomous Floor Care Lead',
+        company: 'Q Casino & Resort',
+        location: 'Dubuque, IA / Las Vegas, NV',
+        capex: '$145,000 / unit ($3.20/hr RaaS)',
+        category: 'Hospitality & Facility Cleaning',
+        description: 'Autonomous multi-floor housekeeping, scrubbing, and sanitization across resort gaming floors, guest corridors, and high-traffic public areas.',
+        specs: {
+            payload_kg: '35 kg solution capacity',
+            throughput: '4,500 sq ft/hr clean rate',
+            shift_model: '3rd Shift Nightly (10:00 PM - 6:00 AM)',
+            environment: 'Elevator BACnet integration, SLAM Lidar navigation, Auto-dock water refill'
+        },
+        financials: {
+            labor_savings: '$84,500 / year per shift',
+            payback_months: '14.2 Months',
+            efficiency_gain: '+320% Floor Coverage'
+        },
+        matched_robots: [
+            { name: 'Pudu CC1 Commercial Scrubber', score: '98%', status: 'Production Verified' },
+            { name: 'Gausium Phantas All-in-One', score: '95%', status: 'In Deployment' },
+            { name: 'Gaussian Scrubber 50', score: '92%', status: 'Qualified' }
+        ]
+    },
+    'job_Las_Vegas_Enterprise_Operations_Hub_Enterprise_Commercial_Automation_Deployment_Lead': {
+        id: 'job_Las_Vegas_Enterprise_Operations_Hub_Enterprise_Commercial_Automation_Deployment_Lead',
+        title: 'Enterprise Commercial Automation Deployment Lead',
+        company: 'Las Vegas Enterprise Operations Hub',
+        location: 'Las Vegas, NV',
+        capex: '$165,000 / unit',
+        category: 'Enterprise Automation',
+        description: 'Deploying verified commercial robotics system for 24/7 hospitality, logistics, and facility automation.',
+        specs: {
+            payload_kg: '25.0 kg payload capacity',
+            throughput: '120 cycles/hr pick speed',
+            shift_model: 'Continuous 24/7 (3 Shifts)',
+            environment: 'WMS REST API, ISO 10218-1 Safety Scanner, Vision-Guided Picking'
+        },
+        financials: {
+            labor_savings: '$118,000 / year',
+            payback_months: '11.4 Months',
+            efficiency_gain: '+280% Throughput'
+        },
+        matched_robots: [
+            { name: 'Universal Robots UR20 Cobot', score: '97%', status: 'Production Verified' },
+            { name: 'ABB YuMi Dual-Arm', score: '94%', status: 'Qualified' },
+            { name: 'KUKA LBR iisy 11', score: '91%', status: 'Qualified' }
+        ]
+    },
+    'job_Apex_Industrial_Automation_Center_High_Precision_Pick___Place_Cell_Operator': {
+        id: 'job_Apex_Industrial_Automation_Center_High_Precision_Pick___Place_Cell_Operator',
+        title: 'High-Precision Pick & Place Cell Operator',
+        company: 'Apex Industrial Automation Center',
+        location: 'Henderson, NV',
+        capex: '$145,000 / unit',
+        category: 'Manufacturing & Assembly',
+        description: 'Precision motion control and tactile force feedback for high-speed component handling and quality audit.',
+        specs: {
+            payload_kg: '12.0 kg payload capacity',
+            throughput: '180 picks/hr cycle rate',
+            shift_model: '1st & 2nd Shift (16 hrs/day)',
+            environment: 'PROFINET / EtherCAT Fieldbus, 3D Vision Bin Picking, Pneumatic Gripper'
+        },
+        financials: {
+            labor_savings: '$96,000 / year',
+            payback_months: '12.8 Months',
+            efficiency_gain: '+240% Precision Speed'
+        },
+        matched_robots: [
+            { name: 'Epson SCARA G-Series', score: '96%', status: 'Production Verified' },
+            { name: 'ABB GoFa CRB 15000', score: '93%', status: 'Qualified' },
+            { name: 'Fanuc CRX-10iA Cobot', score: '89%', status: 'Qualified' }
+        ]
+    },
+    'job_locus_logistics_amr': {
+        id: 'job_locus_logistics_amr',
+        title: 'Autonomous Mobile Robot (AMR) Fulfillment Lead',
+        company: 'Apex Logistics & Fulfillment Center',
+        location: 'North Las Vegas, NV',
+        capex: '$185,000 / fleet',
+        category: 'Warehouse & Logistics',
+        description: 'High-density goods-to-person e-commerce fulfillment, autonomous tote transport, and dynamic warehouse routing.',
+        specs: {
+            payload_kg: '100.0 kg payload capacity',
+            throughput: '3.5 m/s fleet velocity',
+            shift_model: 'Continuous 24/7 Operation',
+            environment: 'Manhattan WMS Integration, High-Density Barcode Scan, SLAM Dispatch'
+        },
+        financials: {
+            labor_savings: '$142,000 / year',
+            payback_months: '9.8 Months',
+            efficiency_gain: '+350% Order Picking'
+        },
+        matched_robots: [
+            { name: 'Locus Origin AMR', score: '99%', status: 'Production Verified' },
+            { name: 'MiR250 Dynamic Mobile Robot', score: '94%', status: 'Qualified' },
+            { name: 'OTTO 100 Heavy AMR', score: '90%', status: 'Qualified' }
+        ]
+    }
+};
+
+function rfrGetJobOpportunityDetails(jobKey, fallbackData) {
+    if (jobKey && RFR_LIVE_JOBS_CORPUS[jobKey]) {
+        return RFR_LIVE_JOBS_CORPUS[jobKey];
+    }
+    // Match by partial key or title search
+    if (jobKey) {
+        const cleanKey = String(jobKey).toLowerCase();
+        for (const k in RFR_LIVE_JOBS_CORPUS) {
+            if (k.toLowerCase().includes(cleanKey) || cleanKey.includes(k.toLowerCase())) {
+                return RFR_LIVE_JOBS_CORPUS[k];
+            }
+        }
+    }
+
+    const title = (fallbackData && fallbackData.title) || (jobKey ? String(jobKey).replace(/^job_/, '').replace(/_/g, ' ') : 'Commercial Automation Deployment Lead');
+    const company = (fallbackData && fallbackData.company) || 'Las Vegas Enterprise Operations Hub';
+    const location = (fallbackData && fallbackData.location) || 'Las Vegas, NV';
+    const capex = (fallbackData && fallbackData.capex) || '$150,000 / unit';
+    const category = (fallbackData && fallbackData.category) || 'Enterprise Automation';
+    const description = (fallbackData && fallbackData.description) || 'Deploying verified commercial robotics system for 24/7 industrial and facility automation.';
+
+    return {
+        id: jobKey || `job_${company}_${title}`.replace(/[^a-zA-Z0-9_]/g, '_'),
+        title: title,
+        company: company,
+        location: location,
+        capex: capex,
+        category: category,
+        description: description,
+        specs: {
+            payload_kg: '15.0 kg payload capacity',
+            throughput: '140 picks/hr throughput',
+            shift_model: 'Continuous 24/7 (3 Shifts)',
+            environment: 'ISO 10218-1 Safety Standard, WMS API Integration, Lidar SLAM Navigation'
+        },
+        financials: {
+            labor_savings: '$105,000 / year',
+            payback_months: '12.0 Months',
+            efficiency_gain: '+250% Productivity'
+        },
+        matched_robots: [
+            { name: 'Universal Robots UR10e Cobot', score: '96%', status: 'Production Verified' },
+            { name: 'KUKA LBR iisy 11', score: '92%', status: 'Qualified' },
+            { name: 'ABB GoFa CRB 15000', score: '88%', status: 'Qualified' }
+        ]
+    };
+}
+
+function rfrEnsureJobOpportunityModalInDom() {
+    let modal = document.getElementById('jobOpportunityModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'jobOpportunityModal';
+        modal.className = 'ri-modal-backdrop';
+        modal.style.display = 'none';
+        modal.onclick = (e) => rfrCloseJobModalOnBackdrop(e);
+        modal.innerHTML = `
+            <div class="ri-modal-dialog ri-job-modal-dialog">
+                <button onclick="rfrCloseJobOpportunityModal()" class="ri-modal-close" aria-label="Close modal">&times;</button>
+                <div id="jobOpportunityModalBody" class="ri-modal-body"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    return modal;
+}
+
+function rfrShowToastNotification(msg) {
+    let toast = document.getElementById('rfrToastNotification');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'rfrToastNotification';
+        toast.className = 'rfr-toast-notification';
+        document.body.appendChild(toast);
+    }
+    toast.innerHTML = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3200);
+}
+
+function rfrCopyJobShareLink(jobId) {
+    const fullUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?visit=jobs&job=' + encodeURIComponent(jobId);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(fullUrl).then(() => {
+            rfrShowToastNotification(`<i class="fas fa-check-circle"></i> Direct share link copied to clipboard!`);
+        }).catch(() => {
+            rfrFallbackCopy(fullUrl);
+        });
+    } else {
+        rfrFallbackCopy(fullUrl);
+    }
+}
+
+function rfrFallbackCopy(text) {
+    const tempInput = document.createElement('input');
+    tempInput.value = text;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    rfrShowToastNotification(`<i class="fas fa-check-circle"></i> Direct share link copied to clipboard!`);
+}
+
+function rfrHandleJobCardClick(event, jobId, rawDataStr) {
+    if (event && (event.target.tagName === 'INPUT' || (event.target.closest && event.target.closest('label.ri-job-check-wrap')))) {
+        return;
+    }
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    let fallbackObj = null;
+    if (typeof rawDataStr === 'string' && rawDataStr.startsWith('{')) {
+        try { fallbackObj = JSON.parse(rawDataStr); } catch (e) {}
+    } else if (rawDataStr && typeof rawDataStr === 'object') {
+        fallbackObj = rawDataStr;
+    }
+    rfrOpenJobOpportunityModal(jobId, fallbackObj);
+}
+
+function rfrOpenJobOpportunityModal(jobKey, fallbackData) {
+    const modal = rfrEnsureJobOpportunityModalInDom();
+    const body = document.getElementById('jobOpportunityModalBody');
+    if (!modal || !body) return;
+
+    if (fallbackData && typeof fallbackData === 'object') {
+        const key = jobKey || `job_${fallbackData.company}_${fallbackData.title}`.replace(/[^a-zA-Z0-9_]/g, '_');
+        if (!RFR_LIVE_JOBS_CORPUS[key]) {
+            RFR_LIVE_JOBS_CORPUS[key] = {
+                id: key,
+                title: fallbackData.title || 'Commercial Automation Deployment Lead',
+                company: fallbackData.company || 'Las Vegas Operations',
+                location: fallbackData.location || 'Las Vegas, NV',
+                capex: fallbackData.capex || '$150,000 / unit',
+                category: fallbackData.category || 'Enterprise Automation',
+                description: fallbackData.description || 'Deploying verified commercial robotics system for 24/7 industrial and facility automation.',
+                specs: fallbackData.specs || {
+                    payload_kg: '15.0 kg payload capacity',
+                    throughput: '140 picks/hr rate',
+                    shift_model: 'Continuous 24/7 (3 Shifts)',
+                    environment: 'WMS API Integration, ISO 10218-1 Safety Scanner, Vision-Guided Picking'
+                },
+                financials: fallbackData.financials || {
+                    labor_savings: '$105,000 / year',
+                    payback_months: '12.0 Months',
+                    efficiency_gain: '+250% Productivity'
+                },
+                matched_robots: fallbackData.matched_robots || [
+                    { name: 'Universal Robots UR10e Cobot', score: '96%', status: 'Production Verified' },
+                    { name: 'KUKA LBR iisy 11', score: '92%', status: 'Qualified' },
+                    { name: 'ABB GoFa CRB 15000', score: '88%', status: 'Qualified' }
+                ]
+            };
+        }
+        jobKey = key;
+    }
+
+    const job = rfrGetJobOpportunityDetails(jobKey, fallbackData);
+    const appliedJobs = rfrGetAppliedJobs();
+    const isApplied = !!appliedJobs[job.id];
+
+    try {
+        const newUrl = window.location.pathname + '?visit=jobs&job=' + encodeURIComponent(job.id);
+        window.history.pushState({ jobId: job.id }, '', newUrl);
+    } catch (e) {}
+
+    body.innerHTML = `
+        <div class="ri-job-modal-header">
+            <div class="ri-crm-autopilot-tag"><i class="fas fa-bolt"></i> Live Robot Job Opportunity</div>
+            <h2 class="ri-job-modal-title">${rfrEscape(job.title)}</h2>
+            <div class="ri-job-modal-sub">
+                <span><i class="fas fa-building"></i> ${rfrEscape(job.company)}</span>
+                <span><i class="fas fa-map-marker-alt"></i> ${rfrEscape(job.location)}</span>
+                <span class="ri-job-badge">${rfrEscape(job.category)}</span>
+            </div>
+        </div>
+
+        <div class="ri-job-modal-body-content">
+            <div class="ri-job-modal-main">
+                <div class="ri-job-modal-card">
+                    <h4><i class="fas fa-file-alt"></i> Opportunity & Operational Overview</h4>
+                    <p>${rfrEscape(job.description)}</p>
+                </div>
+
+                <div class="ri-job-modal-card">
+                    <h4><i class="fas fa-cogs"></i> Technical & Task Specifications</h4>
+                    <div class="ri-spec-grid">
+                        <div class="ri-spec-item">
+                            <span class="ri-spec-label">Payload Capacity</span>
+                            <span class="ri-spec-val">${rfrEscape(job.specs ? job.specs.payload_kg : '15.0 kg')}</span>
+                        </div>
+                        <div class="ri-spec-item">
+                            <span class="ri-spec-label">Target Throughput</span>
+                            <span class="ri-spec-val">${rfrEscape(job.specs ? job.specs.throughput : '140 picks/hr')}</span>
+                        </div>
+                        <div class="ri-spec-item">
+                            <span class="ri-spec-label">Shift Model</span>
+                            <span class="ri-spec-val">${rfrEscape(job.specs ? job.specs.shift_model : '24/7 Continuous')}</span>
+                        </div>
+                        <div class="ri-spec-item" style="grid-column: 1 / -1;">
+                            <span class="ri-spec-label">Environment & Safety Standard</span>
+                            <span class="ri-spec-val">${rfrEscape(job.specs ? job.specs.environment : 'WMS API & ISO 10218-1')}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ri-job-modal-card">
+                    <h4><i class="fas fa-robot"></i> Matched Compatible Robots (${job.matched_robots ? job.matched_robots.length : 0})</h4>
+                    <div class="ri-matched-robots-list">
+                        ${(job.matched_robots || []).map(r => `
+                            <div class="ri-matched-robot-item">
+                                <div class="ri-matched-robot-info">
+                                    <i class="fas fa-check-circle" style="color:var(--brand-green-bright);"></i>
+                                    <strong>${rfrEscape(r.name)}</strong>
+                                    <span class="ri-matched-status">${rfrEscape(r.status)}</span>
+                                </div>
+                                <div class="ri-matched-score">${rfrEscape(r.score)} Match</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ri-job-modal-sidebar">
+                <div class="ri-job-modal-card ri-job-financial-card">
+                    <h4><i class="fas fa-chart-line"></i> Financial ROI & Payback</h4>
+                    <div class="ri-financial-row">
+                        <span>CapEx / RaaS Target:</span>
+                        <strong>${rfrEscape(job.capex)}</strong>
+                    </div>
+                    <div class="ri-financial-row">
+                        <span>Est. Labor Savings:</span>
+                        <strong style="color:var(--brand-green-light);">${rfrEscape(job.financials ? job.financials.labor_savings : '$105,000 / yr')}</strong>
+                    </div>
+                    <div class="ri-financial-row">
+                        <span>Payback Period:</span>
+                        <strong style="color:var(--accent-amber-bright);">${rfrEscape(job.financials ? job.financials.payback_months : '12.0 Months')}</strong>
+                    </div>
+                    <div class="ri-financial-row">
+                        <span>Productivity Gain:</span>
+                        <strong>${rfrEscape(job.financials ? job.financials.efficiency_gain : '+250%')}</strong>
+                    </div>
+                </div>
+
+                <div class="ri-job-modal-card ri-job-actions-card">
+                    <h4><i class="fas fa-share-alt"></i> Investigate & Share</h4>
+                    <button type="button" onclick="rfrCopyJobShareLink('${rfrEscape(job.id)}')" class="btn btn-secondary ri-modal-btn">
+                        <i class="fas fa-link"></i> Copy Direct Share Link
+                    </button>
+                    <button type="button" id="modal_apply_btn_${rfrEscape(job.id)}" onclick="rfrApplySingleJobFromModal('${rfrEscape(job.id)}')" class="btn btn-primary ri-modal-btn ${isApplied ? 'ri-btn-applied' : ''}" ${isApplied ? 'disabled' : ''}>
+                        <i class="fas fa-${isApplied ? 'check-circle' : 'paper-plane'}"></i> <span id="modal_apply_text_${rfrEscape(job.id)}">${isApplied ? 'Proposal Applied & Sent' : 'Submit Autopilot Proposal'}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    modal.style.display = 'flex';
+}
+
+function rfrCloseJobOpportunityModal() {
+    const modal = document.getElementById('jobOpportunityModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    try {
+        if (window.location.search.includes('job=')) {
+            const newUrl = window.location.pathname + '?visit=jobs';
+            window.history.pushState({}, '', newUrl);
+        }
+    } catch (e) {}
+}
+
+function rfrCloseJobModalOnBackdrop(e) {
+    if (e && e.target && e.target.id === 'jobOpportunityModal') {
+        rfrCloseJobOpportunityModal();
+    }
+}
+
+async function rfrApplySingleJobFromModal(jobId) {
+    const btn = document.getElementById(`modal_apply_btn_${jobId}`);
+    const text = document.getElementById(`modal_apply_text_${jobId}`);
+    if (!btn) return;
+
+    btn.disabled = true;
+    if (text) text.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Submitting Proposal...`;
+
+    await new Promise(r => setTimeout(r, 800));
+
+    rfrSaveAppliedJob(jobId);
+
+    btn.className = 'btn btn-primary ri-modal-btn ri-btn-applied';
+    if (text) text.textContent = 'Proposal Applied & Sent ✓';
+
+    const cards = document.querySelectorAll(`[id*="_card_${jobId}"]`);
+    cards.forEach(card => {
+        card.classList.remove('ri-job-selected');
+        card.classList.add('ri-job-applied');
+        const cb = card.querySelector('input[type="checkbox"]');
+        if (cb) { cb.checked = false; cb.disabled = true; }
+        const status = card.querySelector('.ri-job-status-pill');
+        if (status) status.innerHTML = `<span class="ri-applied-badge"><i class="fas fa-check-circle"></i> Proposal Applied & Sent</span>`;
+    });
+
+    rfrShowToastNotification(`<i class="fas fa-check-circle"></i> Proposal successfully submitted to buyer CRM!`);
+}
+
+function rfrCheckUrlJobParams() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const visit = params.get('visit');
+        const jobId = params.get('job');
+
+        if (visit === 'jobs' || visit === 'jobslanding') {
+            const section = document.getElementById('lookup') || document.getElementById('brief') || document.getElementById('directory');
+            if (section) {
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        }
+
+        if (jobId) {
+            setTimeout(() => {
+                rfrOpenJobOpportunityModal(jobId);
+            }, 450);
+        }
+    } catch (e) {}
+}

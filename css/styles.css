@@ -6332,3 +6332,179 @@ body.has-site-nav .hamburger-menu { display: none; }
     align-items: center;
     gap: 0.35rem;
 }
+
+
+
+/* ── LIVE ROBOT JOB OPPORTUNITY MODAL & INTERACTIVE CARD STYLES ── */
+.ri-job-card {
+    cursor: pointer;
+    position: relative;
+}
+.ri-job-explore-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--brand-green-light);
+    font-weight: 600;
+    margin-top: 0.65rem;
+    transition: color 0.2s ease;
+}
+.ri-job-card:hover .ri-job-explore-hint {
+    color: var(--accent-amber-bright);
+    text-decoration: underline;
+}
+.ri-job-modal-dialog {
+    max-width: 860px;
+    width: 92%;
+    background: #090d16;
+    border: 1px solid rgba(63, 209, 127, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(63, 209, 127, 0.15);
+    border-radius: 16px;
+    padding: 1.75rem;
+}
+.ri-job-modal-header {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
+}
+.ri-job-modal-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0.4rem 0 0.5rem 0;
+}
+.ri-job-modal-sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+.ri-job-modal-badge {
+    background: rgba(63, 209, 127, 0.15);
+    color: var(--brand-green-bright);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.ri-job-modal-body-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+}
+@media (max-width: 768px) {
+    .ri-job-modal-body-content {
+        grid-template-columns: 1fr;
+    }
+}
+.ri-job-modal-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+.ri-job-modal-card h4 {
+    font-size: 1rem;
+    color: #ffffff;
+    margin: 0 0 0.85rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.ri-job-modal-card p {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin: 0;
+}
+.ri-matched-robots-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+.ri-matched-robot-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+}
+.ri-matched-robot-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: #ffffff;
+}
+.ri-matched-status {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+.ri-matched-score {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--brand-green-bright);
+}
+.ri-job-financial-card {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+.ri-financial-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.45rem 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+.ri-financial-row:last-child {
+    border-bottom: none;
+}
+.ri-modal-btn {
+    width: 100%;
+    margin-top: 0.65rem;
+    padding: 0.7rem;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.ri-btn-applied {
+    background: #059669 !important;
+    border-color: #10b981 !important;
+    cursor: default;
+}
+.rfr-toast-notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #0f172a;
+    border: 1px solid var(--brand-green-bright);
+    color: #ffffff;
+    padding: 0.85rem 1.35rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    font-size: 0.9rem;
+    font-weight: 600;
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+.rfr-toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
