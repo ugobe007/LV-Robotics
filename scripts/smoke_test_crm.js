@@ -51,10 +51,10 @@ const sampleJobs = [
 
 const crmHtml = sandbox.rfrBuildJobsCrmHtml(sampleJobs, 'test_lookup');
 
-if (crmHtml.includes('Apply to 2 Selected Jobs') && crmHtml.includes('Select All') && crmHtml.includes('ri-crm-apply-btn')) {
-    console.log('[PASS] rfrBuildJobsCrmHtml rendered button [Apply to 2 Selected Jobs] and Select All checkbox!');
+if (crmHtml.includes('Automate 2 Job Applications') && crmHtml.includes('Select All') && crmHtml.includes('rfrHandleJobCardClick') && crmHtml.includes('ri-job-explore-hint')) {
+    console.log('[PASS] rfrBuildJobsCrmHtml rendered button [Automate 2 Job Applications], Select All checkbox, and clickable card handler!');
 } else {
-    console.error('[FAIL] crmHtml did not contain expected Apply to 2 Selected Jobs text:', crmHtml);
+    console.error('[FAIL] crmHtml did not contain expected Automate 2 Job Applications text or card handler:', crmHtml);
 }
 
 // Test persistent storage
